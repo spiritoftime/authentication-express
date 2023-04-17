@@ -39,7 +39,6 @@ async function refreshTokenMiddleware(req, res, next) {
     return res
       .status(403)
       .json({ error: "invalid refresh tokens. please relogin or register" });
-  console.log(refreshToken === user.refreshToken);
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
