@@ -69,6 +69,8 @@ const login = async (req, res) => {
   });
 
   res.setHeader("Authorization", "Bearer " + accessToken);
+  res.setHeader('Access-Control-Expose-Headers', 'Authorization');
+
   res.status(200).json({ user: { username: username, id: user.id } });
 };
 function generateToken(payload, tokenType, expiresIn) {

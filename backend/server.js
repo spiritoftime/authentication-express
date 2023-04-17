@@ -8,7 +8,12 @@ const cors = require("cors");
 const app = express();
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const { login, register } = require("./controllers/auth");

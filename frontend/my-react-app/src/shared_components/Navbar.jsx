@@ -5,8 +5,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import google_docs_logo from "../assets/google_docs_logo.png";
+import { useAppContext } from "../../context/appContext";
 const Navbar = () => {
-  const [loggedIn, setIsLoggedIn] = useState(false);
+  const { authDetails, setAuthDetails } = useAppContext();
+
+  const loggedIn = Object.keys(authDetails).length !== 0;
   return (
     <AppBar sx={{ backgroundColor: "#4285F4" }} position="static">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

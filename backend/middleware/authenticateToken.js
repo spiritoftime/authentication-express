@@ -60,6 +60,8 @@ async function refreshTokenMiddleware(req, res, next) {
       );
 
       res.setHeader("Authorization", "Bearer " + accessToken);
+      res.setHeader("Access-Control-Expose-Headers", "Authorization");
+
       req.accessToken = accessToken; // pass it to the authenticateToken middleware for checking
       next();
     }
