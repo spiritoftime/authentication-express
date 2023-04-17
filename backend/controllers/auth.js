@@ -33,7 +33,7 @@ const register = async (req, res) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: process.env.NODE_ENV === "production" ? false : true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // since we are using react to render frontend and not client side render
+    sameSite: "None", // since we are using react to render frontend and not client side render
   });
 
   res.setHeader("Authorization", "Bearer " + accessToken);
@@ -65,13 +65,58 @@ const login = async (req, res) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: process.env.NODE_ENV === "production" ? false : true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // since we are using react to render frontend and not client side render
+    sameSite: "None", // since we are using react to render frontend and not client side render
   });
 
   res.setHeader("Authorization", "Bearer " + accessToken);
-  res.setHeader('Access-Control-Expose-Headers', 'Authorization');
+  res.setHeader("Access-Control-Expose-Headers", "Authorization");
 
   res.status(200).json({ user: { username: username, id: user.id } });
+};
+const logout = async (req, res) => {
+  const { userId } = req.body;
+  const refreshToken = req.cookies.refreshToken;
+  if (refreshToken) {
+    const user = User.findByPk(userId);
+    user.refreshToken = null;
+    await user.save();
+  }
+
+  // Delete the refresh token cookie
+  res.clearCookie("refreshToken");
+  res.status(200).send("Logged out");
+};
+const persistLogin = async (req, res) => {
+  const { accessToken } = req.body;
+  jwt.verify(
+    accessToken,
+    process.env.ACCESS_TOKEN_SECRET,
+    async (err, decoded) => {
+      if (decoded) {
+        const user = await User.findOne({
+          where: { username: decoded.name },
+        });
+        const payload = { name: user.username, isRefreshed: true };
+        const accessToken = generateToken(payload, "access", "15s");
+        const refreshToken = generateToken(payload, "refresh", "3h");
+        user.refreshToken = refreshToken;
+        await user.save();
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: process.env.NODE_ENV === "production" ? false : true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "None", // since we are using react to render frontend and not client side render
+        });
+
+        res.setHeader("Authorization", "Bearer " + accessToken);
+        res.setHeader("Access-Control-Expose-Headers", "Authorization");
+
+        res
+          .status(200)
+          .json({ user: { username: user.username, id: user.id } });
+      }
+    }
+  );
 };
 function generateToken(payload, tokenType, expiresIn) {
   // access - 15mins, refresh - 3h
@@ -85,4 +130,4 @@ function generateToken(payload, tokenType, expiresIn) {
     }
   );
 }
-module.exports = { register, login };
+module.exports = { register, login, logout, persistLogin };

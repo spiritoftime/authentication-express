@@ -6,9 +6,32 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import google_docs_logo from "../assets/google_docs_logo.png";
 import { useAppContext } from "../../context/appContext";
+import Button from "@mui/material/Button";
+import { useMutation } from "@tanstack/react-query";
+import { protectedApi } from "../services/makeProtectedRequest";
+import { logout } from "../services/auth";
 const Navbar = () => {
   const { authDetails, setAuthDetails } = useAppContext();
+  const {
+    mutate: logoutMutation,
+    error: logoutError,
+    isError: isLogoutError,
+  } = useMutation({
+    mutationFn: (userId) => {
+      return logout(userId);
+    },
+    onSuccess: (res) => {
+      setAuthDetails({});
+      localStorage.removeItem("accessToken");
 
+      protectedApi.interceptors.request.use((config) => {
+        if (accessToken) {
+          config.headers.Authorization = "";
+        }
+        return config;
+      });
+    },
+  });
   const loggedIn = Object.keys(authDetails).length !== 0;
   return (
     <AppBar sx={{ backgroundColor: "#4285F4" }} position="static">
@@ -21,7 +44,7 @@ const Navbar = () => {
             sx={{ height: "40px", width: "40px", objectFit: "cover" }}
           />
         </Link>
-        <Box>
+        <Box display="flex" alignItems="center">
           <Typography
             variant="body1"
             component={Link}
@@ -43,7 +66,7 @@ const Navbar = () => {
               variant="body1"
               component={Link}
               to="/profile"
-              sx={{ textDecoration: "none", color: "inherit" }}
+              sx={{ marginRight: 2, textDecoration: "none", color: "inherit" }}
             >
               Profile
             </Typography>
@@ -52,10 +75,20 @@ const Navbar = () => {
               variant="body1"
               component={Link}
               to="/register"
-              sx={{ textDecoration: "none", color: "inherit" }}
+              sx={{ marginRight: 2, textDecoration: "none", color: "inherit" }}
             >
               Register
             </Typography>
+          )}
+          {loggedIn ? (
+            <Button
+              onClick={() => logoutMutation(authDetails.id)}
+              variant="contained"
+            >
+              Logout
+            </Button>
+          ) : (
+            ""
           )}
         </Box>
       </Toolbar>

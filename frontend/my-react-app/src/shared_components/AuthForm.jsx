@@ -74,7 +74,7 @@ export default function AuthForm({ isLogin }) {
     if (isLogin) loginMutation({ username, password });
     else registerMutation({ username, password });
     // navigate to profile or something after that
-    navigate('/')
+    navigate("/");
   };
   return (
     <ThemeProvider theme={theme}>
@@ -152,12 +152,16 @@ export default function AuthForm({ isLogin }) {
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
-                <Link to={isLogin ? "/register" : "/login"} variant="body2">
-                  {isLogin
-                    ? `Don't have an account? Sign Up`
-                    : `Already have an account? Sign In`}
-                </Link>
+              <Grid onClick={() => navigate(isLogin ? "/register" : "/login")}>
+                {isLogin ? (
+                  <Link  variant="body2">
+                    Don't have an account? Sign Up
+                  </Link>
+                ) : (
+                  <Link variant="body2">
+                    Already have an account? Sign In
+                  </Link>
+                )}
               </Grid>
             </Grid>
           </Box>
