@@ -6,34 +6,12 @@ import Home from "./routes/Home";
 import Navbar from "./shared_components/Navbar";
 import AuthForm from "./shared_components/AuthForm";
 import Profile from "./routes/Profile";
-import { persistLogin } from "./services/auth";
-import { useMutation } from "@tanstack/react-query";
-import { useAppContext } from "../context/appContext";
-function App() {
-  const { setAuthDetails } = useAppContext();
-  const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: (accessToken) => {
-      return persistLogin(accessToken);
-    },
-    onSuccess: (res) => {
-      setAuthDetails({ ...res.data.user });
-      const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
-      protectedApi.interceptors.request.use((config) => {
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-      });
-    },
-  });
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      persistLoginMutation(accessToken);
-    }
-  }, []);
+import usePersistLogin from "./custom_hooks/usePersistLogin";
+import Redirect from "./routes/Redirect";
+import TextEditor from "./routes/TextEditor";
 
+function App() {
+  usePersistLogin();
   return (
     <>
       <CssBaseline />
@@ -44,6 +22,8 @@ function App() {
           <Route path="/register" element={<AuthForm isLogin={false} />} />
           <Route path="/login" element={<AuthForm isLogin={true} />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/createDocument" element={<Redirect />} />
+          <Route path="/documents/:id" element={<TextEditor />} />
         </Routes>
       </div>
     </>

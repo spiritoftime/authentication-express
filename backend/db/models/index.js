@@ -5,6 +5,7 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const process = require("process");
 const initUser = require("./user");
+const initDocument = require("./document");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../../config/database.js")[env];
@@ -43,6 +44,16 @@ if (config.use_env_variable) {
 //   }
 // });
 db.User = initUser(sequelize);
+db.Document = initDocument(sequelize);
+db.User.hasMany(db.Document, {
+  foreignKey: "user_id", // The foreign key in the Document model
+  as: "documents",
+});
+
+db.Document.belongsTo(db.User, {
+  foreignKey: "user_id",
+  as: "user",
+});
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

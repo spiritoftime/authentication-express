@@ -2,11 +2,22 @@ require("dotenv").config();
 const authenticateToken = require("./middleware/authenticateToken");
 const express = require("express");
 const db = require("./db/models");
+const { Document } = require("./db/models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const app = express();
+const { login, register } = require("./controllers/auth");
+const documentRouter = require("./routes/documentRouter");
+const authRouter = require("./routes/authRouter");
 const cookieParser = require("cookie-parser");
+const { findOrCreateDocument } = require("./controllers/document");
+const io = require("socket.io")(3001, {
+  cors: {
+    origin: "http://127.0.0.1:5173",
+    methods: ["GET", "POST"],
+  },
+});
 app.use(cookieParser());
 app.use(
   cors({
@@ -15,13 +26,24 @@ app.use(
   })
 );
 app.use(express.json());
-
-const { login, register } = require("./controllers/auth");
-const authRouter = require("./routes/authRouter");
-
-app.use("/", authRouter);
-app.get("/posts", authenticateToken, (req, res) => {
-  res.status(200).json({ message: "you made it!" });
+io.on("connection", (socket) => {
+  socket.on("get-document", async (documentId) => {
+    const document = await findOrCreateDocument(documentId);
+    socket.join(documentId);
+    socket.emit("load-document", document.data);
+    socket.on("send-changes", (delta) => {
+      socket.broadcast.to(documentId).emit("receive-changes", delta);
+    });
+    socket.on("save-document", async (document) => {
+      await Document.update({ data: document }, { where: { id: documentId } });
+      io.to(documentId).emit("document-saved", "All changes saved!");
+    });
+  });
 });
+app.use("/", authRouter);
+app.use("/documents", documentRouter);
+// app.get("/posts", authenticateToken, (req, res) => {
+//   res.status(200).json({ message: "you made it!" });
+// });
 
 app.listen(3000, () => console.log("app running on port 3000"));

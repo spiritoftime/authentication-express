@@ -11,7 +11,7 @@ const register = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   // store in the db
   const payload = { name: username, isRefreshed: false };
-  const accessToken = generateToken(payload, "access", "15s");
+  const accessToken = generateToken(payload, "access", "3h");
   const refreshToken = generateToken(payload, "refresh", "3h");
   let newUser;
   try {
@@ -57,7 +57,7 @@ const login = async (req, res) => {
   }
   // once both are correct, create the tokens
   const payload = { name: username, isRefreshed: false };
-  const accessToken = generateToken(payload, "access", "15s");
+  const accessToken = generateToken(payload, "access", "3h");
   const refreshToken = generateToken(payload, "refresh", "3h");
   user.refreshToken = refreshToken;
   await user.save();
@@ -86,8 +86,10 @@ const logout = async (req, res) => {
   res.clearCookie("refreshToken");
   res.status(200).send("Logged out");
 };
+// const persistLogin = authenticateToken;
 const persistLogin = async (req, res) => {
   const { accessToken } = req.body;
+
   jwt.verify(
     accessToken,
     process.env.ACCESS_TOKEN_SECRET,
@@ -97,7 +99,7 @@ const persistLogin = async (req, res) => {
           where: { username: decoded.name },
         });
         const payload = { name: user.username, isRefreshed: true };
-        const accessToken = generateToken(payload, "access", "15s");
+        const accessToken = generateToken(payload, "access", "3h");
         const refreshToken = generateToken(payload, "refresh", "3h");
         user.refreshToken = refreshToken;
         await user.save();
@@ -111,10 +113,13 @@ const persistLogin = async (req, res) => {
         res.setHeader("Authorization", "Bearer " + accessToken);
         res.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-        res
+        return res
           .status(200)
           .json({ user: { username: user.username, id: user.id } });
       }
+      return res
+        .status(403)
+        .json({ error: "Invalid access token, Please login" });
     }
   );
 };
