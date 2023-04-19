@@ -42,8 +42,8 @@ io.on("connection", (socket) => {
 });
 app.use("/", authRouter);
 app.use("/documents", documentRouter);
-// app.get("/posts", authenticateToken, (req, res) => {
-//   res.status(200).json({ message: "you made it!" });
-// });
+app.get("/posts", authenticateToken, (req, res) => {
+  res.status(200).json({ message: "you made it!" });
+});
 
 app.listen(3000, () => console.log("app running on port 3000"));

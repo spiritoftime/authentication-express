@@ -9,6 +9,7 @@ import Profile from "./routes/Profile";
 import usePersistLogin from "./custom_hooks/usePersistLogin";
 import Redirect from "./routes/Redirect";
 import TextEditor from "./routes/TextEditor";
+import Posts from "./routes/Posts";
 
 function App() {
   usePersistLogin();
@@ -24,6 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/createDocument" element={<Redirect />} />
           <Route path="/documents/:id" element={<TextEditor />} />
+          <Route path="/posts" element={<Posts />} />
         </Routes>
       </div>
     </>

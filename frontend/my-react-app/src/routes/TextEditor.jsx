@@ -77,7 +77,7 @@ export default function TextEditor() {
   }, [socket, quillRef]);
 
   return (
-    <Box display="flex" padding={2}>
+    <Box display="flex" flexDirection="column" padding={2}>
       <Typography variant="h5" component="h1">
         {documentSaved}
       </Typography>

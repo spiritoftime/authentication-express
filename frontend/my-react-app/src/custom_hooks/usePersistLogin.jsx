@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { persistLogin } from "../services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useAppContext } from "../../context/appContext";
-import { protectedApi } from "../services/makeProtectedRequest";
+import { api } from "../services/makeRequest";
 const usePersistLogin = () => {
   const { authDetails, setAuthDetails } = useAppContext();
   const { mutate: persistLoginMutation } = useMutation({
@@ -13,12 +13,7 @@ const usePersistLogin = () => {
       setAuthDetails({ ...res.data.user });
       const accessToken = res.headers.authorization.split(" ")[1];
       localStorage.setItem("accessToken", accessToken);
-      protectedApi.interceptors.request.use((config) => {
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-      });
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     },
   });
   useEffect(() => {

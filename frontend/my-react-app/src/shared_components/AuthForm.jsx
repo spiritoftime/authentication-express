@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMutation } from "@tanstack/react-query";
 import { register, login } from "../services/auth";
 import { useAppContext } from "../../context/appContext";
-import { protectedApi } from "../services/makeProtectedRequest";
+import { api } from "../services/makeRequest";
 import { useNavigate } from "react-router-dom";
 const theme = createTheme();
 
@@ -34,13 +34,10 @@ export default function AuthForm({ isLogin }) {
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.user });
       const accessToken = res.headers.authorization.split(" ")[1];
+
       localStorage.setItem("accessToken", accessToken);
-      protectedApi.interceptors.request.use((config) => {
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-      });
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
       navigate("/");
     },
   });
@@ -55,14 +52,12 @@ export default function AuthForm({ isLogin }) {
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.user });
+
       const accessToken = res.headers.authorization.split(" ")[1];
+
       localStorage.setItem("accessToken", accessToken);
-      protectedApi.interceptors.request.use((config) => {
-        if (accessToken) {
-          config.headers.Authorization = `Bearer ${accessToken}`;
-        }
-        return config;
-      });
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      navigate("/");
     },
   });
 
@@ -74,7 +69,6 @@ export default function AuthForm({ isLogin }) {
     if (isLogin) loginMutation({ username, password });
     else registerMutation({ username, password });
     // navigate to profile or something after that
-    navigate("/");
   };
   return (
     <ThemeProvider theme={theme}>
@@ -154,13 +148,9 @@ export default function AuthForm({ isLogin }) {
               </Grid>
               <Grid onClick={() => navigate(isLogin ? "/register" : "/login")}>
                 {isLogin ? (
-                  <Link  variant="body2">
-                    Don't have an account? Sign Up
-                  </Link>
+                  <Link variant="body2">Don't have an account? Sign Up</Link>
                 ) : (
-                  <Link variant="body2">
-                    Already have an account? Sign In
-                  </Link>
+                  <Link variant="body2">Already have an account? Sign In</Link>
                 )}
               </Grid>
             </Grid>

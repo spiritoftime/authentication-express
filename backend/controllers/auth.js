@@ -10,9 +10,7 @@ const register = async (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   // store in the db
-  const payload = { name: username, isRefreshed: false };
-  const accessToken = generateToken(payload, "access", "3h");
-  const refreshToken = generateToken(payload, "refresh", "3h");
+
   let newUser;
   try {
     newUser = await User.create({
@@ -20,7 +18,6 @@ const register = async (req, res) => {
       created_at: new Date(),
       username: username,
       password: hashedPassword,
-      refreshToken: refreshToken,
     });
   } catch (err) {
     if (err.name === "SequelizeUniqueConstraintError") {
@@ -30,13 +27,9 @@ const register = async (req, res) => {
       .status(400)
       .json({ error: `Unable to create user. ${err.name}` });
   }
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: process.env.NODE_ENV === "production" ? false : true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "None", // since we are using react to render frontend and not client side render
-  });
-
-  res.setHeader("Authorization", "Bearer " + accessToken);
+  const { refreshToken } = generateTokensAndCookies(username, false, res);
+  newUser.refreshToken = refreshToken;
+  await newUser.save();
   res.status(200).json({ user: { username: username, id: newUser.id } });
 };
 const login = async (req, res) => {
@@ -56,28 +49,18 @@ const login = async (req, res) => {
     return res.status(401).json({ error: "Invalid password" });
   }
   // once both are correct, create the tokens
-  const payload = { name: username, isRefreshed: false };
-  const accessToken = generateToken(payload, "access", "3h");
-  const refreshToken = generateToken(payload, "refresh", "3h");
+  const { refreshToken } = generateTokensAndCookies(username, false, res);
   user.refreshToken = refreshToken;
   await user.save();
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: process.env.NODE_ENV === "production" ? false : true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "None", // since we are using react to render frontend and not client side render
-  });
-
-  res.setHeader("Authorization", "Bearer " + accessToken);
-  res.setHeader("Access-Control-Expose-Headers", "Authorization");
-
-  res.status(200).json({ user: { username: username, id: user.id } });
+  return res.status(200).json({ user: { username: username, id: user.id } });
 };
 const logout = async (req, res) => {
   const { userId } = req.body;
+
   const refreshToken = req.cookies.refreshToken;
   if (refreshToken) {
-    const user = User.findByPk(userId);
+    const user = await User.findByPk(userId);
     user.refreshToken = null;
     await user.save();
   }
@@ -89,40 +72,60 @@ const logout = async (req, res) => {
 // const persistLogin = authenticateToken;
 const persistLogin = async (req, res) => {
   const { accessToken } = req.body;
+  const refreshToken = req.cookies.refreshToken;
 
-  jwt.verify(
-    accessToken,
-    process.env.ACCESS_TOKEN_SECRET,
-    async (err, decoded) => {
-      if (decoded) {
+  try {
+    const decodedAccessToken = jwt.verify(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    const user = await User.findOne({
+      where: { username: decodedAccessToken.name },
+    });
+    const { newRefreshToken } = generateTokensAndCookies(
+      decodedAccessToken.name,
+      true,
+      res
+    );
+    user.refreshToken = newRefreshToken;
+    await user.save();
+    return res
+      .status(200)
+      .json({ user: { username: user.username, id: user.id } });
+  } catch (accessTokenError) {
+    if (accessTokenError.name === "TokenExpiredError") {
+      try {
+        const decodedRefreshToken = jwt.verify(
+          refreshToken,
+          process.env.REFRESH_TOKEN_SECRET
+        );
         const user = await User.findOne({
-          where: { username: decoded.name },
+          where: { username: decodedRefreshToken.name },
         });
-        const payload = { name: user.username, isRefreshed: true };
-        const accessToken = generateToken(payload, "access", "3h");
-        const refreshToken = generateToken(payload, "refresh", "3h");
-        user.refreshToken = refreshToken;
+        const { refreshToken: newRefreshToken } = generateTokensAndCookies(
+          decodedRefreshToken.name,
+          true,
+          res
+        );
+
+        user.refreshToken = newRefreshToken;
         await user.save();
-
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: process.env.NODE_ENV === "production" ? false : true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "None", // since we are using react to render frontend and not client side render
-        });
-
-        res.setHeader("Authorization", "Bearer " + accessToken);
-        res.setHeader("Access-Control-Expose-Headers", "Authorization");
-
         return res
           .status(200)
           .json({ user: { username: user.username, id: user.id } });
+      } catch (refreshTokenError) {
+        return res
+          .status(403)
+          .json({ error: "Invalid refresh token, please relogin." });
       }
+    } else {
       return res
         .status(403)
         .json({ error: "Invalid access token, Please login" });
     }
-  );
+  }
 };
+
 function generateToken(payload, tokenType, expiresIn) {
   // access - 15mins, refresh - 3h
   return jwt.sign(
@@ -134,5 +137,19 @@ function generateToken(payload, tokenType, expiresIn) {
       expiresIn: expiresIn, // typically, this is 5-15mins
     }
   );
+}
+function generateTokensAndCookies(username, isRefresh, res) {
+  const payload = { name: username, isRefreshed: isRefresh };
+  const accessToken = generateToken(payload, "access", "5s");
+  const refreshToken = generateToken(payload, "refresh", "3h");
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: process.env.NODE_ENV === "production" ? false : true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax", // since we are using react to render frontend and not client side render
+  });
+
+  res.setHeader("Authorization", "Bearer " + accessToken);
+  res.setHeader("Access-Control-Expose-Headers", "Authorization");
+  return { refreshToken, accessToken };
 }
 module.exports = { register, login, logout, persistLogin };

@@ -4,7 +4,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 async function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
+
   const token = authHeader && authHeader.split(" ")[1];
+
   if (token === null)
     return res
       .status(401)
@@ -15,11 +17,12 @@ async function authenticateToken(req, res, next) {
       if (err.name === "TokenExpiredError") {
         // Access token has expired, attempt to refresh it
         return refreshTokenMiddleware(req, res, next);
-      }
-      return res
-        .status(403)
-        .json({ error: "Invalid access token, Please login" }); // Invalid token
+      } else
+        return res
+          .status(403)
+          .json({ error: "Invalid access token, Please login" }); // Invalid token
     }
+
     req.user = user; // payload can be for use in the /posts example below
     // it can also be used to set state
     next();
@@ -27,7 +30,6 @@ async function authenticateToken(req, res, next) {
 }
 async function refreshTokenMiddleware(req, res, next) {
   const refreshToken = req.cookies.refreshToken;
-
   if (refreshToken == null)
     return res.status(401).json({ error: "Please relogin or register" }); // no such cookie
   const user = await User.findOne({
@@ -35,10 +37,11 @@ async function refreshTokenMiddleware(req, res, next) {
   });
 
   // next, check if the refreshToken is in the db
-  if (user == null)
+  if (user == null) {
     return res
       .status(403)
       .json({ error: "invalid refresh tokens. please relogin or register" });
+  }
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
@@ -56,13 +59,12 @@ async function refreshTokenMiddleware(req, res, next) {
       const accessToken = generateToken(
         { name: user.name, isRefreshed: true },
         "access",
-        "15min"
+        "5s"
       );
 
       res.setHeader("Authorization", "Bearer " + accessToken);
       res.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-      req.accessToken = accessToken; // pass it to the authenticateToken middleware for checking
       next();
     }
   );

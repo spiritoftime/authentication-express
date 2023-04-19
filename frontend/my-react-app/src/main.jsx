@@ -8,13 +8,11 @@ import { BrowserRouter } from "react-router-dom";
 import { AppProvider } from "../context/appContext";
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AppProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </AppProvider>
-  </React.StrictMode>
+  <AppProvider>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
+  </AppProvider>
 );

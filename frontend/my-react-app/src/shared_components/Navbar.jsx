@@ -8,7 +8,7 @@ import google_docs_logo from "../assets/google_docs_logo.png";
 import { useAppContext } from "../../context/appContext";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
-import { protectedApi } from "../services/makeProtectedRequest";
+import { api } from "../services/makeRequest";
 import { logout } from "../services/auth";
 const Navbar = () => {
   const { authDetails, setAuthDetails } = useAppContext();
@@ -23,13 +23,7 @@ const Navbar = () => {
     onSuccess: (res) => {
       setAuthDetails({});
       localStorage.removeItem("accessToken");
-
-      protectedApi.interceptors.request.use((config) => {
-        if (accessToken) {
-          config.headers.Authorization = "";
-        }
-        return config;
-      });
+      api.defaults.headers.common["Authorization"] = null;
     },
   });
   const loggedIn = Object.keys(authDetails).length !== 0;
