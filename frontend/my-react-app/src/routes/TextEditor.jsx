@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { io } from "socket.io-client";
+import { useAppContext } from "../context/appContext";
 const SAVE_INTERVAL_MS = 2000;
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -17,10 +18,12 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 export default function TextEditor() {
+  const { authDetails } = useAppContext();
   const { id: documentId } = useParams();
-  const [saveTimeout, setSaveTimeout] = useState(null);
+
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
   const quillRef = useRef();
+  const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
   // mount the socket.io
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function TextEditor() {
   useEffect(() => {
     if (socket == null || quillRef == null) return;
     const quillInstance = quillRef.current.getEditor();
-    socket.emit("get-document", documentId);
+    socket.emit("get-document", documentId, authDetails.username);
     quillInstance.setText("Loading...");
     quillInstance.disable();
     socket.once("load-document", (document) => {
@@ -51,12 +54,12 @@ export default function TextEditor() {
     const sendChangehandler = (delta, oldDelta, source) => {
       if (source !== "user") return;
       socket.emit("send-changes", delta);
-      if (saveTimeout) {
-        clearTimeout(saveTimeout);
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
       }
 
       // Set new save timeout
-      const newSaveTimeout = setTimeout(() => {
+      saveTimeout.current = setTimeout(() => {
         socket.emit("save-document", quillInstance.getContents());
         setDocumentSaved("saving document....");
       }, 2000); // 2000 ms delay after the user stops typing
@@ -72,6 +75,10 @@ export default function TextEditor() {
     quillInstance.on("text-change", sendChangehandler);
     socket.on("receive-changes", updateHandler);
     return () => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
+      }
+
       quillInstance.off("text-change", sendChangehandler);
     };
   }, [socket, quillRef]);

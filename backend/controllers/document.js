@@ -3,11 +3,11 @@ const { User, Document } = db;
 
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
-  const document = await findOrCreateDocument(documentId);
+  const document = await findOrCreateDocument(documentId, username);
   return res.status(200).json({ document });
 };
 
-async function findOrCreateDocument(documentId) {
+async function findOrCreateDocument(documentId, username) {
   if (documentId == null) return;
   const documentWithCreator = await Document.findByPk(documentId, {
     include: {
@@ -20,6 +20,9 @@ async function findOrCreateDocument(documentId) {
   });
 
   if (documentWithCreator) return documentWithCreator;
-  return await Document.create({ id: documentId, data: "" });
+  const user = await User.findOne({ where: { username: username } });
+  return await Document.create({
+    createdBy: user.id,
+  });
 }
 module.exports = { getDocument, findOrCreateDocument };

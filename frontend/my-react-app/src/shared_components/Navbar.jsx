@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import google_docs_logo from "../assets/google_docs_logo.png";
-import { useAppContext } from "../../context/appContext";
+import { useAppContext } from "../context/appContext";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../services/makeRequest";

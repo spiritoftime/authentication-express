@@ -9,6 +9,7 @@ const cors = require("cors");
 const app = express();
 const { login, register } = require("./controllers/auth");
 const documentRouter = require("./routes/documentRouter");
+const userRouter = require("./routes/userRouter");
 const authRouter = require("./routes/authRouter");
 const cookieParser = require("cookie-parser");
 const { findOrCreateDocument } = require("./controllers/document");
@@ -27,8 +28,8 @@ app.use(
 );
 app.use(express.json());
 io.on("connection", (socket) => {
-  socket.on("get-document", async (documentId) => {
-    const document = await findOrCreateDocument(documentId);
+  socket.on("get-document", async (documentId, username) => {
+    const document = await findOrCreateDocument(documentId, username);
     socket.join(documentId);
     socket.emit("load-document", document.data);
     socket.on("send-changes", (delta) => {
@@ -42,8 +43,9 @@ io.on("connection", (socket) => {
 });
 app.use("/", authRouter);
 app.use("/documents", documentRouter);
-app.get("/posts", authenticateToken, (req, res) => {
-  res.status(200).json({ message: "you made it!" });
-});
+app.use("/users", userRouter);
+// app.get("/posts", authenticateToken, (req, res) => {
+//   res.status(200).json({ message: "you made it!" });
+// });
 
 app.listen(3000, () => console.log("app running on port 3000"));

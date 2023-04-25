@@ -15,9 +15,16 @@ module.exports = {
       {
         name: "Kyle",
         username: "Kyle1234",
-
         password:
           "$2y$12$S8vE5am1ZK.NeZcoI4W4d.T3iHc9XnIzvr33UW8iPv5OKZbi/C6Ua",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        name: "Liang Yi",
+        username: "Liang Yi",
+        password:
+          "$2b$10$bU7CXE8t7HblOpBauuTGS.11Q4oRu/T53vw.py5yhumEPrMtui.vq",
         created_at: new Date(),
         updated_at: new Date(),
       },
