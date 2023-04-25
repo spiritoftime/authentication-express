@@ -46,13 +46,14 @@ if (config.use_env_variable) {
 db.User = initUser(sequelize);
 db.Document = initDocument(sequelize);
 db.User.hasMany(db.Document, {
-  foreignKey: "user_id", // The foreign key in the Document model
+  foreignKey: "created_by", // The foreign key in the Document model
+  onDelete: "CASCADE",
   as: "documents",
 });
 
 db.Document.belongsTo(db.User, {
-  foreignKey: "user_id",
-  as: "user",
+  foreignKey: "created_by",
+  as: "creator",
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

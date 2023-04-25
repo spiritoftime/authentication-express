@@ -10,9 +10,12 @@ const getDocument = async (req, res) => {
 async function findOrCreateDocument(documentId) {
   if (documentId == null) return;
   const documentWithCreator = await Document.findByPk(documentId, {
-    include: { model: User, as: "user" },
-    attributes: {
-      exclude: ["password", "refreshToken"],
+    include: {
+      model: User,
+      as: "creator",
+      attributes: {
+        exclude: ["password", "refreshToken", "createdAt", "updatedAt"],
+      },
     },
   });
 

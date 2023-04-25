@@ -8,8 +8,8 @@ function initDocument(sequelize) {
         primaryKey: true,
         type: DataTypes.UUID,
       },
-      user_id: {
-        allowNull: true,
+      createdBy: {
+        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "users", // The table name in the database

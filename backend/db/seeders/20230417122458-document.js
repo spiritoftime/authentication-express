@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert("documents", [
       {
         id: "81fcb940-400f-4dfe-9630-d9bfc98987f4",
-        user_id: 1,
+        created_by: 1,
         data: JSON.stringify({
           ops: [
             {
@@ -24,7 +24,6 @@ module.exports = {
           ],
         }),
 
-        created_by: "derpina",
         created_at: new Date(),
         updated_at: new Date(),
       },
