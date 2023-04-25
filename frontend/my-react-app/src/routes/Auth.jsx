@@ -17,9 +17,12 @@ import { register, login } from "../services/auth";
 import { useAppContext } from "../../context/appContext";
 import { api } from "../services/makeRequest";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const theme = createTheme();
 
-export default function AuthForm({ isLogin }) {
+export default function Auth({ isLogin }) {
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const { authDetails, setAuthDetails } = useAppContext();
 
   const navigate = useNavigate();
@@ -38,7 +41,7 @@ export default function AuthForm({ isLogin }) {
       localStorage.setItem("accessToken", accessToken);
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-      navigate("/");
+      navigate(from, { replace: true });
     },
   });
 
@@ -57,7 +60,7 @@ export default function AuthForm({ isLogin }) {
 
       localStorage.setItem("accessToken", accessToken);
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      navigate("/");
+      navigate(from, { replace: true });
     },
   });
 
