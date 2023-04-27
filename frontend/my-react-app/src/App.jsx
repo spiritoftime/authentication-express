@@ -12,9 +12,11 @@ import TextEditor from "./routes/TextEditor";
 import Posts from "./routes/Posts";
 import ProtectedRoute from "./shared_components/ProtectedRoute";
 import Auth from "./routes/Auth";
+import Unauthorized from "./routes/Unauthorized";
 
 function App() {
   usePersistLogin();
+
   return (
     <>
       <CssBaseline />
@@ -25,9 +27,24 @@ function App() {
           <Route path="/register" element={<Auth isLogin={false} />} />
           <Route path="/login" element={<Auth isLogin={true} />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/createDocument" element={<ProtectedRoute><Redirect /></ProtectedRoute>} />
-          <Route path="/documents/:id" element={<TextEditor />} />
+          <Route
+            path="/createDocument"
+            element={
+              <ProtectedRoute>
+                <Redirect />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/documents/:id"
+            element={
+              <ProtectedRoute>
+                <TextEditor />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/posts" element={<Posts />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>
     </>

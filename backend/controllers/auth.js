@@ -2,10 +2,10 @@ require("dotenv").config();
 const db = require("../db/models");
 const express = require("express");
 const authenticateToken = require("../middleware/authenticateToken");
-const { User } = db;
+const { User, Document } = db;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const { getUserWithDocuments } = require("../sequelize_queries/index.js");
 const register = async (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -52,8 +52,9 @@ const login = async (req, res) => {
   const { refreshToken } = generateTokensAndCookies(username, false, res);
   user.refreshToken = refreshToken;
   await user.save();
+  const userWithDocuments = await getUserWithDocuments(username);
 
-  return res.status(200).json({ user: { username: username, id: user.id } });
+  return res.status(200).json({ userWithDocuments });
 };
 const logout = async (req, res) => {
   const { userId } = req.body;
@@ -75,6 +76,7 @@ const persistLogin = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   try {
+    // check accessToken
     const decodedAccessToken = jwt.verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET
@@ -89,9 +91,8 @@ const persistLogin = async (req, res) => {
     );
     user.refreshToken = newRefreshToken;
     await user.save();
-    return res
-      .status(200)
-      .json({ user: { username: user.username, id: user.id } });
+    const userWithDocuments = await getUserWithDocuments(user.username);
+    return res.status(200).json({ userWithDocuments });
   } catch (accessTokenError) {
     if (accessTokenError.name === "TokenExpiredError") {
       try {
@@ -110,9 +111,8 @@ const persistLogin = async (req, res) => {
 
         user.refreshToken = newRefreshToken;
         await user.save();
-        return res
-          .status(200)
-          .json({ user: { username: user.username, id: user.id } });
+        const userWithDocuments = await getUserWithDocuments(user.username);
+        return res.status(200).json({ userWithDocuments });
       } catch (refreshTokenError) {
         return res
           .status(403)

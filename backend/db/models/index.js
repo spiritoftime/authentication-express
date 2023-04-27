@@ -47,22 +47,22 @@ if (config.use_env_variable) {
 db.User = initUser(sequelize);
 db.Document = initDocument(sequelize);
 db.User.hasMany(db.Document, {
-  foreignKey: "created_by",
+  foreignKey: "createdBy",
   onDelete: "CASCADE",
   as: "createdDocuments",
 });
 
 db.Document.belongsTo(db.User, {
-  foreignKey: "created_by", // the belongs to key
+  foreignKey: "createdBy", // the belongs to key
   as: "creator",
 });
 db.User.belongsToMany(db.Document, {
-  foreignKey: "user_id",
+  foreignKey: "userId",
   as: "accessibleDocuments",
   through: "user_document_access",
 });
 db.Document.belongsToMany(db.User, {
-  foreignKey: "document_id",
+  foreignKey: "documentId",
   as: "accessibleTo",
   through: "user_document_access",
 });
