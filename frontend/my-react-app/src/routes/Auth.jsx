@@ -35,7 +35,7 @@ export default function Auth({ isLogin }) {
       return register({ username, password });
     },
     onSuccess: (res) => {
-      setAuthDetails({ ...res.data.user });
+      setAuthDetails({ ...res.data.user, isNewDocument: false });
       const accessToken = res.headers.authorization.split(" ")[1];
 
       localStorage.setItem("accessToken", accessToken);
@@ -54,7 +54,7 @@ export default function Auth({ isLogin }) {
       return login({ username, password });
     },
     onSuccess: (res) => {
-      setAuthDetails({ ...res.data.userWithDocuments      });
+      setAuthDetails({ ...res.data.userWithDocuments, isNewDocument: false });
 
       const accessToken = res.headers.authorization.split(" ")[1];
 

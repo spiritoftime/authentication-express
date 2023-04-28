@@ -4,8 +4,11 @@ import "react-quill/dist/quill.snow.css";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { api } from "../services/makeRequest";
+import { useMutation } from "@tanstack/react-query";
 import { io } from "socket.io-client";
 import { useAppContext } from "../context/appContext";
+import { persistLogin } from "../services/auth";
 const SAVE_INTERVAL_MS = 2000;
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -18,7 +21,7 @@ const TOOLBAR_OPTIONS = [
   ["clean"],
 ];
 export default function TextEditor() {
-  const { authDetails } = useAppContext();
+  const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { id: documentId } = useParams();
 
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
@@ -62,9 +65,7 @@ export default function TextEditor() {
       saveTimeout.current = setTimeout(() => {
         socket.emit("save-document", quillInstance.getContents());
         setDocumentSaved("saving document....");
-      }, 2000); // 2000 ms delay after the user stops typing
-
-      setSaveTimeout(newSaveTimeout);
+      }, 1000);
     };
     const updateHandler = (delta, oldDelta, source) => {
       quillInstance.updateContents(delta);

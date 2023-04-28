@@ -39,9 +39,12 @@ const Navbar = () => {
             sx={{ height: "40px", width: "40px", objectFit: "cover" }}
           />
         </Link>
-        {!isLoadingAuth && (
+        {
           <Box display="flex" alignItems="center">
             <Typography
+              onClick={() =>
+                setAuthDetails((prev) => ({ ...prev, isNewDocument: true }))
+              }
               variant="body1"
               component={Link}
               to="/createDocument"
@@ -95,7 +98,7 @@ const Navbar = () => {
               ""
             )}
           </Box>
-        )}
+        }
       </Toolbar>
     </AppBar>
   );

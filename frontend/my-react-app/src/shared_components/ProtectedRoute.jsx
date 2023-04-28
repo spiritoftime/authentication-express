@@ -5,10 +5,15 @@ import { useLocation, useParams } from "react-router-dom";
 const ProtectedRoute = ({ children }) => {
   const { id: documentId } = useParams();
   const location = useLocation();
+
   const { authDetails, isLoadingAuth } = useAppContext();
+  console.log(authDetails);
   if (isLoadingAuth) return null;
   if (!authDetails.username)
     return <Navigate to="/login" state={{ from: location }} replace />;
+  if (authDetails.isNewDocument) {
+    return <>{children}</>;
+  }
   for (const document of authDetails.accessibleDocuments) {
     if (document.id === documentId) {
       return <>{children}</>;
