@@ -63,6 +63,9 @@ const AccessDialog = ({ document }) => {
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Button
+              onClick={() =>
+                navigator.clipboard.writeText(window.location.href)
+              }
               sx={{ borderRadius: "20px" }}
               variant="outlined"
               startIcon={<InsertLinkIcon />}
