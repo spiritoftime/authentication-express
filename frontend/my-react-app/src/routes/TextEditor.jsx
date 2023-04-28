@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { io } from "socket.io-client";
 import { useAppContext } from "../context/appContext";
 import { persistLogin } from "../services/auth";
+import DocumentBar from "../components/DocumentBar";
 const SAVE_INTERVAL_MS = 2000;
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -58,7 +59,6 @@ export default function TextEditor() {
   useEffect(() => {
     if (socket == null || quillRef == null) return;
     const quillInstance = quillRef.current.getEditor();
-    console.log(documentId);
     socket.emit("get-document", documentId, authDetails.username);
     quillInstance.setText("Loading...");
     quillInstance.disable();
@@ -106,10 +106,14 @@ export default function TextEditor() {
   }, [socket, quillRef]);
 
   return (
-    <Box display="flex" flexDirection="column" padding={2}>
-      <Typography variant="h5" component="h1">
-        {documentSaved}
-      </Typography>
+    <Box
+      position="relative"
+      display="flex"
+      flexDirection="column"
+      gap={2}
+      padding={2}
+    >
+      <DocumentBar documentSaved={documentSaved} />
       <ReactQuill
         ref={quillRef}
         modules={{ toolbar: TOOLBAR_OPTIONS }}

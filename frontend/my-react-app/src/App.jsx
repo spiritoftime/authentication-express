@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./index.css";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
 import Navbar from "./shared_components/Navbar";
@@ -13,12 +13,14 @@ import Posts from "./routes/Posts";
 import ProtectedRoute from "./shared_components/ProtectedRoute";
 import Auth from "./routes/Auth";
 import Unauthorized from "./routes/Unauthorized";
-
+import { useAppContext } from "./context/appContext";
+import { ThemeProvider } from "@mui/material/styles";
+import { darkTheme, lightTheme } from "./theme";
 function App() {
   usePersistLogin();
-
+  const { isDarkMode } = useAppContext();
   return (
-    <>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <div className="App">
         <Navbar />
@@ -47,7 +49,7 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>
-    </>
+    </ThemeProvider>
   );
 }
 

@@ -6,12 +6,24 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import google_docs_logo from "../assets/google_docs_logo.png";
 import { useAppContext } from "../context/appContext";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../services/makeRequest";
 import { logout } from "../services/auth";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import NightlightIcon from "@mui/icons-material/Nightlight";
 const Navbar = () => {
-  const { authDetails, setAuthDetails, isLoadingAuth } = useAppContext();
+  const {
+    authDetails,
+    setAuthDetails,
+    isLoadingAuth,
+    setIsDarkMode,
+    isDarkMode,
+  } = useAppContext();
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
+  };
   const {
     mutate: logoutMutation,
     error: logoutError,
@@ -29,7 +41,7 @@ const Navbar = () => {
   const loggedIn = Object.keys(authDetails).length !== 0;
 
   return (
-    <AppBar sx={{ backgroundColor: "#4285F4" }} position="static">
+    <AppBar position="static">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Box
@@ -41,6 +53,13 @@ const Navbar = () => {
         </Link>
         {
           <Box display="flex" alignItems="center">
+            <IconButton
+              onClick={toggleTheme}
+              aria-label="toggle color mode"
+              component="label"
+            >
+              {isDarkMode ? <NightlightIcon /> : <LightModeIcon />}
+            </IconButton>
             <Typography
               onClick={() =>
                 setAuthDetails((prev) => ({ ...prev, isNewDocument: true }))

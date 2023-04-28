@@ -4,6 +4,7 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   return (
     <AppContext.Provider
       value={{
@@ -11,6 +12,8 @@ const AppProvider = ({ children }) => {
         setAuthDetails,
         isLoadingAuth,
         setIsLoadingAuth,
+        isDarkMode,
+        setIsDarkMode,
       }}
     >
       {children}
