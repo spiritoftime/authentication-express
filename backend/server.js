@@ -30,6 +30,7 @@ app.use(express.json());
 io.on("connection", (socket) => {
   socket.on("get-document", async (documentId, username) => {
     const document = await findOrCreateDocument(documentId, username);
+    console.log(document);
     socket.join(documentId);
     socket.emit("load-document", document.data);
     socket.on("send-changes", (delta) => {
@@ -37,6 +38,7 @@ io.on("connection", (socket) => {
     });
     socket.on("save-document", async (document) => {
       await Document.update({ data: document }, { where: { id: documentId } });
+
       io.to(documentId).emit("document-saved", "All changes saved!");
     });
   });

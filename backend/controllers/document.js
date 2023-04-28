@@ -21,7 +21,7 @@ async function findOrCreateDocument(documentId, username) {
 
   if (documentWithCreator) return documentWithCreator;
   const user = await User.findOne({ where: { username: username } });
-  const newDocument = await user.createCreatedDocument();
+  const newDocument = await user.createCreatedDocument({ id: documentId });
   await user.addAccessibleDocument(newDocument);
   return newDocument;
 }

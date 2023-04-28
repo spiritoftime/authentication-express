@@ -23,12 +23,29 @@ const TOOLBAR_OPTIONS = [
 export default function TextEditor() {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { id: documentId } = useParams();
+  console.log(documentId);
 
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
   // mount the socket.io
+  const { mutate: reloginMutation } = useMutation({
+    // this is needed so that authDetails.accessibleDocuments and createdBy is updated when you create a new document
+    mutationFn: (accessToken) => {
+      return persistLogin(accessToken);
+    },
+    onSuccess: (res) => {
+      setAuthDetails((prev) => ({
+        ...res.data.userWithDocuments,
+        isNewDocument: prev.isNewDocument,
+      }));
+      const accessToken = res.headers.authorization.split(" ")[1];
+      localStorage.setItem("accessToken", accessToken);
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      setIsLoadingAuth(false); // Set loading state to false after checking
+    },
+  });
   useEffect(() => {
     const s = io("http://localhost:3001"); // connect to backend URI
     setSocket(s);
@@ -41,10 +58,14 @@ export default function TextEditor() {
   useEffect(() => {
     if (socket == null || quillRef == null) return;
     const quillInstance = quillRef.current.getEditor();
+    console.log(documentId);
     socket.emit("get-document", documentId, authDetails.username);
     quillInstance.setText("Loading...");
     quillInstance.disable();
     socket.once("load-document", (document) => {
+      setIsLoadingAuth(true);
+      reloginMutation(localStorage.getItem("accessToken"));
+      setIsLoadingAuth(false);
       quillInstance.setContents(document);
       quillInstance.enable();
     });
