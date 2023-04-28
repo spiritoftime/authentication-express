@@ -2,10 +2,14 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import HttpsIcon from "@mui/icons-material/Https";
+
 import Button from "@mui/material/Button";
 import CommentIcon from "@mui/icons-material/Comment";
-const DocumentBar = ({ documentSaved }) => {
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import CloudDoneIcon from "@mui/icons-material/CloudDone";
+import HistoryIcon from "@mui/icons-material/History";
+import AccessDialog from "./AccessDialog";
+const DocumentBar = ({ documentSaved, document = null }) => {
   return (
     <Box justifyContent="space-between" display="flex" alignItems="center">
       <Box gap={2} display="flex" alignItems="center">
@@ -15,24 +19,21 @@ const DocumentBar = ({ documentSaved }) => {
           label="Document Title"
         />
 
-        <Typography variant="h6" component="h5">
-          {documentSaved}
-        </Typography>
+        <Box display="flex" gap={2} alignItems="center">
+          {documentSaved === "All changes saved!" ? (
+            <CloudDoneIcon />
+          ) : (
+            <RestartAltIcon />
+          )}
+          <Typography variant="h6" component="h5">
+            {documentSaved}
+          </Typography>
+        </Box>
       </Box>
       <Box gap={2} display="flex" alignItems="center">
+        <HistoryIcon />
         <CommentIcon />
-        <Button
-          variant="contained"
-          sx={{
-            alignItems: "center",
-            backgroundColor: "#a5d8ff",
-            color: "#001d35",
-            borderRadius: "30px",
-          }}
-          startIcon={<HttpsIcon fontSize="small" />}
-        >
-          Share
-        </Button>
+        <AccessDialog />
       </Box>
     </Box>
   );

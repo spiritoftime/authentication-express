@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { io } from "socket.io-client";
 import { useAppContext } from "../context/appContext";
 import { persistLogin } from "../services/auth";
+
 import DocumentBar from "../components/DocumentBar";
 const SAVE_INTERVAL_MS = 2000;
 const TOOLBAR_OPTIONS = [
