@@ -2,7 +2,7 @@ require("dotenv").config();
 const db = require("../db/models");
 const express = require("express");
 const authenticateToken = require("../middleware/authenticateToken");
-const { User, Document } = db;
+const { User } = db;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { getUserWithDocuments } = require("../sequelize_queries/index.js");
@@ -84,7 +84,7 @@ const persistLogin = async (req, res) => {
     const user = await User.findOne({
       where: { username: decodedAccessToken.name },
     });
-    const { newRefreshToken } = generateTokensAndCookies(
+    const { refreshToken: newRefreshToken } = generateTokensAndCookies(
       decodedAccessToken.name,
       true,
       res

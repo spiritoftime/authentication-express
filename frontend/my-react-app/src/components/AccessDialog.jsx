@@ -11,18 +11,24 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Typography from "@mui/material/Typography";
 import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import Avatar from "@mui/material/Avatar";
+import { stringAvatar } from "../helper_functions/muiAvatar";
 import { getUsers, getUsersWithAccess } from "../services/user";
 
 const AccessDialog = ({ documentId }) => {
   const { data: users, isLoading: isUserFetching } = useQuery({
     queryKey: ["users"],
     queryFn: () => getUsers(),
+    refetchOnWindowFocus: false,
   });
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
     queryKey: ["users", "withAccess"],
     queryFn: () => getUsersWithAccess(documentId),
+    refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
+  // if (!isAccessFetching) console.log(userAccess.data);
   const [open, setOpen] = useState(false);
+  // const []
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,11 +72,24 @@ const AccessDialog = ({ documentId }) => {
               )}
             />
           )}
-          <Typography variant="h6" component="h5">
+          <Typography variant="h6" component="h6">
             People with access
           </Typography>
           <Box display="flex" flexDirection="column" gap={2}>
-            {/* the avatars */}
+            {!isAccessFetching &&
+              userAccess.data &&
+              userAccess.data.map((user) => {
+                return (
+                  <Box display="flex" gap={2}>
+                    <Avatar {...stringAvatar(user.name)} />
+                    <Box>
+                      <Typography key={user.id} variant="h6" component="h6">
+                        {user.name}
+                      </Typography>
+                    </Box>
+                  </Box>
+                );
+              })}
           </Box>
           <Typography variant="h6" component="h5">
             General access

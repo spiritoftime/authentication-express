@@ -23,13 +23,12 @@ async function authenticateToken(req, res, next) {
           .json({ error: "Invalid access token, Please login" }); // Invalid token
     }
 
-    req.user = user; // payload can be for use in the /posts example below
-    // it can also be used to set state
     next();
   });
 }
 async function refreshTokenMiddleware(req, res, next) {
   const refreshToken = req.cookies.refreshToken;
+
   if (refreshToken == null)
     return res.status(401).json({ error: "Please relogin or register" }); // no such cookie
   const user = await User.findOne({
