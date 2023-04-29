@@ -9,7 +9,7 @@ import Profile from "./routes/Profile";
 import usePersistLogin from "./custom_hooks/usePersistLogin";
 import Redirect from "./routes/Redirect";
 import TextEditor from "./routes/TextEditor";
-import Posts from "./routes/Posts";
+
 import ProtectedRoute from "./shared_components/ProtectedRoute";
 import Auth from "./routes/Auth";
 import Unauthorized from "./routes/Unauthorized";
@@ -45,7 +45,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/posts" element={<Posts />} />
+
           <Route path="/unauthorized" element={<Unauthorized />} />
         </Routes>
       </div>

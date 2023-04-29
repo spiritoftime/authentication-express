@@ -19,6 +19,7 @@ export function makeRequest(url, options) {
           "Authorization"
         ] = `Bearer ${headerAccessToken}`;
       }
+
       return res;
     })
     .catch((err) => {

@@ -11,7 +11,7 @@ import { useAppContext } from "../context/appContext";
 import { persistLogin } from "../services/auth";
 
 import DocumentBar from "../components/DocumentBar";
-const SAVE_INTERVAL_MS = 2000;
+const SAVE_INTERVAL_MS = 1000;
 const TOOLBAR_OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   [{ font: [] }],
@@ -25,7 +25,6 @@ const TOOLBAR_OPTIONS = [
 export default function TextEditor() {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { id: documentId } = useParams();
-  console.log(documentId);
 
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
   const quillRef = useRef();
@@ -87,7 +86,7 @@ export default function TextEditor() {
       saveTimeout.current = setTimeout(() => {
         socket.emit("save-document", quillInstance.getContents());
         setDocumentSaved("saving document....");
-      }, 1000);
+      }, SAVE_INTERVAL_MS);
     };
     const updateHandler = (delta, oldDelta, source) => {
       quillInstance.updateContents(delta);
@@ -114,7 +113,7 @@ export default function TextEditor() {
       gap={2}
       padding={2}
     >
-      <DocumentBar documentSaved={documentSaved} />
+      <DocumentBar documentId={documentId} documentSaved={documentSaved} />
       <ReactQuill
         ref={quillRef}
         modules={{ toolbar: TOOLBAR_OPTIONS }}

@@ -4,14 +4,25 @@ import Box from "@mui/material/Box";
 import HttpsIcon from "@mui/icons-material/Https";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
-
+import { useQuery, useMutation } from "@tanstack/react-query";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-
+import Autocomplete from "@mui/material/Autocomplete";
 import Typography from "@mui/material/Typography";
 import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-const AccessDialog = ({ document }) => {
+import { getUsers, getUsersWithAccess } from "../services/user";
+
+const AccessDialog = ({ documentId }) => {
+  const { data: users, isLoading: isUserFetching } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUsers(),
+  });
+  // const { data: userAccess, isLoading: isAccessFetching } = useQuery({
+  //   queryKey: ["users", "withAccess"],
+  //   queryFn: () => getUsersWithAccess(documentId),
+  // });
+  // if (!isAccessFetching) console.log(userAccess.data);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -43,12 +54,19 @@ const AccessDialog = ({ document }) => {
           gap={2}
           dividers={true}
         >
-          <TextField
-            sx={{ border: "none" }}
-            fullWidth
-            variant="outlined"
-            label="Add people"
-          />
+          {isUserFetching ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <Autocomplete
+              getOptionLabel={(option) => option.name}
+              id="combo-box-demo"
+              options={users.data}
+              fullWidth
+              renderInput={(params) => (
+                <TextField {...params} label="Add People" />
+              )}
+            />
+          )}
           <Typography variant="h6" component="h5">
             People with access
           </Typography>
