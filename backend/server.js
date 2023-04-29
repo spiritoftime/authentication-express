@@ -30,7 +30,6 @@ app.use(express.json());
 io.on("connection", (socket) => {
   socket.on("get-document", async (documentId, username) => {
     const document = await findOrCreateDocument(documentId, username);
-    console.log(document);
     socket.join(documentId);
     socket.emit("load-document", document.data);
     socket.on("send-changes", (delta) => {
@@ -44,8 +43,8 @@ io.on("connection", (socket) => {
   });
 });
 app.use("/", authRouter);
-app.use("/documents", documentRouter);
-app.use("/users", userRouter);
+app.use("/documents", authenticateToken, documentRouter);
+app.use("/users", authenticateToken, userRouter);
 // app.get("/posts", authenticateToken, (req, res) => {
 //   res.status(200).json({ message: "you made it!" });
 // });

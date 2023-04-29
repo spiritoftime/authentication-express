@@ -18,11 +18,10 @@ const AccessDialog = ({ documentId }) => {
     queryKey: ["users"],
     queryFn: () => getUsers(),
   });
-  // const { data: userAccess, isLoading: isAccessFetching } = useQuery({
-  //   queryKey: ["users", "withAccess"],
-  //   queryFn: () => getUsersWithAccess(documentId),
-  // });
-  // if (!isAccessFetching) console.log(userAccess.data);
+  const { data: userAccess, isLoading: isAccessFetching } = useQuery({
+    queryKey: ["users", "withAccess"],
+    queryFn: () => getUsersWithAccess(documentId),
+  });
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

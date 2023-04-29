@@ -6,6 +6,7 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const initUser = require("./user");
 const initDocument = require("./document");
+const initUserDocumentAccess = require("./user_document_access");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../../config/database.js")[env];
@@ -46,6 +47,7 @@ if (config.use_env_variable) {
 
 db.User = initUser(sequelize);
 db.Document = initDocument(sequelize);
+db.UserDocumentAccess = initUserDocumentAccess(sequelize);
 db.User.hasMany(db.Document, {
   foreignKey: "createdBy",
   onDelete: "CASCADE",
@@ -59,12 +61,12 @@ db.Document.belongsTo(db.User, {
 db.User.belongsToMany(db.Document, {
   foreignKey: "userId",
   as: "accessibleDocuments",
-  through: "user_document_access",
+  through: db.UserDocumentAccess,
 });
 db.Document.belongsToMany(db.User, {
   foreignKey: "documentId",
   as: "accessibleTo",
-  through: "user_document_access",
+  through: db.UserDocumentAccess,
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
