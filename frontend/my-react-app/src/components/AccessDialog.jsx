@@ -13,7 +13,6 @@ import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
-import Snackbar from "@mui/material/Snackbar";
 import {
   getUsersWithoutAccess,
   getUsersWithAccess,
@@ -22,7 +21,7 @@ import {
 
 const AccessDialog = ({ documentId }) => {
   const [open, setOpen] = useState(false);
-  const [addUser, setAddUser] = useState(null);
+  const [addUsers, setAddUsers] = useState([]);
   const {
     mutate: addUserAccessMutation,
     error: userAccessError,
@@ -46,15 +45,17 @@ const AccessDialog = ({ documentId }) => {
     queryFn: () => getUsersWithAccess(documentId),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
+
   // if (!isUserFetching) console.log(usersWithoutAccess.data);
   // if (!isAccessFetching) console.log(userAccess.data);
 
-  console.log(addUser);
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
-    addUserAccessMutation({ name: addUser, documentId });
+    for (const name in addUsers) {
+      addUserAccessMutation({ name: name, documentId });
+    }
     setOpen(false);
   };
   return (
@@ -85,7 +86,13 @@ const AccessDialog = ({ documentId }) => {
           ) : (
             <Autocomplete
               onChange={(e) => {
-                setAddUser(e.target.innerText);
+                setAddUsers((prev) => {
+                  if (!prev.includes(e.target.innerText)) {
+                    return [...prev, e.target.innerText];
+                  } else {
+                    return prev;
+                  }
+                });
               }}
               getOptionLabel={(option) => option.name}
               id="combo-box-demo"
@@ -95,6 +102,27 @@ const AccessDialog = ({ documentId }) => {
                 <TextField {...params} label="Add People" />
               )}
             />
+          )}
+          {addUsers.length > 0 && (
+            <>
+              <Typography variant="h6" component="h6">
+                People to add
+              </Typography>
+              <Box display="flex" gap={2}>
+                {addUsers.map((name) => (
+                  <Box
+                    sx={{
+                      borderRadius: "5px",
+                      color: "black",
+                      padding: "5px 8px",
+                      backgroundColor: "#f1f1f1",
+                    }}
+                  >
+                    {name}
+                  </Box>
+                ))}
+              </Box>
+            </>
           )}
           <Typography variant="h6" component="h6">
             People with access
