@@ -13,29 +13,48 @@ import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
-import { getUsersWithoutAccess, getUsersWithAccess } from "../services/user";
+import Snackbar from "@mui/material/Snackbar";
+import {
+  getUsersWithoutAccess,
+  getUsersWithAccess,
+  addUserToDocument,
+} from "../services/user";
 
 const AccessDialog = ({ documentId }) => {
-  const [addUsers, setAddUsers] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [addUser, setAddUser] = useState(null);
+  const {
+    mutate: addUserAccessMutation,
+    error: userAccessError,
+    isError: isUserAccessError,
+  } = useMutation({
+    mutationFn: ({ name, documentId }) => {
+      return addUserToDocument({ name, documentId });
+    },
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
-    queryKey: ["users", "withoutAccess", "documentId"],
+    queryKey: ["users", "withoutAccess", "documentId", open], // it will refetch whenever user opens the dialog
     queryFn: () => getUsersWithoutAccess(documentId),
     refetchOnWindowFocus: false,
   });
 
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
-    queryKey: ["users", "withAccess", "documentId"],
+    queryKey: ["users", "withAccess", "documentId", open],
     queryFn: () => getUsersWithAccess(documentId),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-  if (!isUserFetching) console.log(usersWithoutAccess.data);
-  const [open, setOpen] = useState(false);
-  // const []
+  // if (!isUserFetching) console.log(usersWithoutAccess.data);
+  // if (!isAccessFetching) console.log(userAccess.data);
 
+  console.log(addUser);
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
+    addUserAccessMutation({ name: addUser, documentId });
     setOpen(false);
   };
   return (
@@ -65,6 +84,9 @@ const AccessDialog = ({ documentId }) => {
             <Typography>Loading...</Typography>
           ) : (
             <Autocomplete
+              onChange={(e) => {
+                setAddUser(e.target.innerText);
+              }}
               getOptionLabel={(option) => option.name}
               id="combo-box-demo"
               options={usersWithoutAccess.data}
@@ -82,10 +104,10 @@ const AccessDialog = ({ documentId }) => {
               userAccess.data &&
               userAccess.data.map((user) => {
                 return (
-                  <Box display="flex" gap={2}>
+                  <Box key={user.id} display="flex" gap={2}>
                     <Avatar {...stringAvatar(user.name)} />
                     <Box>
-                      <Typography key={user.id} variant="h6" component="h6">
+                      <Typography variant="h6" component="h6">
                         {user.name}
                       </Typography>
                     </Box>
