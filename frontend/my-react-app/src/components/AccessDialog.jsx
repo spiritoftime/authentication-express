@@ -13,20 +13,22 @@ import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
-import { getUsers, getUsersWithAccess } from "../services/user";
+import { getUsersWithoutAccess, getUsersWithAccess } from "../services/user";
 
 const AccessDialog = ({ documentId }) => {
-  const { data: users, isLoading: isUserFetching } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => getUsers(),
+  const [addUsers, setAddUsers] = useState([]);
+  const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
+    queryKey: ["users", "withoutAccess", "documentId"],
+    queryFn: () => getUsersWithoutAccess(documentId),
     refetchOnWindowFocus: false,
   });
+
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
-    queryKey: ["users", "withAccess"],
+    queryKey: ["users", "withAccess", "documentId"],
     queryFn: () => getUsersWithAccess(documentId),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-  // if (!isAccessFetching) console.log(userAccess.data);
+  if (!isUserFetching) console.log(usersWithoutAccess.data);
   const [open, setOpen] = useState(false);
   // const []
 
@@ -65,7 +67,7 @@ const AccessDialog = ({ documentId }) => {
             <Autocomplete
               getOptionLabel={(option) => option.name}
               id="combo-box-demo"
-              options={users.data}
+              options={usersWithoutAccess.data}
               fullWidth
               renderInput={(params) => (
                 <TextField {...params} label="Add People" />

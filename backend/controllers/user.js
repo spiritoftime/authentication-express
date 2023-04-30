@@ -1,6 +1,9 @@
 const db = require("../db/models");
 const { User, Document } = db;
-const { queryUsersWithAccess } = require("../sequelize_queries/index");
+const {
+  queryUsersWithAccess,
+  queryUsersWithoutAccess,
+} = require("../sequelize_queries/index");
 const getUser = async (req, res) => {
   const { userId } = req.params;
   const userWithDocuments = await User.findByPk(userId, {
@@ -37,4 +40,15 @@ const getUsersWithAccess = async (req, res) => {
 
   return res.status(200).json(usersWithAccess);
 };
-module.exports = { getUser, getUsers, getUsersWithAccess };
+const getUsersWithoutAccess = async (req, res) => {
+  const { documentId } = req.params;
+  const usersWithoutAccess = await queryUsersWithoutAccess(documentId);
+
+  return res.status(200).json(usersWithoutAccess);
+};
+module.exports = {
+  getUser,
+  getUsers,
+  getUsersWithAccess,
+  getUsersWithoutAccess,
+};
