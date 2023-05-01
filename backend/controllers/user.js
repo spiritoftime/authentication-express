@@ -48,10 +48,13 @@ const getUsersWithoutAccess = async (req, res) => {
 };
 const addUserToDocument = async (req, res) => {
   const { name, documentId } = req.body;
-  const user = await User.findOne({ where: { name } });
+
+  const user = await User.findOne({ where: { name: name } });
+
   const document = await Document.findOne({ where: { id: documentId } });
+
   await user.addAccessibleDocument(document);
-  return res.status(200).send("User added to document!");
+  return res.status(200).send("Users added to document!");
 };
 module.exports = {
   getUser,

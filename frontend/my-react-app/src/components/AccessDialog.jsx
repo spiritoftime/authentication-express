@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import HttpsIcon from "@mui/icons-material/Https";
@@ -11,8 +11,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
 import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import Avatar from "@mui/material/Avatar";
-import { stringAvatar } from "../helper_functions/muiAvatar";
+
 import {
   getUsersWithoutAccess,
   getUsersWithAccess,
@@ -21,10 +20,14 @@ import {
 import AutoComplete from "./AutoComplete";
 import PeopleToAdd from "./PeopleToAdd";
 import PeopleWithAccess from "./PeopleWithAccess";
+import AccessSnackBar from "./AccessSnackBar";
 
 const AccessDialog = ({ documentId }) => {
   const [open, setOpen] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
   const [addUsers, setAddUsers] = useState([]);
+  const [message, setMessage] = useState("");
+
   const {
     mutate: addUserAccessMutation,
     error: userAccessError,
@@ -32,6 +35,10 @@ const AccessDialog = ({ documentId }) => {
   } = useMutation({
     mutationFn: ({ name, documentId }) => {
       return addUserToDocument({ name, documentId });
+    },
+    onSuccess: (res) => {
+      setMessage(res.data);
+      setOpenSnackBar(true);
     },
   });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
@@ -53,13 +60,22 @@ const AccessDialog = ({ documentId }) => {
     setOpen(true);
   };
   const handleClose = () => {
-    for (const name in addUsers) {
+    setOpen(false);
+  };
+  const saveChanges = () => {
+    for (const name of addUsers) {
       addUserAccessMutation({ name: name, documentId });
     }
+    setAddUsers([]);
     setOpen(false);
   };
   return (
     <Box>
+      <AccessSnackBar
+        setOpenSnackBar={setOpenSnackBar}
+        openSnackBar={openSnackBar}
+        message={message}
+      />
       <Button
         onClick={handleClickOpen}
         variant="contained"
@@ -112,7 +128,7 @@ const AccessDialog = ({ documentId }) => {
               Copy Link
             </Button>
             <DialogActions>
-              <Button variant="contained" autoFocus onClick={handleClose}>
+              <Button variant="contained" autoFocus onClick={saveChanges}>
                 Save changes
               </Button>
             </DialogActions>

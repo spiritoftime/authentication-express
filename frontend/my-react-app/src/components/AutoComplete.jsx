@@ -14,6 +14,7 @@ const AutoComplete = ({ usersWithoutAccess, setAddUsers }) => {
       }}
       getOptionLabel={(option) => option.name}
       options={usersWithoutAccess.data}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       fullWidth
       renderInput={(params) => <TextField {...params} label="Add People" />}
     />
