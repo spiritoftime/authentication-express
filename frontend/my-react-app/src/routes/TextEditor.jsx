@@ -3,7 +3,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import { api } from "../services/makeRequest";
 import { useMutation } from "@tanstack/react-query";
 import { io } from "socket.io-client";
@@ -24,6 +23,7 @@ const TOOLBAR_OPTIONS = [
 ];
 export default function TextEditor() {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
+  const [documentTitle, setDocumentTitle] = useState("Untitled Document");
   const { id: documentId } = useParams();
 
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
@@ -62,7 +62,8 @@ export default function TextEditor() {
     socket.emit("get-document", documentId, authDetails.username);
     quillInstance.setText("Loading...");
     quillInstance.disable();
-    socket.once("load-document", (document) => {
+    socket.once("load-document", (document, title) => {
+      setDocumentTitle(title);
       setIsLoadingAuth(true);
       reloginMutation(localStorage.getItem("accessToken"));
       setIsLoadingAuth(false);
@@ -113,7 +114,13 @@ export default function TextEditor() {
       gap={2}
       padding={2}
     >
-      <DocumentBar documentId={documentId} documentSaved={documentSaved} />
+      <DocumentBar
+        setDocumentSaved={setDocumentSaved}
+        setDocumentTitle={setDocumentTitle}
+        documentTitle={documentTitle}
+        documentId={documentId}
+        documentSaved={documentSaved}
+      />
       <ReactQuill
         ref={quillRef}
         modules={{ toolbar: TOOLBAR_OPTIONS }}

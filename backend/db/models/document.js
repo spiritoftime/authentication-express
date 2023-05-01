@@ -20,6 +20,10 @@ function initDocument(sequelize) {
         allowNull: true,
         type: DataTypes.JSONB,
       },
+      title: {
+        allowNull: false,
+        type: DataTypes.TEXT,
+      },
     },
     { underscored: true }
   );
