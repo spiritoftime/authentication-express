@@ -16,6 +16,12 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        document_id: "be0255b0-b6e2-41ae-accc-38f379daa408",
+        user_id: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]);
   },
 

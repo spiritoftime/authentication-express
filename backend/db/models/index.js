@@ -6,6 +6,8 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const initUser = require("./user");
 const initDocument = require("./document");
+const initFolder = require("./folder");
+const initUserFolderAccess = require("./user_folder_access");
 const initUserDocumentAccess = require("./user_document_access");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
@@ -48,6 +50,8 @@ if (config.use_env_variable) {
 db.User = initUser(sequelize);
 db.Document = initDocument(sequelize);
 db.UserDocumentAccess = initUserDocumentAccess(sequelize);
+db.Folder = initFolder(sequelize);
+db.UserFolderAccess = initUserFolderAccess(sequelize);
 db.User.hasMany(db.Document, {
   foreignKey: "createdBy",
   onDelete: "CASCADE",
@@ -67,6 +71,25 @@ db.Document.belongsToMany(db.User, {
   foreignKey: "documentId",
   as: "accessibleTo",
   through: db.UserDocumentAccess,
+});
+db.Folder.belongsToMany(db.User, {
+  foreignKey: "folderId",
+  as: "foldersAccessibleTo",
+  through: db.UserFolderAccess,
+});
+db.User.belongsToMany(db.Folder, {
+  foreignKey: "userId",
+  through: db.UserFolderAccess,
+  as: "accessibleFolders",
+});
+db.Folder.belongsTo(db.Folder, {
+  foreignKey: "parentFolderId",
+  as: "parentFolder",
+});
+
+db.Folder.hasOne(db.Folder, {
+  foreignKey: "parentFolderId",
+  as: "childFolder",
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

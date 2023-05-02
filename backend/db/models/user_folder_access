@@ -1,14 +1,15 @@
 const { sequelize, DataTypes } = require("sequelize");
-function initDocument(sequelize) {
-  const Document = sequelize.define(
-    "Document",
+function initUserFolderAccess(sequelize) {
+  const UserFolderAccess = sequelize.define(
+    "UserFolderAccess",
     {
       id: {
         defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
       },
-      createdBy: {
+      userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
@@ -16,14 +17,7 @@ function initDocument(sequelize) {
           key: "id",
         },
       },
-      data: {
-        allowNull: true,
-        type: DataTypes.JSONB,
-      },
-      title: {
-        allowNull: false,
-        type: DataTypes.TEXT,
-      },
+
       folderId: {
         defaultValue: null,
         allowNull: true,
@@ -34,8 +28,11 @@ function initDocument(sequelize) {
         },
       },
     },
-    { underscored: true }
+    {
+      underscored: true,
+      tableName: "user_folder_access",
+    }
   );
-  return Document;
+  return UserFolderAccess;
 }
-module.exports = initDocument;
+module.exports = initUserFolderAccess;

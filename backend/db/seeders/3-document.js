@@ -72,6 +72,14 @@ module.exports = {
           ],
         }),
       },
+      {
+        created_at: new Date(),
+        updated_at: new Date(),
+        id: "be0255b0-b6e2-41ae-accc-38f379daa408",
+        title: "Custom Hook Example 1",
+        folder_id: "488db8e7-59a5-4fda-9f63-dc48f5e1e2b3",
+        created_by: 1,
+      },
     ]);
   },
 

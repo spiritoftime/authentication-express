@@ -1,7 +1,7 @@
 const { sequelize, DataTypes } = require("sequelize");
-function initDocument(sequelize) {
-  const Document = sequelize.define(
-    "Document",
+function initFolder(sequelize) {
+  const Folder = sequelize.define(
+    "Folder",
     {
       id: {
         defaultValue: DataTypes.UUIDV4,
@@ -12,19 +12,11 @@ function initDocument(sequelize) {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
-          model: "users", // The table name in the database
+          model: "users",
           key: "id",
         },
       },
-      data: {
-        allowNull: true,
-        type: DataTypes.JSONB,
-      },
-      title: {
-        allowNull: false,
-        type: DataTypes.TEXT,
-      },
-      folderId: {
+      parentFolderId: {
         defaultValue: null,
         allowNull: true,
         type: DataTypes.UUID,
@@ -33,9 +25,13 @@ function initDocument(sequelize) {
           key: "id",
         },
       },
+      folderName: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
     },
-    { underscored: true }
+    { underscored: true, timestamps: false }
   );
-  return Document;
+  return Folder;
 }
-module.exports = initDocument;
+module.exports = initFolder;

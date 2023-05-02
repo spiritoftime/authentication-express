@@ -3,7 +3,7 @@ const { User, Document } = db;
 
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
-  const document = await document.findByPk(documentId);
+  const document = await Document.findByPk(documentId);
   return res.status(200).json({ document });
 };
 
