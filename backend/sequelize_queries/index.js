@@ -1,7 +1,7 @@
 const db = require("../db/models");
 const { Op } = require("sequelize");
-const { User, Document, UserDocumentAccess } = db;
-async function getUserWithDocuments(username) {
+const { User, Document, UserDocumentAccess, Folder } = db;
+async function queryUserDetails(username) {
   const userWithDocuments = await User.findOne({
     where: { username: username },
     attributes: {
@@ -16,7 +16,12 @@ async function getUserWithDocuments(username) {
       {
         model: Document,
         as: "accessibleDocuments",
-        attributes: ["id"],
+        attributes: ["id", "title"],
+        through: { attributes: [] },
+      },
+      {
+        model: Folder,
+        as: "accessibleFolders",
         through: { attributes: [] },
       },
     ],
@@ -69,7 +74,7 @@ async function queryUsersWithoutAccess(documentId) {
   return usersWithoutAccess;
 }
 module.exports = {
-  getUserWithDocuments,
+  queryUserDetails,
   queryUsersWithAccess,
   queryUsersWithoutAccess,
 };

@@ -1,5 +1,5 @@
 const db = require("../db/models");
-const { User, Document } = db;
+const { User, Document, Folder } = db;
 const {
   queryUsersWithAccess,
   queryUsersWithoutAccess,
@@ -19,7 +19,12 @@ const getUser = async (req, res) => {
       {
         model: Document,
         as: "accessibleDocuments",
-        attributes: ["id"],
+        attributes: ["id,title"],
+        through: { attributes: [] },
+      },
+      {
+        model: Folder,
+        as: "accessibleFolders",
         through: { attributes: [] },
       },
     ],

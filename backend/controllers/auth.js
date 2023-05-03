@@ -5,7 +5,7 @@ const authenticateToken = require("../middleware/authenticateToken");
 const { User } = db;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { getUserWithDocuments } = require("../sequelize_queries/index.js");
+const { queryUserDetails } = require("../sequelize_queries/index.js");
 const register = async (req, res) => {
   const { username, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -52,7 +52,7 @@ const login = async (req, res) => {
   const { refreshToken } = generateTokensAndCookies(username, false, res);
   user.refreshToken = refreshToken;
   await user.save();
-  const userWithDocuments = await getUserWithDocuments(username);
+  const userWithDocuments = await queryUserDetails(username);
 
   return res.status(200).json({ userWithDocuments });
 };
@@ -91,7 +91,7 @@ const persistLogin = async (req, res) => {
     );
     user.refreshToken = newRefreshToken;
     await user.save();
-    const userWithDocuments = await getUserWithDocuments(user.username);
+    const userWithDocuments = await queryUserDetails(user.username);
     return res.status(200).json({ userWithDocuments });
   } catch (accessTokenError) {
     if (accessTokenError.name === "TokenExpiredError") {
@@ -111,7 +111,7 @@ const persistLogin = async (req, res) => {
 
         user.refreshToken = newRefreshToken;
         await user.save();
-        const userWithDocuments = await getUserWithDocuments(user.username);
+        const userWithDocuments = await queryUserDetails(user.username);
         return res.status(200).json({ userWithDocuments });
       } catch (refreshTokenError) {
         return res
