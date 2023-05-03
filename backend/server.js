@@ -10,6 +10,7 @@ const app = express();
 const { login, register } = require("./controllers/auth");
 const documentRouter = require("./routes/documentRouter");
 const userRouter = require("./routes/userRouter");
+const folderRouter = require("./routes/folderRouter");
 const authRouter = require("./routes/authRouter");
 const cookieParser = require("cookie-parser");
 const { findOrCreateDocument } = require("./controllers/document");
@@ -45,6 +46,7 @@ io.on("connection", (socket) => {
 app.use("/", authRouter);
 app.use("/documents", authenticateToken, documentRouter);
 app.use("/users", authenticateToken, userRouter);
+app.use("/folders", authenticateToken, folderRouter);
 // app.get("/posts", authenticateToken, (req, res) => {
 //   res.status(200).json({ message: "you made it!" });
 // });

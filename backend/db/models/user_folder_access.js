@@ -4,20 +4,19 @@ function initUserFolderAccess(sequelize) {
     "UserFolderAccess",
     {
       id: {
-        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
       },
       userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
         references: {
-          model: "users", // The table name in the database
+          model: "users",
           key: "id",
         },
       },
-
       folderId: {
         defaultValue: null,
         allowNull: true,

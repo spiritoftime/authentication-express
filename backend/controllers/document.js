@@ -1,5 +1,5 @@
 const db = require("../db/models");
-const { User, Document } = db;
+const { User, Document, UserDocumentAccess } = db;
 
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
@@ -29,6 +29,26 @@ async function findOrCreateDocument(documentId, username) {
   await user.addAccessibleDocument(newDocument);
   return newDocument;
 }
+async function createDocument(req, res) {
+  const { title, folderId, createdBy } = req.body;
+  try {
+    const document = await Document.create({
+      folderId: folderId,
+      createdBy: createdBy,
+      title: title,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    const userDocumentAccess = await UserDocumentAccess.create({
+      userId: createdBy,
+      documentId: document.id,
+    });
+    return res.status(201).json({ document, type: "document" });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err.message });
+  }
+}
 async function editDocument(req, res) {
   const { title } = req.body;
 
@@ -38,4 +58,9 @@ async function editDocument(req, res) {
   await document.save();
   return res.status(200).send("All changes saved!");
 }
-module.exports = { getDocument, findOrCreateDocument, editDocument };
+module.exports = {
+  getDocument,
+  findOrCreateDocument,
+  editDocument,
+  createDocument,
+};

@@ -16,7 +16,7 @@ async function queryUserDetails(username) {
       {
         model: Document,
         as: "accessibleDocuments",
-        attributes: ["id", "title", "folder_id", "created_by"],
+        attributes: ["id", "title", "folderId", "createdBy"],
         through: { attributes: [] },
       },
       {

@@ -7,6 +7,7 @@ function initFolder(sequelize) {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         type: DataTypes.UUID,
+        allowNull: false,
       },
       createdBy: {
         allowNull: false,

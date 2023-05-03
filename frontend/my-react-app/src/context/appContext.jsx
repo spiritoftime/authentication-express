@@ -16,9 +16,9 @@ const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
+
   const { accessibleDocuments: documents, accessibleFolders: folders } =
     authDetails;
-
   function createTree() {
     const root = {
       folderName: "root",
@@ -28,17 +28,21 @@ const AppProvider = ({ children }) => {
     };
 
     const tree = { null: root }; // the key will be 'null'
-
+    // traverse through all folders and add them to the tree first
     (folders || []).forEach((folder) => {
       folder.type = "folder";
       folder.children = [];
       tree[folder.id] = folder;
-      const parent = tree[folder.parentFolderId];
-      if (parent.children) parent.children.push(folder);
     });
+
+    (folders || []).forEach((folder) => {
+      const parent = tree[folder.parentFolderId] || tree["null"]; // Add to root if parent is not found
+      if (parent) parent.children.push(folder);
+    });
+
     (documents || []).forEach((document) => {
       document.type = "document";
-      const parent = tree[document.folder_id];
+      const parent = tree[document.folderId];
       if (parent) {
         parent.children.push(document);
       }
@@ -47,7 +51,7 @@ const AppProvider = ({ children }) => {
   }
   const tree = useMemo(() => {
     return createTree();
-  }, [folders, documents]);
+  }, [documents, folders]);
   return (
     <AppContext.Provider
       value={{

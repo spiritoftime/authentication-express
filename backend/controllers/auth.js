@@ -14,8 +14,7 @@ const register = async (req, res) => {
   let newUser;
   try {
     newUser = await User.create({
-      updated_at: new Date(),
-      created_at: new Date(),
+
       username: username,
       password: hashedPassword,
     });
@@ -30,7 +29,7 @@ const register = async (req, res) => {
   const { refreshToken } = generateTokensAndCookies(username, false, res);
   newUser.refreshToken = refreshToken;
   await newUser.save();
-  res.status(200).json({ user: { username: username, id: newUser.id } });
+  res.status(201).json({ user: { username: username, id: newUser.id } });
 };
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -54,7 +53,7 @@ const login = async (req, res) => {
   await user.save();
   const userWithDocuments = await queryUserDetails(username);
 
-  return res.status(200).json({ userWithDocuments });
+  return res.status(201).json({ userWithDocuments });
 };
 const logout = async (req, res) => {
   const { userId } = req.body;
@@ -68,7 +67,7 @@ const logout = async (req, res) => {
 
   // Delete the refresh token cookie
   res.clearCookie("refreshToken");
-  res.status(200).send("Logged out");
+  res.status(201).send("Logged out");
 };
 // const persistLogin = authenticateToken;
 const persistLogin = async (req, res) => {
@@ -92,7 +91,7 @@ const persistLogin = async (req, res) => {
     user.refreshToken = newRefreshToken;
     await user.save();
     const userWithDocuments = await queryUserDetails(user.username);
-    return res.status(200).json({ userWithDocuments });
+    return res.status(201).json({ userWithDocuments });
   } catch (accessTokenError) {
     if (accessTokenError.name === "TokenExpiredError") {
       try {
@@ -112,7 +111,7 @@ const persistLogin = async (req, res) => {
         user.refreshToken = newRefreshToken;
         await user.save();
         const userWithDocuments = await queryUserDetails(user.username);
-        return res.status(200).json({ userWithDocuments });
+        return res.status(201).json({ userWithDocuments });
       } catch (refreshTokenError) {
         return res
           .status(403)

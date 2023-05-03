@@ -91,6 +91,10 @@ db.Folder.hasOne(db.Folder, {
   foreignKey: "parentFolderId",
   as: "childFolder",
 });
+db.Document.belongsTo(db.Folder, {
+  foreignKey: "folderId",
+  as: "folder",
+});
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
