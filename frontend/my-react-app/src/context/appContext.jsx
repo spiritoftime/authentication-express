@@ -18,24 +18,31 @@ const AppProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const { accessibleDocuments: documents, accessibleFolders: folders } =
     authDetails;
+
   function createTree() {
-    const root = { name: "root", children: [], type: "folder", id: "null" };
+    const root = {
+      folderName: "root",
+      children: [],
+      type: "folder",
+      id: "null",
+    };
+
     const tree = { null: root }; // the key will be 'null'
-    if (documents)
-      documents.forEach((document) => {
-        document.type = "document";
-        const parent = tree[document.folder_id];
-        if (parent) {
-          parent.children.push(document);
-        }
-      });
-    if (folders)
-      folders.forEach((folder) => {
-        folder.type = "folder";
-        tree[folder.id] = folder;
-        const parent = tree[folder.parentFolderId];
-        if (parent) parent.children.push(folder);
-      });
+
+    (folders || []).forEach((folder) => {
+      folder.type = "folder";
+      folder.children = [];
+      tree[folder.id] = folder;
+      const parent = tree[folder.parentFolderId];
+      if (parent.children) parent.children.push(folder);
+    });
+    (documents || []).forEach((document) => {
+      document.type = "document";
+      const parent = tree[document.folder_id];
+      if (parent) {
+        parent.children.push(document);
+      }
+    });
     return tree;
   }
   const tree = useMemo(() => {

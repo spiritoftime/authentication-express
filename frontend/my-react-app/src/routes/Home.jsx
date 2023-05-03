@@ -1,7 +1,11 @@
 import React from "react";
-
+import Folder from "../components/Folder";
 const Home = () => {
-  return <div>Hello there</div>;
+  return (
+    <div>
+      <Folder id="null" />
+    </div>
+  );
 };
 
 export default Home;
