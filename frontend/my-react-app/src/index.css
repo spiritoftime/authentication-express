@@ -10,3 +10,14 @@
 .ql-container.ql-snow {
   min-height: 11.7in;
 }
+.node-input {
+  font-size: 12px;
+  line-height: 23px;
+  box-sizing: content-box;
+  letter-spacing: 0.15px;
+  cursor: text;
+  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 31px;
+}

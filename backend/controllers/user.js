@@ -19,7 +19,7 @@ const getUser = async (req, res) => {
       {
         model: Document,
         as: "accessibleDocuments",
-        attributes: ["id,title"],
+        attributes: ["id", "title", "createdBy"],
         through: { attributes: [] },
       },
       {

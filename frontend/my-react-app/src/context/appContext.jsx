@@ -10,7 +10,7 @@ const AppContext = React.createContext();
 // const accessibleDocument =  {
 //   "id": "81fcb940-400f-4dfe-9630-d9bfc98987f4",
 //   "title": "Untitled Document",
-//   "folder_id": null
+//   "folderId": null
 // },
 const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});

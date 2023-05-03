@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Folder from "../components/Folder";
 const Home = () => {
   return (
-    <Box padding={2}>
+    <Box>
       <Folder id="null" />
     </Box>
   );
