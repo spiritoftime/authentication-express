@@ -52,6 +52,7 @@ db.Document = initDocument(sequelize);
 db.UserDocumentAccess = initUserDocumentAccess(sequelize);
 db.Folder = initFolder(sequelize);
 db.UserFolderAccess = initUserFolderAccess(sequelize);
+// one user can have many documents, whilst one document can only be created by one user
 db.User.hasMany(db.Document, {
   foreignKey: "createdBy",
   onDelete: "CASCADE",
@@ -62,6 +63,7 @@ db.Document.belongsTo(db.User, {
   foreignKey: "createdBy", // the belongs to key
   as: "creator",
 });
+// one user can have many documents, and one document can be accessible to many users. ondelete cascade should be in model definition for many-many
 db.User.belongsToMany(db.Document, {
   foreignKey: "userId",
   as: "accessibleDocuments",
@@ -72,6 +74,7 @@ db.Document.belongsToMany(db.User, {
   as: "accessibleTo",
   through: db.UserDocumentAccess,
 });
+// one user can have many folders, and one folder can be accessibleto many users.
 db.Folder.belongsToMany(db.User, {
   foreignKey: "folderId",
   as: "foldersAccessibleTo",
@@ -82,18 +85,28 @@ db.User.belongsToMany(db.Folder, {
   through: db.UserFolderAccess,
   as: "accessibleFolders",
 });
+// one folder can have many child folders, but one child folder can only have one parent. onDelete cascade works when the parent is deleted, the child is deleted too
 db.Folder.belongsTo(db.Folder, {
   foreignKey: "parentFolderId",
   as: "parentFolder",
+  onDelete: "CASCADE",
 });
 
-db.Folder.hasOne(db.Folder, {
+db.Folder.hasMany(db.Folder, {
   foreignKey: "parentFolderId",
-  as: "childFolder",
+  as: "childFolders",
+  onDelete: "CASCADE",
 });
+// one document can be in one folder, but one folder can have many documents.
 db.Document.belongsTo(db.Folder, {
   foreignKey: "folderId",
   as: "folder",
+  onDelete: "CASCADE",
+});
+db.Folder.hasMany(db.Document, {
+  foreignKey: "folderId",
+  as: "documents",
+  onDelete: "CASCADE",
 });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

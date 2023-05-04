@@ -5,3 +5,8 @@ export function createFolder({ folderId, title, createdBy }) {
     data: { folderId, title, createdBy },
   });
 }
+export function deleteFolder(folderId) {
+  return makeRequest(`/folders/${folderId}`, {
+    method: "DELETE",
+  });
+}

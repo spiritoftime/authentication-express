@@ -11,3 +11,8 @@ export function createDocument({ folderId, title, createdBy }) {
     data: { folderId, title, createdBy },
   });
 }
+export function deleteDocument(documentId) {
+  return makeRequest(`/documents/${documentId}`, {
+    method: "DELETE",
+  });
+}

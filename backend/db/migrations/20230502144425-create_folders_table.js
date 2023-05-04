@@ -17,6 +17,8 @@ module.exports = {
           model: "users", // The table name in the database
           key: "id",
         },
+        onDelete: "CASCADE",
+
       },
       parent_folder_id: {
         defaultValue: null,
@@ -26,6 +28,8 @@ module.exports = {
           model: "folders", // The table name in the database
           key: "id",
         },
+        onDelete: "CASCADE",
+
       },
       folder_name: {
         type: Sequelize.TEXT,

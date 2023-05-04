@@ -16,6 +16,7 @@ function initUserFolderAccess(sequelize) {
           model: "users",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       folderId: {
         defaultValue: null,
@@ -25,6 +26,7 @@ function initUserFolderAccess(sequelize) {
           model: "folders",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
     },
     {

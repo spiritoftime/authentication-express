@@ -15,6 +15,7 @@ function initUserDocumentAccess(sequelize) {
           model: "users",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       documentId: {
         type: DataTypes.UUID,
@@ -22,6 +23,7 @@ function initUserDocumentAccess(sequelize) {
           model: "documents",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
     },
     {

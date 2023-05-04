@@ -13,9 +13,9 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { persistLogin } from "../services/auth";
 import Document from "./Document";
 import Grid from "@mui/material/Grid";
-import { createFolder } from "../services/folder";
+import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 const Folder = ({ id }) => {
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
@@ -25,6 +25,14 @@ const Folder = ({ id }) => {
   const [showInput, setShowInput] = useState({
     visible: false,
     isFolder: null,
+  });
+  const { mutate: deleteFolderMutation } = useMutation({
+    mutationFn: (folderId) => {
+      return deleteFolder(folderId);
+    },
+    onSuccess: (res) => {
+      persistLoginMutation(localStorage.getItem("accessToken"));
+    },
   });
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
@@ -86,19 +94,27 @@ const Folder = ({ id }) => {
               gap={1}
               component="h6"
             >
-              <FolderIcon />
+              <FolderIcon color="warning" />
               {folderNode.folderName}
             </Typography>
             <Box display="flex" alignItems="center">
               <IconButton
+                color="info"
                 onClick={() => setShowInput({ visible: true, isFolder: true })}
               >
                 <CreateNewFolderIcon />
               </IconButton>
               <IconButton
+                color="success"
                 onClick={() => setShowInput({ visible: true, isFolder: false })}
               >
                 <PostAddIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => deleteFolderMutation(id)}
+                color="error"
+              >
+                <DeleteIcon />
               </IconButton>
             </Box>
           </Grid>

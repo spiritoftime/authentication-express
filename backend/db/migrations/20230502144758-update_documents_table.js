@@ -11,6 +11,7 @@ module.exports = {
         model: "folders", // The table name in the database
         key: "id",
       },
+      onDelete: "CASCADE",
     });
   },
 

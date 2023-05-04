@@ -15,6 +15,7 @@ function initDocument(sequelize) {
           model: "users", // The table name in the database
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       data: {
         allowNull: true,
@@ -32,6 +33,7 @@ function initDocument(sequelize) {
           model: "folders",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
     },
     { underscored: true }

@@ -16,6 +16,7 @@ module.exports = {
           model: "users", // The table name in the database
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       data: {
         allowNull: true,

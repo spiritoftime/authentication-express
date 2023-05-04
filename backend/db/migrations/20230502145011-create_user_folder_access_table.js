@@ -16,6 +16,7 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       folder_id: {
         type: Sequelize.UUID,
@@ -23,6 +24,7 @@ module.exports = {
           model: "folders",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       created_at: {
         allowNull: false,

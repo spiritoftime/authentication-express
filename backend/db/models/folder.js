@@ -25,6 +25,7 @@ function initFolder(sequelize) {
           model: "folders",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       folderName: {
         type: DataTypes.TEXT,
