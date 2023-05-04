@@ -13,6 +13,7 @@ export function makeRequest(url, options) {
       const accessToken = localStorage.getItem("accessToken");
       if (!res.headers.authorization) return;
       const headerAccessToken = res.headers.authorization.split(" ")[1];
+
       if (accessToken !== headerAccessToken) {
         localStorage.setItem("accessToken", headerAccessToken);
         api.defaults.headers.common[

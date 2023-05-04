@@ -17,7 +17,7 @@ const Navbar = () => {
   const {
     authDetails,
     setAuthDetails,
-    isLoadingAuth,
+
     setIsDarkMode,
     isDarkMode,
   } = useAppContext();

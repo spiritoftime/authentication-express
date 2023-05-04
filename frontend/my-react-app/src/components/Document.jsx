@@ -14,6 +14,7 @@ const Document = ({ node }) => {
   const { setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
+      setIsLoadingAuth(true);
       return persistLogin(accessToken);
     },
     onSuccess: (res) => {

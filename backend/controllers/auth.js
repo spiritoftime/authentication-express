@@ -14,7 +14,6 @@ const register = async (req, res) => {
   let newUser;
   try {
     newUser = await User.create({
-
       username: username,
       password: hashedPassword,
     });
@@ -118,6 +117,7 @@ const persistLogin = async (req, res) => {
           .json({ error: "Invalid refresh token, please relogin." });
       }
     } else {
+      console.error(accessTokenError);
       return res
         .status(403)
         .json({ error: "Invalid access token, Please login" });

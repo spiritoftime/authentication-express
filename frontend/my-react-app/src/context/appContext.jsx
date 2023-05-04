@@ -14,7 +14,7 @@ const AppContext = React.createContext();
 // },
 const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   const { accessibleDocuments: documents, accessibleFolders: folders } =
@@ -52,6 +52,7 @@ const AppProvider = ({ children }) => {
   const tree = useMemo(() => {
     return createTree();
   }, [documents, folders]);
+  console.log(isLoadingAuth);
   return (
     <AppContext.Provider
       value={{

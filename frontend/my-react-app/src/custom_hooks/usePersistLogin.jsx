@@ -22,6 +22,8 @@ const usePersistLogin = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     if (Object.keys(authDetails).length === 0 && accessToken) {
+      // currently not logged in but previously logged in
+      setIsLoadingAuth(true);
       persistLoginMutation(accessToken);
     }
   }, []);

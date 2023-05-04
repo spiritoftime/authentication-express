@@ -6,7 +6,7 @@ const createFolder = async (req, res) => {
   try {
     const folder = await Folder.create({
       createdBy: createdBy,
-      parentFolderId: folderId,
+      parentFolderId: folderId === "null" ? null : folderId,
       folderName: title,
     });
 
@@ -35,4 +35,4 @@ const deleteFolder = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-module.exports = { createFolder,deleteFolder };
+module.exports = { createFolder, deleteFolder };

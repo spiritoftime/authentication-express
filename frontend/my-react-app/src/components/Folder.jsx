@@ -31,14 +31,17 @@ const Folder = ({ id }) => {
       return deleteFolder(folderId);
     },
     onSuccess: (res) => {
+      console.log(res);
       persistLoginMutation(localStorage.getItem("accessToken"));
     },
   });
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
+      setIsLoadingAuth(true)
       return persistLogin(accessToken);
     },
     onSuccess: (res) => {
+      console.log(res, "login res");
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
       localStorage.setItem("accessToken", accessToken);
@@ -74,7 +77,7 @@ const Folder = ({ id }) => {
   return (
     <>
       <Grid sx={{ maxHeight: "500px", overflowY: "auto" }} container>
-        {id !== "null" && (
+        {
           <Grid item xs={12} display="flex" alignItems="center">
             {expand ? (
               <ExpandMoreIcon
@@ -118,7 +121,7 @@ const Folder = ({ id }) => {
               </IconButton>
             </Box>
           </Grid>
-        )}
+        }
         {showInput.visible && (
           <Grid item xs={12}>
             <input

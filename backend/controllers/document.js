@@ -33,7 +33,7 @@ async function createDocument(req, res) {
   const { title, folderId, createdBy } = req.body;
   try {
     const document = await Document.create({
-      folderId: folderId,
+      folderId: folderId === "null" ? null : folderId,
       createdBy: createdBy,
       title: title,
       createdAt: new Date(),
