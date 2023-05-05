@@ -87,24 +87,24 @@ db.User.belongsToMany(db.Folder, {
 });
 // one folder can have many child folders, but one child folder can only have one parent. onDelete cascade works when the parent is deleted, the child is deleted too
 db.Folder.belongsTo(db.Folder, {
-  foreignKey: "parentFolderId",
+  foreignKey: "parent",
   as: "parentFolder",
   onDelete: "CASCADE",
 });
 
 db.Folder.hasMany(db.Folder, {
-  foreignKey: "parentFolderId",
+  foreignKey: "parent",
   as: "childFolders",
   onDelete: "CASCADE",
 });
 // one document can be in one folder, but one folder can have many documents.
 db.Document.belongsTo(db.Folder, {
-  foreignKey: "folderId",
+  foreignKey: "parent",
   as: "folder",
   onDelete: "CASCADE",
 });
 db.Folder.hasMany(db.Document, {
-  foreignKey: "folderId",
+  foreignKey: "parent",
   as: "documents",
   onDelete: "CASCADE",
 });

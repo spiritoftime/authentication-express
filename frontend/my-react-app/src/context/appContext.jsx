@@ -19,9 +19,10 @@ const AppProvider = ({ children }) => {
 
   const { accessibleDocuments: documents, accessibleFolders: folders } =
     authDetails;
+
   function createTree() {
     const root = {
-      folderName: "root",
+      text: "root",
       children: [],
       type: "folder",
     };
@@ -36,14 +37,14 @@ const AppProvider = ({ children }) => {
     });
 
     (folders || []).forEach((folder) => {
-      const parent = tree[folder.parentFolderId] || tree["null"]; // Add to root if parent is not found
+      const parent = tree[folder.parent] || tree["null"]; // Add to root if parent is not found
       if (parent) parent.children.push(folder);
     });
 
     (documents || []).forEach((document) => {
       document.type = "document";
 
-      const parent = tree[document.folderId];
+      const parent = tree[document.parent];
       if (parent) {
         parent.children.push(document);
       }
@@ -53,6 +54,7 @@ const AppProvider = ({ children }) => {
   const tree = useMemo(() => {
     return createTree();
   }, [documents, folders]);
+
   return (
     <AppContext.Provider
       value={{

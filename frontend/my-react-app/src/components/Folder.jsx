@@ -17,7 +17,7 @@ import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const Folder = ({ id, index = null }) => {
+const Folder = ({ id }) => {
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
   const folderNode = tree[id];
@@ -96,7 +96,7 @@ const Folder = ({ id, index = null }) => {
             component="h6"
           >
             <FolderIcon color="warning" />
-            {folderNode.folderName}
+            {folderNode.text}
           </Typography>
           <Box display="flex" alignItems="center">
             <IconButton

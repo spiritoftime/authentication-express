@@ -7,7 +7,7 @@ const createFolder = async (req, res) => {
     const folder = await Folder.create({
       createdBy: createdBy,
       parentFolderId: folderId === "null" ? null : folderId,
-      folderName: title,
+      text: title,
     });
 
     const userFolderAccess = await UserFolderAccess.create({

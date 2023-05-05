@@ -45,7 +45,7 @@ const Document = ({ node }) => {
           component="span"
         >
           <ArticleIcon color="primary" />
-          {node.title}
+          {node.text}
         </Typography>
         <IconButton
           onClick={() => deleteDocumentMutation(node.id)}

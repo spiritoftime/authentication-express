@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
   socket.on("get-document", async (documentId, username) => {
     const document = await findOrCreateDocument(documentId, username);
     socket.join(documentId);
-    socket.emit("load-document", document.data, document.title);
+    socket.emit("load-document", document.data, document.text);
     socket.on("send-changes", (delta) => {
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });

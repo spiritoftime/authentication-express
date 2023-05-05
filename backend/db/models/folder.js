@@ -17,7 +17,7 @@ function initFolder(sequelize) {
           key: "id",
         },
       },
-      parentFolderId: {
+      parent: {
         defaultValue: null,
         allowNull: true,
         type: DataTypes.UUID,
@@ -27,7 +27,8 @@ function initFolder(sequelize) {
         },
         onDelete: "CASCADE",
       },
-      folderName: {
+      text: {
+        // folderName, called it text to fit react dnd
         type: DataTypes.TEXT,
         allowNull: false,
       },

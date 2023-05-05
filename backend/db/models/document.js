@@ -21,11 +21,11 @@ function initDocument(sequelize) {
         allowNull: true,
         type: DataTypes.JSONB,
       },
-      title: {
+      text: {
         allowNull: false,
         type: DataTypes.TEXT,
       },
-      folderId: {
+      parent: {
         defaultValue: null,
         allowNull: true,
         type: DataTypes.UUID,

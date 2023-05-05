@@ -24,7 +24,7 @@ async function findOrCreateDocument(documentId, username) {
 
   const newDocument = await user.createCreatedDocument({
     id: documentId,
-    title: "Untitled Document",
+    text: "Untitled Document",
   });
   await user.addAccessibleDocument(newDocument);
   return newDocument;
@@ -33,9 +33,9 @@ async function createDocument(req, res) {
   const { title, folderId, createdBy } = req.body;
   try {
     const document = await Document.create({
-      folderId: folderId === "null" ? null : folderId,
+      parent: folderId === "null" ? null : folderId,
       createdBy: createdBy,
-      title: title,
+      text: title,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -54,7 +54,7 @@ async function editDocument(req, res) {
 
   const { documentId } = req.params;
   const document = await Document.findByPk(documentId);
-  document.title = title;
+  document.text = title;
   await document.save();
   return res.status(200).send("All changes saved!");
 }

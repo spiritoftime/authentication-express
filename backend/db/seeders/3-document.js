@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert("documents", [
       {
         id: "81fcb940-400f-4dfe-9630-d9bfc98987f4",
-        title: "Untitled Document",
+        text: "Untitled Document",
         created_by: 1,
         data: JSON.stringify({
           ops: [
@@ -32,7 +32,7 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
         id: "6c228b2d-c165-4699-a734-08c3c5b23fe8",
-        title: "Random Rant",
+        text: "Random Rant",
         created_by: 3,
         data: JSON.stringify({
           ops: [
@@ -76,8 +76,8 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
         id: "be0255b0-b6e2-41ae-accc-38f379daa408",
-        title: "Custom Hook Example 1",
-        folder_id: "488db8e7-59a5-4fda-9f63-dc48f5e1e2b3",
+        text: "Custom Hook Example 1",
+        parent: "488db8e7-59a5-4fda-9f63-dc48f5e1e2b3",
         created_by: 1,
       },
     ]);
