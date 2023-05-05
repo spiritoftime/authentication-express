@@ -6,7 +6,7 @@ import Home from "./routes/Home";
 import Navbar from "./shared_components/Navbar";
 
 import Profile from "./routes/Profile";
-import usePersistLogin from "./custom_hooks/usePersistLogin";
+import usePersistLogin from "./customHooks/usePersistLogin";
 import Redirect from "./routes/Redirect";
 import TextEditor from "./routes/TextEditor";
 

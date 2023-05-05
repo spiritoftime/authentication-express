@@ -15,8 +15,8 @@ const usePersistLogin = () => {
       const accessToken = res.headers.authorization.split(" ")[1];
       localStorage.setItem("accessToken", accessToken);
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setIsLoadingAuth(false); // Set loading state to false after checking
     },
+    onSettled: () => setIsLoadingAuth(false), // Set loading state to false after checking
   });
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");

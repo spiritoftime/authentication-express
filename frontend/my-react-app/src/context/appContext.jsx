@@ -52,7 +52,6 @@ const AppProvider = ({ children }) => {
   const tree = useMemo(() => {
     return createTree();
   }, [documents, folders]);
-  console.log(isLoadingAuth);
   return (
     <AppContext.Provider
       value={{

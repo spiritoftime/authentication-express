@@ -31,17 +31,15 @@ const Folder = ({ id }) => {
       return deleteFolder(folderId);
     },
     onSuccess: (res) => {
-      console.log(res);
       persistLoginMutation(localStorage.getItem("accessToken"));
     },
   });
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
-      setIsLoadingAuth(true)
+      setIsLoadingAuth(true);
       return persistLogin(accessToken);
     },
     onSuccess: (res) => {
-      console.log(res, "login res");
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
       localStorage.setItem("accessToken", accessToken);

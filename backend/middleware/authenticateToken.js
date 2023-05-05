@@ -56,7 +56,7 @@ async function refreshTokenMiddleware(req, res, next) {
       }
 
       const accessToken = generateToken(
-        { name: user.name, isRefreshed: true },
+        { name: user.username, isRefreshed: true },
         "access",
         "5s"
       );
