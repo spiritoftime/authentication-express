@@ -16,6 +16,7 @@ import Unauthorized from "./routes/Unauthorized";
 import { useAppContext } from "./context/appContext";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
+
 function App() {
   usePersistLogin();
   const { isDarkMode } = useAppContext();

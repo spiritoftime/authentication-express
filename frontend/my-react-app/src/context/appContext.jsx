@@ -24,13 +24,13 @@ const AppProvider = ({ children }) => {
       folderName: "root",
       children: [],
       type: "folder",
-      id: "null",
     };
 
     const tree = { null: root }; // the key will be 'null'
     // traverse through all folders and add them to the tree first
     (folders || []).forEach((folder) => {
       folder.type = "folder";
+
       folder.children = [];
       tree[folder.id] = folder;
     });
@@ -42,6 +42,7 @@ const AppProvider = ({ children }) => {
 
     (documents || []).forEach((document) => {
       document.type = "document";
+
       const parent = tree[document.folderId];
       if (parent) {
         parent.children.push(document);

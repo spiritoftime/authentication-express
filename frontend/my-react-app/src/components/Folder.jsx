@@ -16,7 +16,8 @@ import Grid from "@mui/material/Grid";
 import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
-const Folder = ({ id }) => {
+
+const Folder = ({ id, index = null }) => {
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
   const folderNode = tree[id];
@@ -73,95 +74,90 @@ const Folder = ({ id }) => {
     }
   };
   return (
-    <>
-      <Grid sx={{ maxHeight: "500px", overflowY: "auto" }} container>
-        {
-          <Grid item xs={12} display="flex" alignItems="center">
-            {expand ? (
-              <ExpandMoreIcon
-                sx={{ cursor: "pointer" }}
-                onClick={() => setExpand(!expand)}
-              />
-            ) : (
-              <KeyboardArrowRightIcon
-                sx={{ cursor: "pointer" }}
-                onClick={() => setExpand(!expand)}
-              />
-            )}
-            <Typography
-              display="flex"
-              alignItems="center"
-              variant="h6"
-              gap={1}
-              component="h6"
-            >
-              <FolderIcon color="warning" />
-              {folderNode.folderName}
-            </Typography>
-            <Box display="flex" alignItems="center">
-              <IconButton
-                color="info"
-                onClick={() => setShowInput({ visible: true, isFolder: true })}
-              >
-                <CreateNewFolderIcon />
-              </IconButton>
-              <IconButton
-                color="success"
-                onClick={() => setShowInput({ visible: true, isFolder: false })}
-              >
-                <PostAddIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => deleteFolderMutation(id)}
-                color="error"
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          </Grid>
-        }
-        {showInput.visible && (
-          <Grid item xs={12}>
-            <input
-              onChange={(e) => setNewNodeName(e.target.value)}
-              style={{
-                color: isDarkMode ? "white" : "#1f2b44",
-                backgroundColor: isDarkMode ? "#fff" : "",
-                background: "none",
-                border: `1px solid ${isDarkMode ? "#d6b8b7" : "#1f2b44"}`,
-              }}
-              autoFocus
-              onKeyDown={onAddFolderNode}
-              onBlur={() => {
-                setShowInput({ visible: false, isFolder: null });
-                setNewNodeName("");
-              }}
-              className="node-input"
-              placeholder={
-                showInput.isFolder ? "Untitled Folder" : "Untitled Document"
-              }
-              value={newNodeName}
-            ></input>
-          </Grid>
-        )}
-        {expand && (
-          <Box
-            sx={{
-              padding: "0px 16px",
-            }}
+    <Grid sx={{ maxHeight: "500px", overflowY: "auto" }} container>
+      {
+        <Grid item xs={12} display="flex" alignItems="center">
+          {expand ? (
+            <ExpandMoreIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => setExpand(!expand)}
+            />
+          ) : (
+            <KeyboardArrowRightIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => setExpand(!expand)}
+            />
+          )}
+          <Typography
             display="flex"
-            flexDirection="column"
+            alignItems="center"
+            variant="h6"
+            gap={1}
+            component="h6"
           >
-            {folderNode.children &&
-              folderNode.children.map((fol) => {
-                if (fol.type === "folder")
-                  return <Folder key={fol.id} id={fol.id} />;
-                else return <Document key={fol.id} node={fol} />;
-              })}
+            <FolderIcon color="warning" />
+            {folderNode.folderName}
+          </Typography>
+          <Box display="flex" alignItems="center">
+            <IconButton
+              color="info"
+              onClick={() => setShowInput({ visible: true, isFolder: true })}
+            >
+              <CreateNewFolderIcon />
+            </IconButton>
+            <IconButton
+              color="success"
+              onClick={() => setShowInput({ visible: true, isFolder: false })}
+            >
+              <PostAddIcon />
+            </IconButton>
+            <IconButton onClick={() => deleteFolderMutation(id)} color="error">
+              <DeleteIcon />
+            </IconButton>
           </Box>
-        )}
-      </Grid>
-    </>
+        </Grid>
+      }
+      {showInput.visible && (
+        <Grid item xs={12}>
+          <input
+            onChange={(e) => setNewNodeName(e.target.value)}
+            style={{
+              color: isDarkMode ? "white" : "#1f2b44",
+              backgroundColor: isDarkMode ? "#fff" : "",
+              background: "none",
+              border: `1px solid ${isDarkMode ? "#d6b8b7" : "#1f2b44"}`,
+            }}
+            autoFocus
+            onKeyDown={onAddFolderNode}
+            onBlur={() => {
+              setShowInput({ visible: false, isFolder: null });
+              setNewNodeName("");
+            }}
+            className="node-input"
+            placeholder={
+              showInput.isFolder ? "Untitled Folder" : "Untitled Document"
+            }
+            value={newNodeName}
+          ></input>
+        </Grid>
+      )}
+      {expand && (
+        <Box
+          sx={{
+            padding: "0px 16px",
+          }}
+          display="flex"
+          flexDirection="column"
+        >
+          {folderNode.children &&
+            folderNode.children.map((fol) => {
+              if (fol.type === "folder")
+                return <Folder key={fol.id} id={fol.id} />;
+              else return <Document key={fol.id} node={fol} />;
+            })}
+        </Box>
+      )}
+    </Grid>
   );
 };
 
