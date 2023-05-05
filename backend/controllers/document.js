@@ -33,7 +33,7 @@ async function createDocument(req, res) {
   const { title, folderId, createdBy } = req.body;
   try {
     const document = await Document.create({
-      parent: folderId === "null" ? null : folderId,
+      parent: folderId,
       createdBy: createdBy,
       text: title,
       createdAt: new Date(),
@@ -50,20 +50,21 @@ async function createDocument(req, res) {
   }
 }
 async function editDocument(req, res) {
-  const { title } = req.body;
+  const { title, parent } = req.body;
 
   const { documentId } = req.params;
   const document = await Document.findByPk(documentId);
-  document.text = title;
+  if (title) document.text = title;
+  if (parent) document.parent = parent === "root" ? null : parent;
+
   await document.save();
-  return res.status(200).send("All changes saved!");
+  return res.status(204).send("All changes saved!");
 }
 const deleteDocument = async (req, res) => {
   const { documentId } = req.params;
   try {
     await Document.destroy({ where: { id: documentId } });
-
-    return res.status(200).json({ message: "Document deleted" });
+    return res.status(204).json({ message: "Document deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

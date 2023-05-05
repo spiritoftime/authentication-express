@@ -10,6 +10,6 @@ router.route("/").post(createDocument);
 router
   .route("/:documentId")
   .get(getDocument)
-  .post(editDocument)
+  .patch(editDocument)
   .delete(deleteDocument);
 module.exports = router;

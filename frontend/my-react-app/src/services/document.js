@@ -1,8 +1,8 @@
 import { makeRequest } from "./makeRequest";
-export function editDocument({ documentId, title }) {
-  return makeRequest(`/documents/${documentId}`, {
-    method: "POST",
-    data: { title },
+export function editDocument(data) {
+  return makeRequest(`/documents/${data.documentId}`, {
+    method: "PATCH",
+    data: data,
   });
 }
 export function createDocument({ folderId, title, createdBy }) {

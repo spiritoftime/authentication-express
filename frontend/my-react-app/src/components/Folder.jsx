@@ -17,12 +17,59 @@ import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const Folder = ({ id }) => {
+const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
+  if (isPreview)
+    return (
+      <Grid
+        item
+        xs={12}
+        display="flex"
+        alignItems="center"
+        paddingLeft={`${depth * 16}px`}
+      >
+        {isOpen ? (
+          <ExpandMoreIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => onToggle(node.id)}
+          />
+        ) : (
+          <KeyboardArrowRightIcon
+            sx={{ cursor: "pointer" }}
+            onClick={() => onToggle(node.id)}
+          />
+        )}
+        <Typography
+          display="flex"
+          alignItems="center"
+          variant="h6"
+          gap={1}
+          component="h6"
+        >
+          <FolderIcon color="warning" />
+          {node.text}
+        </Typography>
+        <Box display="flex" alignItems="center">
+          <IconButton
+            color="info"
+            onClick={() => setShowInput({ visible: true, isFolder: true })}
+          >
+            <CreateNewFolderIcon />
+          </IconButton>
+          <IconButton
+            color="success"
+            onClick={() => setShowInput({ visible: true, isFolder: false })}
+          >
+            <PostAddIcon />
+          </IconButton>
+          <IconButton onClick={() => deleteFolderMutation(id)} color="error">
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      </Grid>
+    );
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
-  const folderNode = tree[id];
   const [newNodeName, setNewNodeName] = useState("");
-  const [expand, setExpand] = useState(true);
   const [showInput, setShowInput] = useState({
     visible: false,
     isFolder: null,
@@ -63,29 +110,36 @@ const Folder = ({ id }) => {
       setNewNodeName("");
     },
   });
+
   const onAddFolderNode = (e) => {
     if (e.keyCode === 13 && e.target.value) {
       addFolderNodeMutation({
         title: e.target.value,
-        folderId: id,
+        folderId: node.id,
         createdBy: authDetails.id,
         isFolder: showInput.isFolder,
       });
     }
   };
   return (
-    <Grid sx={{ maxHeight: "500px", overflowY: "auto" }} container>
+    <Grid>
       {
-        <Grid item xs={12} display="flex" alignItems="center">
-          {expand ? (
+        <Grid
+          item
+          xs={12}
+          display="flex"
+          alignItems="center"
+          paddingLeft={`${depth * 16}px`}
+        >
+          {isOpen ? (
             <ExpandMoreIcon
               sx={{ cursor: "pointer" }}
-              onClick={() => setExpand(!expand)}
+              onClick={() => onToggle(node.id)}
             />
           ) : (
             <KeyboardArrowRightIcon
               sx={{ cursor: "pointer" }}
-              onClick={() => setExpand(!expand)}
+              onClick={() => onToggle(node.id)}
             />
           )}
           <Typography
@@ -96,7 +150,7 @@ const Folder = ({ id }) => {
             component="h6"
           >
             <FolderIcon color="warning" />
-            {folderNode.text}
+            {node.text}
           </Typography>
           <Box display="flex" alignItems="center">
             <IconButton
@@ -140,22 +194,6 @@ const Folder = ({ id }) => {
             value={newNodeName}
           ></input>
         </Grid>
-      )}
-      {expand && (
-        <Box
-          sx={{
-            padding: "0px 16px",
-          }}
-          display="flex"
-          flexDirection="column"
-        >
-          {folderNode.children &&
-            folderNode.children.map((fol) => {
-              if (fol.type === "folder")
-                return <Folder key={fol.id} id={fol.id} />;
-              else return <Document key={fol.id} node={fol} />;
-            })}
-        </Box>
       )}
     </Grid>
   );

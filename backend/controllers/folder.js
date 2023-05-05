@@ -6,7 +6,7 @@ const createFolder = async (req, res) => {
   try {
     const folder = await Folder.create({
       createdBy: createdBy,
-      parentFolderId: folderId === "null" ? null : folderId,
+      parent: folderId,
       text: title,
     });
 
@@ -29,10 +29,19 @@ const deleteFolder = async (req, res) => {
   const { folderId } = req.params;
   try {
     await Folder.destroy({ where: { id: folderId } });
-    return res.status(200).json({ message: "Folder deleted" });
+    return res.status(204).json({ message: "Folder deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
-module.exports = { createFolder, deleteFolder };
+const editFolder = async (req, res) => {
+  const { parent } = req.body;
+  const { folderId } = req.params;
+  const folder = await Folder.findByPk(folderId);
+  console.log(parent, folder);
+  if (parent) folder.parent = parent === "root" ? null : parent;
+  await folder.save();
+  return res.status(201).send("All changes saved!");
+};
+module.exports = { createFolder, deleteFolder, editFolder };

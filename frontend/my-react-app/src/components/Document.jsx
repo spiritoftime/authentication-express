@@ -10,7 +10,29 @@ import { useAppContext } from "../context/appContext";
 import IconButton from "@mui/material/IconButton";
 import { persistLogin } from "../services/auth";
 import { api } from "../services/makeRequest";
-const Document = ({ node }) => {
+const Document = ({ node, depth, isPreview }) => {
+  if (isPreview)
+    return (
+      <Box display="flex" alignItems="center">
+        <KeyboardArrowRightIcon />
+        <Typography
+          display="flex"
+          alignItems="center"
+          gap={1}
+          variant="h6"
+          component="span"
+        >
+          <ArticleIcon color="primary" />
+          {node.text}
+        </Typography>
+        <IconButton
+          onClick={() => deleteDocumentMutation(node.id)}
+          color="error"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Box>
+    );
   const { setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
@@ -34,27 +56,22 @@ const Document = ({ node }) => {
     },
   });
   return (
-    <>
-      <Box display="flex" alignItems="center">
-        <KeyboardArrowRightIcon />
-        <Typography
-          display="flex"
-          alignItems="center"
-          gap={1}
-          variant="h6"
-          component="span"
-        >
-          <ArticleIcon color="primary" />
-          {node.text}
-        </Typography>
-        <IconButton
-          onClick={() => deleteDocumentMutation(node.id)}
-          color="error"
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Box>
-    </>
+    <Box paddingLeft={`${depth * 16}px`} display="flex" alignItems="center">
+      <KeyboardArrowRightIcon />
+      <Typography
+        display="flex"
+        alignItems="center"
+        gap={1}
+        variant="h6"
+        component="span"
+      >
+        <ArticleIcon color="primary" />
+        {node.text}
+      </Typography>
+      <IconButton onClick={() => deleteDocumentMutation(node.id)} color="error">
+        <DeleteIcon />
+      </IconButton>
+    </Box>
   );
 };
 

@@ -19,40 +19,31 @@ const AppProvider = ({ children }) => {
 
   const { accessibleDocuments: documents, accessibleFolders: folders } =
     authDetails;
-
-  function createTree() {
-    const root = {
-      text: "root",
-      children: [],
-      type: "folder",
-    };
-
-    const tree = { null: root }; // the key will be 'null'
-    // traverse through all folders and add them to the tree first
-    (folders || []).forEach((folder) => {
-      folder.type = "folder";
-
-      folder.children = [];
-      tree[folder.id] = folder;
-    });
-
-    (folders || []).forEach((folder) => {
-      const parent = tree[folder.parent] || tree["null"]; // Add to root if parent is not found
-      if (parent) parent.children.push(folder);
-    });
-
+  function createTreeData() {
     (documents || []).forEach((document) => {
+      document.droppable = false;
       document.type = "document";
-
-      const parent = tree[document.parent];
-      if (parent) {
-        parent.children.push(document);
-      }
     });
-    return tree;
+    (folders || []).forEach((folder) => {
+      folder.droppable = true;
+      folder.type = "folder";
+    });
+    return [
+      {
+        id: null,
+        createdBy: 1,
+        parent: "root",
+        text: "root",
+        droppable: true,
+        type: "folder",
+      },
+      ...(documents || []),
+      ...(folders || []),
+    ];
   }
+
   const tree = useMemo(() => {
-    return createTree();
+    return createTreeData();
   }, [documents, folders]);
 
   return (

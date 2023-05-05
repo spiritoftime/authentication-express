@@ -10,3 +10,9 @@ export function deleteFolder(folderId) {
     method: "DELETE",
   });
 }
+export function editFolder(data) {
+  return makeRequest(`/folders/${data.folderId}`, {
+    method: "PATCH",
+    data: { parent: data.parent },
+  });
+}
