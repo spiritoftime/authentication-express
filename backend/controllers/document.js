@@ -58,13 +58,13 @@ async function editDocument(req, res) {
   if (parent) document.parent = parent === "root" ? null : parent;
 
   await document.save();
-  return res.status(204).send("All changes saved!");
+  return res.status(200).send("All changes saved!");
 }
 const deleteDocument = async (req, res) => {
   const { documentId } = req.params;
   try {
     await Document.destroy({ where: { id: documentId } });
-    return res.status(204).json({ message: "Document deleted" });
+    return res.status(200).json({ message: "Document deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

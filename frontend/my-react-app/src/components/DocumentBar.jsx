@@ -25,11 +25,13 @@ const DocumentBar = ({
       return editDocument(data);
     },
     onSuccess: (res) => {
+      console.log(res);
       setDocumentSaved(res.data);
     },
   });
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
+      console.log("ayo");
       setDocumentSaved("saving document....");
       editDocumentMutation({ documentId: documentId, title: documentTitle }); // usemutation only accepts one obj as args
     }, 1000);

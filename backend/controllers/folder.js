@@ -29,7 +29,7 @@ const deleteFolder = async (req, res) => {
   const { folderId } = req.params;
   try {
     await Folder.destroy({ where: { id: folderId } });
-    return res.status(204).json({ message: "Folder deleted" });
+    return res.status(200).json({ message: "Folder deleted" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });

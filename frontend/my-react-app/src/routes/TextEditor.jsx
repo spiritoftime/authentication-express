@@ -8,7 +8,6 @@ import { useMutation } from "@tanstack/react-query";
 import { io } from "socket.io-client";
 import { useAppContext } from "../context/appContext";
 import { persistLogin } from "../services/auth";
-
 import DocumentBar from "../components/DocumentBar";
 const SAVE_INTERVAL_MS = 1000;
 const TOOLBAR_OPTIONS = [
@@ -27,6 +26,7 @@ export default function TextEditor() {
   const { id: documentId } = useParams();
 
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
+  console.log(documentSaved);
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
@@ -63,6 +63,7 @@ export default function TextEditor() {
     quillInstance.setText("Loading...");
     quillInstance.disable();
     socket.once("load-document", (document, title) => {
+      console.log(documentSaved, "on-load");
       setDocumentTitle(title);
       setIsLoadingAuth(true);
       reloginMutation(localStorage.getItem("accessToken"));
@@ -86,6 +87,7 @@ export default function TextEditor() {
       // Set new save timeout
       saveTimeout.current = setTimeout(() => {
         socket.emit("save-document", quillInstance.getContents());
+
         setDocumentSaved("saving document....");
       }, SAVE_INTERVAL_MS);
     };

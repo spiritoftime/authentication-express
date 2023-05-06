@@ -37,6 +37,7 @@ io.on("connection", (socket) => {
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });
     socket.on("save-document", async (document) => {
+      console.log("hi");
       await Document.update({ data: document }, { where: { id: documentId } });
 
       io.to(documentId).emit("document-saved", "All changes saved!");
