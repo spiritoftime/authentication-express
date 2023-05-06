@@ -70,6 +70,7 @@ export default function TextEditor() {
       setSocket(false);
     };
   }, []);
+  console.log(users);
   useEffect(() => {
     console.log("running");
     if (socket == null || quillRef == null) return;

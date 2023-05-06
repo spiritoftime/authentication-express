@@ -28,9 +28,14 @@ app.use(
   })
 );
 let documentToUsers = {};
+console.log(documentToUsers);
 app.use(express.json());
 io.on("connection", (socket) => {
+  console.log(documentToUsers);
+
   socket.on("get-document", async (documentId, username) => {
+    console.count("connect ran");
+    socket.username = username;
     if (documentToUsers[documentId]) {
       documentToUsers[documentId].add(username);
     } else {
@@ -42,7 +47,15 @@ io.on("connection", (socket) => {
   });
   socket.on("join-document", (documentId) => {
     socket.join(documentId);
+    socket.lastDocument = documentId;
     io.to(documentId).emit("users", [...documentToUsers[documentId]]);
+  });
+  socket.on("disconnect", () => {
+    console.count("disconnect ran");
+    documentToUsers[socket.lastDocument].delete(socket.username);
+    io.to(socket.lastDocument).emit("users", [
+      ...documentToUsers[socket.lastDocument],
+    ]);
   });
   socket.on("send-changes", (delta, documentId) => {
     socket.broadcast.to(documentId).emit("receive-changes", delta);
@@ -61,6 +74,7 @@ io.on("connection", (socket) => {
     }
     // Join the new room
     socket.join(newDocumentId);
+    socket.lastDocument = newDocumentId;
     // Add the user to the new room's user list
     if (documentToUsers[newDocumentId]) {
       documentToUsers[newDocumentId].add(username);
