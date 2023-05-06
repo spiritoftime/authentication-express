@@ -130,6 +130,7 @@ export default function TextEditor() {
   return (
     <Box display="flex" flexDirection="column" gap={2} padding={2}>
       <DocumentBar
+        users={users}
         setDocumentSaved={setDocumentSaved}
         setDocumentTitle={setDocumentTitle}
         documentTitle={documentTitle}

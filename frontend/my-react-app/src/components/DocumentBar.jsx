@@ -9,10 +9,12 @@ import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import HistoryIcon from "@mui/icons-material/History";
 import AccessDialog from "./AccessDialog";
 import { useEffect } from "react";
+import ActiveUsers from "./ActiveUsers";
 const DocumentBar = ({
   documentSaved,
   documentId,
   setDocumentSaved,
+  users,
   documentTitle,
   setDocumentTitle,
 }) => {
@@ -58,6 +60,7 @@ const DocumentBar = ({
         </Box>
       </Box>
       <Box gap={2} display="flex" alignItems="center">
+        <ActiveUsers users={users} />
         <HistoryIcon />
         <CommentIcon />
         <AccessDialog documentId={documentId} />
