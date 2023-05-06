@@ -14,7 +14,7 @@ import { editFolder } from "../services/folder";
 import { api } from "../services/makeRequest";
 import { persistLogin } from "../services/auth";
 
-const NestedFolders = () => {
+const NestedFolders = ({ switchRoom, socket }) => {
   const { tree: treeData, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
@@ -64,7 +64,14 @@ const NestedFolders = () => {
         rootId={"root"}
         render={(node, { depth, isOpen, onToggle }) => {
           if (node.type === "document")
-            return <Document node={node} depth={depth} />;
+            return (
+              <Document
+                switchRoom={switchRoom}
+                socket={socket}
+                node={node}
+                depth={depth}
+              />
+            );
           else
             return (
               <Folder

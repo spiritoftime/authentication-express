@@ -27,21 +27,48 @@ app.use(
     credentials: true,
   })
 );
+let documentToUsers = {};
 app.use(express.json());
 io.on("connection", (socket) => {
   socket.on("get-document", async (documentId, username) => {
+    if (documentToUsers[documentId]) {
+      documentToUsers[documentId].add(username);
+    } else {
+      documentToUsers[documentId] = new Set([username]);
+    }
     const document = await findOrCreateDocument(documentId, username);
-    socket.join(documentId);
-    socket.emit("load-document", document.data, document.text);
-    socket.on("send-changes", (delta) => {
-      socket.broadcast.to(documentId).emit("receive-changes", delta);
-    });
-    socket.on("save-document", async (document) => {
-      console.log("hi");
-      await Document.update({ data: document }, { where: { id: documentId } });
 
-      io.to(documentId).emit("document-saved", "All changes saved!");
-    });
+    socket.emit("load-document", document.data, document.text);
+  });
+  socket.on("join-document", (documentId) => {
+    socket.join(documentId);
+    io.to(documentId).emit("users", [...documentToUsers[documentId]]);
+  });
+  socket.on("send-changes", (delta, documentId) => {
+    socket.broadcast.to(documentId).emit("receive-changes", delta);
+  });
+  socket.on("save-document", async (document, documentId) => {
+    await Document.update({ data: document }, { where: { id: documentId } });
+    io.to(documentId).emit("document-saved", "All changes saved!");
+  });
+  socket.on("switch-document", (oldDocumentId, newDocumentId, username) => {
+    // Leave the old room
+    socket.leave(oldDocumentId);
+    // Remove the user from the old room's user list
+    if (documentToUsers[oldDocumentId]) {
+      documentToUsers[oldDocumentId].delete(username);
+      io.to(oldDocumentId).emit("users", [...documentToUsers[oldDocumentId]]);
+    }
+    // Join the new room
+    socket.join(newDocumentId);
+    // Add the user to the new room's user list
+    if (documentToUsers[newDocumentId]) {
+      documentToUsers[newDocumentId].add(username);
+    } else {
+      documentToUsers[newDocumentId] = new Set([username]);
+    }
+    // Emit the updated user list for the new room
+    io.to(newDocumentId).emit("users", [...documentToUsers[newDocumentId]]);
   });
 });
 app.use("/", authRouter);

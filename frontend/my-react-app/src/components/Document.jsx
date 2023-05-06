@@ -10,7 +10,7 @@ import { useAppContext } from "../context/appContext";
 import IconButton from "@mui/material/IconButton";
 import { persistLogin } from "../services/auth";
 import { api } from "../services/makeRequest";
-const Document = ({ node, depth, isPreview }) => {
+const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
   if (isPreview)
     return (
       <Box display="flex" alignItems="center">
@@ -56,7 +56,12 @@ const Document = ({ node, depth, isPreview }) => {
     },
   });
   return (
-    <Box paddingLeft={`${depth * 16}px`} display="flex" alignItems="center">
+    <Box
+      onClick={() => switchRoom(node.id, socket)}
+      paddingLeft={`${depth * 16}px`}
+      display="flex"
+      alignItems="center"
+    >
       <KeyboardArrowRightIcon />
       <Typography
         display="flex"
