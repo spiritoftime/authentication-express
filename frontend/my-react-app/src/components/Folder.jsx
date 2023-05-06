@@ -165,7 +165,10 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
             >
               <PostAddIcon />
             </IconButton>
-            <IconButton onClick={() => deleteFolderMutation(id)} color="error">
+            <IconButton
+              onClick={() => deleteFolderMutation(node.id)}
+              color="error"
+            >
               <DeleteIcon />
             </IconButton>
           </Box>

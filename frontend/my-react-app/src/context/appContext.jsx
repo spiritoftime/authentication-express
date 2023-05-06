@@ -14,7 +14,7 @@ const AppContext = React.createContext();
 // },
 const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});
-  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   const { accessibleDocuments: documents, accessibleFolders: folders } =
