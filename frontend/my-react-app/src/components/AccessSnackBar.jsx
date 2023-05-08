@@ -1,8 +1,8 @@
-import { useState } from "react";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Alert from "@mui/material/Alert";
 const AccessSnackBar = ({ setOpenSnackBar, openSnackBar, message }) => {
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -27,13 +27,19 @@ const AccessSnackBar = ({ setOpenSnackBar, openSnackBar, message }) => {
 
   return (
     // <Button onClick={handleClick}>Open simple snackbar</Button>
-    <Snackbar
-      open={openSnackBar}
-      autoHideDuration={6000}
-      onClose={handleClose}
-      message={message}
-      action={action}
-    />
+    <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        {message}
+      </Alert>
+    </Snackbar>
+    // <Snackbar
+    //   color="success"
+    //   open={openSnackBar}
+    //   autoHideDuration={6000}
+    //   onClose={handleClose}
+    //   message={message}
+    //   action={action}
+    // />
   );
 };
 
