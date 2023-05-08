@@ -6,10 +6,9 @@ import ArticleIcon from "@mui/icons-material/Article";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteDocument } from "../services/document";
-import { useAppContext } from "../context/appContext";
+
 import IconButton from "@mui/material/IconButton";
-import { persistLogin } from "../services/auth";
-import { api } from "../services/makeRequest";
+
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
   if (isPreview)
@@ -35,7 +34,6 @@ const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
       </Box>
     );
   const reloginMutation = useReLoginMutation();
-  const { setAuthDetails, setIsLoadingAuth } = useAppContext();
 
   const { mutate: deleteDocumentMutation } = useMutation({
     mutationFn: (documentId) => {
@@ -54,6 +52,7 @@ const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
     >
       <KeyboardArrowRightIcon />
       <Typography
+        sx={{ cursor: "pointer" }}
         display="flex"
         alignItems="center"
         gap={1}

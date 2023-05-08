@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Folder from "./Folder";
 import { DndProvider } from "react-dnd";
 import {
@@ -14,6 +14,8 @@ import { editFolder } from "../services/folder";
 
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const NestedFolders = ({ switchRoom, socket }) => {
+  const treeRef = useRef(null);
+  const handleOpen = (nodeId) => treeRef.current.open(nodeId);
   const { tree: treeData, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const reloginMutation = useReLoginMutation();
   const {
@@ -47,6 +49,7 @@ const NestedFolders = ({ switchRoom, socket }) => {
   return (
     <DndProvider backend={MultiBackend} options={getBackendOptions()}>
       <Tree
+        ref={treeRef}
         tree={treeData}
         rootId={"root"}
         render={(node, { depth, isOpen, onToggle }) => {
@@ -62,6 +65,7 @@ const NestedFolders = ({ switchRoom, socket }) => {
           else
             return (
               <Folder
+                handleOpen={handleOpen}
                 node={node}
                 depth={depth}
                 isOpen={isOpen}

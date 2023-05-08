@@ -34,7 +34,6 @@ const Navbar = () => {
     },
     onSuccess: (res) => {
       setAuthDetails({});
-      localStorage.removeItem("accessToken");
       api.defaults.headers.common["Authorization"] = null;
     },
   });

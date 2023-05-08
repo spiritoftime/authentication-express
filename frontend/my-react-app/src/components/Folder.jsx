@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useAppContext } from "../context/appContext";
 import Box from "@mui/material/Box";
 import { useMutation } from "@tanstack/react-query";
-import { api } from "../services/makeRequest";
 import IconButton from "@mui/material/IconButton";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
@@ -10,15 +9,13 @@ import FolderIcon from "@mui/icons-material/Folder";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { persistLogin } from "../services/auth";
-import Document from "./Document";
 import Grid from "@mui/material/Grid";
 import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 
-const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
+const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
   if (isPreview)
     return (
       <Grid
@@ -133,6 +130,7 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
             />
           )}
           <Typography
+            sx={{ cursor: "pointer" }}
             display="flex"
             alignItems="center"
             variant="h6"
@@ -145,13 +143,19 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
           <Box display="flex" alignItems="center">
             <IconButton
               color="info"
-              onClick={() => setShowInput({ visible: true, isFolder: true })}
+              onClick={() => {
+                setShowInput({ visible: true, isFolder: true });
+                handleOpen(node.id);
+              }}
             >
               <CreateNewFolderIcon />
             </IconButton>
             <IconButton
               color="success"
-              onClick={() => setShowInput({ visible: true, isFolder: false })}
+              onClick={() => {
+                setShowInput({ visible: true, isFolder: false });
+                handleOpen(node.id);
+              }}
             >
               <PostAddIcon />
             </IconButton>
