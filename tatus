@@ -1,0 +1,269 @@
+[33mcommit 3969f2864340dc329f49b149081b8e844bf69d17[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat May 6 19:49:20 2023 +0800
+
+    created ActiveUsers component
+
+[33mcommit 0e12fc4c7181d0b2350128e3f383cce5b08d3201[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat May 6 19:36:38 2023 +0800
+
+    added show active users in a document functionality
+
+[33mcommit 6b1a796523a42abf5a2a3033c20d013c73656814[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat May 6 17:02:18 2023 +0800
+
+    add navigate to different documents and on users event
+
+[33mcommit 9031a62ccbfb222486aa7790604efafb4f10e67b[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat May 6 15:30:06 2023 +0800
+
+    fixed status code in edit - 204 means no content, hence documentSaved was returning '' at first
+
+[33mcommit 9822e06e213f906b0301687a637a69e070465c30[m
+Author: choo liang yi <98036884+spiritoftime@users.noreply.github.com>
+Date:   Sat May 6 15:11:13 2023 +0800
+
+    updated readme with bug to fix
+
+[33mcommit 1b61893fee0a93fac8463136e1030d77fce401f2[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat May 6 15:09:04 2023 +0800
+
+    add temporary fix for isLoadingAuth
+
+[33mcommit cca89e06713cccf0bb863d4822db394524513957[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri May 5 20:29:07 2023 +0800
+
+    used react-dnd-treeview and implemented drag and drop functionality
+
+[33mcommit 67491f8438d6e7c6c04449c5eced0294752f871f[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri May 5 17:03:24 2023 +0800
+
+    changed parent_folder_id and folder_id to parent and title, folderName to text without breaking app
+
+[33mcommit 1339f1635107622687c2e62f4b1f42bcfa38e35c[m[33m ([m[1;31morigin/nestedFolderSystem[m[33m, [m[1;32mnestedFolderSystem[m[33m)[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri May 5 16:07:10 2023 +0800
+
+    save folder system made from scratch
+
+[33mcommit 703771f9ee2a427742775b195aaf6932feaf69c2[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri May 5 10:32:27 2023 +0800
+
+    fix authenticateToken middleware bug whereby payload is user.name, causing new users to throw error since they dont have name
+
+[33mcommit c36842b7d36091ad5b9704adb44dce3b533b44f4[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Thu May 4 19:50:48 2023 +0800
+
+    fix new users bug where persist login keeps failing - moved setIsLoadingAuth at protected route to inside useeffect
+
+[33mcommit 23d0c80fbf6b1c0142bbdba8205b4992b682ce6d[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Thu May 4 11:12:21 2023 +0800
+
+    add delete document functionality
+
+[33mcommit e3c464762de69756aa4d689f8ab71212e8cb6f18[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Thu May 4 11:03:20 2023 +0800
+
+    added recursively delete folder functionality
+
+[33mcommit 1384984eafceac20996e79a2cf7d5077b4267823[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 19:29:50 2023 +0800
+
+    implemented add folder or document functionality
+
+[33mcommit deb2bc903fa4d18ffa42a20428b213ad79f2b9d3[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 14:26:58 2023 +0800
+
+    added input element for user to type new folder/document name
+
+[33mcommit d64f872176250dd944d44197ef842b6484b1467f[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 12:28:59 2023 +0800
+
+    added expand and collapse functionality
+
+[33mcommit 41764158bf5209c1c83a8669e5a1f542943bcba2[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 11:19:37 2023 +0800
+
+    rendered folder structure on frontend
+
+[33mcommit dae82a7da78989691cefa35e16b45bd0e8d98109[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 10:26:22 2023 +0800
+
+    create tree structure to store frontend relationship of documents and folders
+
+[33mcommit b06aea4c64384eb97afe6a4c7374d864c19469fd[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed May 3 10:01:32 2023 +0800
+
+    update auth routes to query folders and document title
+
+[33mcommit 20e72415a3447732f066e6e09592bbc41d7fae6d[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Tue May 2 23:45:11 2023 +0800
+
+    created seed and tables for nested folders and documents feature
+
+[33mcommit 0c26eab38436eed0c1d7d286dc1d7cb82aa23839[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon May 1 12:33:22 2023 +0800
+
+    implemented edit document title functionality
+
+[33mcommit 098c69d4bc99a0696ecce8f7e21d56fb28f335fe[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon May 1 11:33:57 2023 +0800
+
+    add snackbar to indicate user given access
+
+[33mcommit f10c1ddb1bb426592f1b3e1406796c7056f15f63[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sun Apr 30 22:19:20 2023 +0800
+
+    extracted accessdialog into individual components
+
+[33mcommit 01ed46bb1d87a26ba48d54a08c562ef2543b6d5e[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sun Apr 30 22:08:57 2023 +0800
+
+    add people to add component in frontend
+
+[33mcommit f580863f290fc58b6945c823ced829cbbeedce28[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sun Apr 30 21:33:00 2023 +0800
+
+    implemented add user functionality
+
+[33mcommit 65b77fffa542620227042efdb8f1a149ae243fc9[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sun Apr 30 20:42:51 2023 +0800
+
+    change autocomplete to contain users without access to document instead of all users
+
+[33mcommit c72391b63303c8fe0715e6716e0f61a8f8aae887[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat Apr 29 21:17:57 2023 +0800
+
+    made basic frontend for people with access to document
+
+[33mcommit c99dca22dfb211992bd4dc94610c4387d9e2cc9f[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat Apr 29 20:38:26 2023 +0800
+
+    add route to query users with access to specific document
+
+[33mcommit 9af264d620196e9ed54b0c9929f966231e40d4e0[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Sat Apr 29 17:03:24 2023 +0800
+
+    add query users to implement autocomplete functionality
+
+[33mcommit b9e69f900ecb246e8a9d148dfc5c0f53b4db90bb[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri Apr 28 21:38:00 2023 +0800
+
+    add copy link functionality in copy link button
+
+[33mcommit 2c3051f8d3d4b5ddce536d49914f3677fe4eb791[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri Apr 28 21:33:08 2023 +0800
+
+    made basic dialog for share button
+
+[33mcommit 01657b5e24d8b6d7381a3c47bd5f9e00d715c913[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri Apr 28 16:21:45 2023 +0800
+
+    add light dark mode theme
+
+[33mcommit 1fcc877bb3113b9e49ca0e026c3401f58a6f494a[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri Apr 28 15:07:00 2023 +0800
+
+    fix createDocument to ensure document is created with the documentId from client
+
+[33mcommit 8f0e2a654938548b03ba5cb4a1dd487046178750[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Fri Apr 28 14:35:32 2023 +0800
+
+    fix redirect to unauthorized when clicking create document button
+
+[33mcommit 651d4df2a284f97f0911325b65ac10e6b561dcf2[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Thu Apr 27 22:46:00 2023 +0800
+
+    implemented authorized access to documents
+
+[33mcommit e4d3689eb08881f8479dbe421afa31bde3f5fc90[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Tue Apr 25 21:56:31 2023 +0800
+
+    fix document saved multiple re-rendering issue
+
+[33mcommit 3c09a5ab42739e57e0b91b926505b051ff49ba2e[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Tue Apr 25 18:39:53 2023 +0800
+
+    modified documents table to have created_by as one to many relationship
+
+[33mcommit 02df1162675fdec11eb6d0faa426b641000b746a[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Tue Apr 25 16:01:22 2023 +0800
+
+    implemented redirect if not login
+
+[33mcommit e5e515b62182502f6e8ee689de5482167d893b58[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Wed Apr 19 11:35:18 2023 +0800
+
+    fix authentication system to have persistence, update access token per request
+
+[33mcommit bcf8cf91dad10e8fd3d6457b8c13ceb07deb7422[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Tue Apr 18 12:44:06 2023 +0800
+
+    implemented create,update,read and save document
+
+[33mcommit ace7dbfddf400cf68c0014e7e93fbaa16ee0f421[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon Apr 17 17:29:47 2023 +0800
+
+    implemented login persistence
+
+[33mcommit 9c35dd242305ccdaa5fc3b3f558f204be4d8b1d5[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon Apr 17 16:22:27 2023 +0800
+
+    made auth form
+
+[33mcommit 8a178fcdcb4bf858e39d5d597d9abee5637af983[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon Apr 17 12:48:50 2023 +0800
+
+    made navbar
+
+[33mcommit 50c0d9d07716ccef78c0857468cb144c783038d7[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon Apr 17 12:04:47 2023 +0800
+
+    made working backend
+
+[33mcommit 856ac862fe8a4076fb1f8406118fab0c0ce8c056[m
+Author: spiritoftime <chooliangyi6@gmail.com>
+Date:   Mon Apr 17 12:04:30 2023 +0800
+
+    first commit

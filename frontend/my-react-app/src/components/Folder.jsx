@@ -83,14 +83,14 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
     },
   });
   const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: (accessToken) => {
+    mutationFn: () => {
       setIsLoadingAuth(true);
-      return persistLogin(accessToken);
+      return persistLogin();
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       setIsLoadingAuth(false); // Set loading state to false after checking
     },
@@ -105,7 +105,7 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
       return createDocument({ title, folderId, createdBy });
     },
     onSuccess: (res) => {
-      persistLoginMutation(localStorage.getItem("accessToken")); // rerun login to get the updated tree
+      persistLoginMutation(); // rerun login to get the updated tree
       setShowInput({ visible: false, isFolder: null });
       setNewNodeName("");
     },

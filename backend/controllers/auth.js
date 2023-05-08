@@ -70,58 +70,32 @@ const logout = async (req, res) => {
 };
 // const persistLogin = authenticateToken;
 const persistLogin = async (req, res) => {
-  const { accessToken } = req.body;
   const refreshToken = req.cookies.refreshToken;
 
+  if (!refreshToken) return;
+
   try {
-    // check accessToken
-    const decodedAccessToken = jwt.verify(
-      accessToken,
-      process.env.ACCESS_TOKEN_SECRET
+    const decodedRefreshToken = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
     );
     const user = await User.findOne({
-      where: { username: decodedAccessToken.name },
+      where: { username: decodedRefreshToken.name },
     });
     const { refreshToken: newRefreshToken } = generateTokensAndCookies(
-      decodedAccessToken.name,
+      decodedRefreshToken.name,
       true,
       res
     );
+
     user.refreshToken = newRefreshToken;
     await user.save();
     const userWithDocuments = await queryUserDetails(user.username);
     return res.status(201).json({ userWithDocuments });
-  } catch (accessTokenError) {
-    if (accessTokenError.name === "TokenExpiredError") {
-      try {
-        const decodedRefreshToken = jwt.verify(
-          refreshToken,
-          process.env.REFRESH_TOKEN_SECRET
-        );
-        const user = await User.findOne({
-          where: { username: decodedRefreshToken.name },
-        });
-        const { refreshToken: newRefreshToken } = generateTokensAndCookies(
-          decodedRefreshToken.name,
-          true,
-          res
-        );
-
-        user.refreshToken = newRefreshToken;
-        await user.save();
-        const userWithDocuments = await queryUserDetails(user.username);
-        return res.status(201).json({ userWithDocuments });
-      } catch (refreshTokenError) {
-        return res
-          .status(403)
-          .json({ error: "Invalid refresh token, please relogin." });
-      }
-    } else {
-      console.error(accessTokenError);
-      return res
-        .status(403)
-        .json({ error: "Invalid access token, Please login" });
-    }
+  } catch (refreshTokenError) {
+    return res
+      .status(403)
+      .json({ error: "Invalid refresh token, please relogin." });
   }
 };
 

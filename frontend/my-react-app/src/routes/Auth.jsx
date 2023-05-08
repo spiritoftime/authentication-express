@@ -36,7 +36,7 @@ export default function Auth({ isLogin }) {
       setAuthDetails({ ...res.data.user, isNewDocument: false });
       const accessToken = res.headers.authorization.split(" ")[1];
 
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       navigate(from, { replace: true });
@@ -56,7 +56,7 @@ export default function Auth({ isLogin }) {
 
       const accessToken = res.headers.authorization.split(" ")[1];
 
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       navigate(from, { replace: true });
     },

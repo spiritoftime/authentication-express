@@ -21,7 +21,6 @@ export function logout(userId) {
 }
 export function persistLogin(accessToken) {
   return makeRequest("/persist", {
-    method: "POST",
-    data: { accessToken },
+    method: "GET",
   });
 }

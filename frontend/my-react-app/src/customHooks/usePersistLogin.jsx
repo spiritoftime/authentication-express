@@ -8,23 +8,21 @@ const usePersistLogin = () => {
 
   const { mutate: persistLoginMutation } = useMutation({
     mutationFn: (accessToken) => {
-      return persistLogin(accessToken);
+      return persistLogin();
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     },
     onSettled: () => setIsLoadingAuth(false), // Set loading state to false after checking
   });
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-
-    if (Object.keys(authDetails).length === 0 && accessToken) {
+    if (Object.keys(authDetails).length === 0) {
       // currently not logged in but previously logged in
       setIsLoadingAuth(true);
-      persistLoginMutation(accessToken);
+      persistLoginMutation();
     }
   }, []);
 };

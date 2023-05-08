@@ -17,14 +17,14 @@ import { persistLogin } from "../services/auth";
 const NestedFolders = ({ switchRoom, socket }) => {
   const { tree: treeData, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: (accessToken) => {
+    mutationFn: () => {
       setIsLoadingAuth(true);
-      return persistLogin(accessToken);
+      return persistLogin();
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       setIsLoadingAuth(false); // Set loading state to false after checking
     },
@@ -50,7 +50,7 @@ const NestedFolders = ({ switchRoom, socket }) => {
       });
     },
     onSuccess: (res) => {
-      persistLoginMutation(localStorage.getItem("accessToken")); // rerun login to get the updated tree
+      persistLoginMutation(); // rerun login to get the updated tree
     },
   });
   const handleDrop = (newTree, { dragSource, dropTarget }) => {

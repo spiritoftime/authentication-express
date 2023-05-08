@@ -35,8 +35,8 @@ export default function TextEditor() {
 
   const { mutate: reloginMutation } = useMutation({
     // this is needed so that authDetails.accessibleDocuments and createdBy is updated when you create a new document
-    mutationFn: (accessToken) => {
-      return persistLogin(accessToken);
+    mutationFn: () => {
+      return persistLogin();
     },
     onSuccess: (res) => {
       setAuthDetails((prev) => ({
@@ -44,7 +44,7 @@ export default function TextEditor() {
         isNewDocument: prev.isNewDocument,
       }));
       const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
+
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       setIsLoadingAuth(false); // Set loading state to false after checking
     },
@@ -70,7 +70,6 @@ export default function TextEditor() {
       setSocket(false);
     };
   }, []);
-  console.log(users);
   useEffect(() => {
     console.log("running");
     if (socket == null || quillRef == null) return;
@@ -82,7 +81,7 @@ export default function TextEditor() {
     socket.once("load-document", (document, title) => {
       setDocumentTitle(title);
       setIsLoadingAuth(true);
-      reloginMutation(localStorage.getItem("accessToken"));
+      reloginMutation();
       setIsLoadingAuth(false);
       quillInstance.setContents(document);
       quillInstance.enable();
