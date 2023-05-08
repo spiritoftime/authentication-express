@@ -11,24 +11,11 @@ import { useAppContext } from "../context/appContext";
 import { useMutation } from "@tanstack/react-query";
 import { editDocument } from "../services/document";
 import { editFolder } from "../services/folder";
-import { api } from "../services/makeRequest";
-import { persistLogin } from "../services/auth";
 
+import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const NestedFolders = ({ switchRoom, socket }) => {
   const { tree: treeData, setAuthDetails, setIsLoadingAuth } = useAppContext();
-  const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: () => {
-      setIsLoadingAuth(true);
-      return persistLogin();
-    },
-    onSuccess: (res) => {
-      setAuthDetails({ ...res.data.userWithDocuments });
-      const accessToken = res.headers.authorization.split(" ")[1];
-
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setIsLoadingAuth(false); // Set loading state to false after checking
-    },
-  });
+  const reloginMutation = useReLoginMutation();
   const {
     mutate: editMutation,
     error: editError,
@@ -50,7 +37,7 @@ const NestedFolders = ({ switchRoom, socket }) => {
       });
     },
     onSuccess: (res) => {
-      persistLoginMutation(); // rerun login to get the updated tree
+      reloginMutation(); // rerun login to get the updated tree
     },
   });
   const handleDrop = (newTree, { dragSource, dropTarget }) => {

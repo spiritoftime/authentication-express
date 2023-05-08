@@ -16,6 +16,7 @@ import Grid from "@mui/material/Grid";
 import { createFolder, deleteFolder } from "../services/folder";
 import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 
 const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
   if (isPreview)
@@ -69,6 +70,8 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
     );
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
+  const reloginMutation = useReLoginMutation();
+
   const [newNodeName, setNewNodeName] = useState("");
   const [showInput, setShowInput] = useState({
     visible: false,
@@ -79,20 +82,7 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
       return deleteFolder(folderId);
     },
     onSuccess: (res) => {
-      persistLoginMutation(localStorage.getItem("accessToken"));
-    },
-  });
-  const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: () => {
-      setIsLoadingAuth(true);
-      return persistLogin();
-    },
-    onSuccess: (res) => {
-      setAuthDetails({ ...res.data.userWithDocuments });
-      const accessToken = res.headers.authorization.split(" ")[1];
-
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setIsLoadingAuth(false); // Set loading state to false after checking
+      reloginMutation();
     },
   });
   const {
@@ -105,7 +95,7 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
       return createDocument({ title, folderId, createdBy });
     },
     onSuccess: (res) => {
-      persistLoginMutation(); // rerun login to get the updated tree
+      reloginMutation(); // rerun login to get the updated tree
       setShowInput({ visible: false, isFolder: null });
       setNewNodeName("");
     },
@@ -166,7 +156,9 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview }) => {
               <PostAddIcon />
             </IconButton>
             <IconButton
-              onClick={() => deleteFolderMutation(node.id)}
+              onClick={(e) => {
+                deleteFolderMutation(node.id);
+              }}
               color="error"
             >
               <DeleteIcon />

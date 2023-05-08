@@ -10,6 +10,7 @@ import { useAppContext } from "../context/appContext";
 import IconButton from "@mui/material/IconButton";
 import { persistLogin } from "../services/auth";
 import { api } from "../services/makeRequest";
+import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
   if (isPreview)
     return (
@@ -33,26 +34,15 @@ const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
         </IconButton>
       </Box>
     );
+  const reloginMutation = useReLoginMutation();
   const { setAuthDetails, setIsLoadingAuth } = useAppContext();
-  const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: (accessToken) => {
-      setIsLoadingAuth(true);
-      return persistLogin(accessToken);
-    },
-    onSuccess: (res) => {
-      setAuthDetails({ ...res.data.userWithDocuments });
-      const accessToken = res.headers.authorization.split(" ")[1];
-      localStorage.setItem("accessToken", accessToken);
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setIsLoadingAuth(false); // Set loading state to false after checking
-    },
-  });
+
   const { mutate: deleteDocumentMutation } = useMutation({
     mutationFn: (documentId) => {
       return deleteDocument(documentId);
     },
     onSuccess: (res) => {
-      persistLoginMutation(localStorage.getItem("accessToken"));
+      reloginMutation();
     },
   });
   return (
@@ -73,7 +63,13 @@ const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
         <ArticleIcon color="primary" />
         {node.text}
       </Typography>
-      <IconButton onClick={() => deleteDocumentMutation(node.id)} color="error">
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation(); // prevent switchRoom from firing
+          deleteDocumentMutation(node.id);
+        }}
+        color="error"
+      >
         <DeleteIcon />
       </IconButton>
     </Box>
