@@ -1,6 +1,6 @@
 const { text } = require("express");
 const db = require("../db/models");
-const { Op } = require("sequelize");
+const { Op, col } = require("sequelize");
 const { User, Document, UserDocumentAccess, Folder } = db;
 async function queryUserDetails(username) {
   const userDetails = await User.findOne({
@@ -36,16 +36,21 @@ async function queryUserDetails(username) {
 }
 async function queryUsersWithAccess(documentId) {
   const usersWithAccess = await db.User.findAll({
-    attributes: ["id", "name"],
+    attributes: [
+      "id",
+      "name",
+      [col("accessibleDocuments->UserDocumentAccess.role"), "role"],
+    ],
     include: [
       {
         model: db.Document,
         as: "accessibleDocuments",
-        through: {
-          model: UserDocumentAccess,
-          where: { document_id: documentId },
-        },
+        where: { id: documentId },
         attributes: [],
+        through: {
+          model: db.UserDocumentAccess,
+          attributes: ["role"],
+        },
         required: true, // inner join
       },
     ],

@@ -25,6 +25,11 @@ function initUserDocumentAccess(sequelize) {
         },
         onDelete: "CASCADE",
       },
+      role: {
+        type: DataTypes.ENUM,
+        values: ["creator", "collaborator", "viewer"],
+        defaultValue: "viewer",
+      },
     },
     {
       underscored: true,

@@ -3,12 +3,19 @@ const { User, Document, UserDocumentAccess } = db;
 
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
-  const document = await Document.findByPk(documentId);
+  const document = await Document.findByPk(documentId, {
+    include: {
+      model: User,
+      as: "creator",
+      attributes: {
+        exclude: ["password", "refreshToken", "createdAt", "updatedAt"],
+      },
+    },
+  });
   return res.status(200).json({ document });
 };
 
-async function findOrCreateDocument(documentId, username) {
-  if (documentId == null) return;
+async function findDocument(documentId, username) {
   const documentWithCreator = await Document.findByPk(documentId, {
     include: {
       model: User,
@@ -18,16 +25,7 @@ async function findOrCreateDocument(documentId, username) {
       },
     },
   });
-
-  if (documentWithCreator) return documentWithCreator;
-  const user = await User.findOne({ where: { username: username } });
-
-  const newDocument = await user.createCreatedDocument({
-    id: documentId,
-    text: "Untitled Document",
-  });
-  await user.addAccessibleDocument(newDocument);
-  return newDocument;
+  return documentWithCreator;
 }
 async function createDocument(req, res) {
   const { title, folderId, createdBy } = req.body;
@@ -73,7 +71,7 @@ const deleteDocument = async (req, res) => {
 };
 module.exports = {
   getDocument,
-  findOrCreateDocument,
+  findDocument,
   editDocument,
   createDocument,
   deleteDocument,

@@ -15,9 +15,17 @@ const PeopleWithAccess = ({ isAccessFetching, userAccess }) => {
             return (
               <Box key={user.id} display="flex" gap={2}>
                 <Avatar {...stringAvatar(user.name)} />
-                <Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent={"space-between"}
+                  width={"100%"}
+                >
                   <Typography variant="h6" component="h6">
                     {user.name}
+                  </Typography>
+                  <Typography variant="h6" component="h6">
+                    {user.role}
                   </Typography>
                 </Box>
               </Box>

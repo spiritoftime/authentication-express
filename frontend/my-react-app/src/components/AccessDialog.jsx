@@ -52,7 +52,7 @@ const AccessDialog = ({ documentId }) => {
     queryFn: () => getUsersWithAccess(documentId),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-
+  console.log(userAccess);
   const handleClickOpen = () => {
     setOpen(true);
   };

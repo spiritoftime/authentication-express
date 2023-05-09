@@ -13,7 +13,7 @@ const userRouter = require("./routes/userRouter");
 const folderRouter = require("./routes/folderRouter");
 const authRouter = require("./routes/authRouter");
 const cookieParser = require("cookie-parser");
-const { findOrCreateDocument } = require("./controllers/document");
+const { findDocument } = require("./controllers/document");
 const io = require("socket.io")(3001, {
   cors: {
     origin: "http://127.0.0.1:5173",
@@ -28,7 +28,6 @@ app.use(
   })
 );
 let documentToUsers = {};
-console.log(documentToUsers);
 app.use(express.json());
 io.on("connection", (socket) => {
   console.log(documentToUsers);
@@ -41,7 +40,7 @@ io.on("connection", (socket) => {
     } else {
       documentToUsers[documentId] = new Set([username]);
     }
-    const document = await findOrCreateDocument(documentId, username);
+    const document = await findDocument(documentId, username);
 
     socket.emit("load-document", document.data, document.text);
   });

@@ -18,6 +18,11 @@ function initUserFolderAccess(sequelize) {
         },
         onDelete: "CASCADE",
       },
+      role: {
+        type: DataTypes.ENUM,
+        values: ["creator", "collaborator", "viewer"],
+        defaultValue: "viewer",
+      },
       folderId: {
         defaultValue: null,
         allowNull: true,
