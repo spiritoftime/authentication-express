@@ -16,6 +16,7 @@ const DocumentBar = ({
   setDocumentSaved,
   users,
   documentTitle,
+  residingFolder,
   setDocumentTitle,
 }) => {
   const {
@@ -63,7 +64,7 @@ const DocumentBar = ({
         <ActiveUsers users={users} />
         <HistoryIcon />
         <CommentIcon />
-        <AccessDialog documentId={documentId} />
+        <AccessDialog residingFolder={residingFolder} documentId={documentId} />
       </Box>
     </Box>
   );

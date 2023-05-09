@@ -21,13 +21,14 @@ import AutoComplete from "./AutoComplete";
 import PeopleToAdd from "./PeopleToAdd";
 import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
+import SelectOption from "./SelectOption";
 
-const AccessDialog = ({ documentId }) => {
+const AccessDialog = ({ documentId, residingFolder }) => {
   const [open, setOpen] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [addUsers, setAddUsers] = useState([]);
   const [message, setMessage] = useState("");
-
+  const [option, setOption] = useState("document");
   const {
     mutate: addUserAccessMutation,
     error: userAccessError,
@@ -43,16 +44,16 @@ const AccessDialog = ({ documentId }) => {
   });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
     queryKey: ["users", "withoutAccess", "documentId", open], // it will refetch whenever user opens the dialog
-    queryFn: () => getUsersWithoutAccess(documentId),
+    queryFn: () => getUsersWithoutAccess(documentId, residingFolder),
     refetchOnWindowFocus: false,
   });
 
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
     queryKey: ["users", "withAccess", "documentId", open],
-    queryFn: () => getUsersWithAccess(documentId),
+    queryFn: () => getUsersWithAccess(documentId, residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-  console.log(userAccess);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -88,12 +89,18 @@ const AccessDialog = ({ documentId }) => {
       </Button>
       <Dialog fullWidth maxWidth="sm" onClose={handleClose} open={open}>
         {/* add document title here */}
-        <AccessDialogTitle onClose={handleClose}>Share</AccessDialogTitle>
+        <AccessDialogTitle onClose={handleClose}>
+          <Typography>Share</Typography>
+        </AccessDialogTitle>
         <DialogContent
-          xs={{ display: "flex", flexDirection: "column" }}
-          gap={2}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           dividers={true}
         >
+          <SelectOption
+            residingFolder={residingFolder}
+            option={option}
+            setOption={setOption}
+          />
           {isUserFetching ? (
             <Typography>Loading...</Typography>
           ) : (

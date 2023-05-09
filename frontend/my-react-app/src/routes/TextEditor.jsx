@@ -32,7 +32,7 @@ export default function TextEditor() {
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
-
+  const [residingFolder, setResidingFolder] = useState("");
   const switchRoom = (newDocumentId, socket) => {
     if (socket && newDocumentId !== documentId) {
       // Emit a 'switch-room' event to the server with the old and new documentId
@@ -55,15 +55,15 @@ export default function TextEditor() {
     };
   }, []);
   useEffect(() => {
-    console.log("running");
     if (socket == null || quillRef == null) return;
     const quillInstance = quillRef.current.getEditor();
     socket.emit("get-document", documentId, authDetails.username);
     quillInstance.setText("Loading...");
     quillInstance.disable();
     socket.emit("join-document", documentId);
-    socket.once("load-document", (document, title) => {
+    socket.once("load-document", (document, title, residingFolder) => {
       setDocumentTitle(title);
+      setResidingFolder(residingFolder);
       setIsLoadingAuth(true);
       reloginMutation();
       setIsLoadingAuth(false);
@@ -113,6 +113,7 @@ export default function TextEditor() {
   return (
     <Box display="flex" flexDirection="column" gap={2} padding={2}>
       <DocumentBar
+        residingFolder={residingFolder}
         users={users}
         setDocumentSaved={setDocumentSaved}
         setDocumentTitle={setDocumentTitle}

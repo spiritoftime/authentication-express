@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
     }
     const document = await findDocument(documentId, username);
 
-    socket.emit("load-document", document.data, document.text);
+    socket.emit("load-document", document.data, document.text, document.parent);
   });
   socket.on("join-document", (documentId) => {
     socket.join(documentId);

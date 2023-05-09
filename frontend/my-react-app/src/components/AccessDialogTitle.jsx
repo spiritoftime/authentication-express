@@ -6,7 +6,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 const AccessDialogTitle = ({ children, onClose }) => {
   return (
-    <DialogTitle>
+    <DialogTitle
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+    >
       {children}
       {onClose ? (
         <IconButton

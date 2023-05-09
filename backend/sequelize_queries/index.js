@@ -18,12 +18,27 @@ async function queryUserDetails(username) {
         model: Document,
         as: "accessibleDocuments",
         attributes: ["id", "text", "parent", "createdBy"],
-        through: { attributes: [] },
+        through: {
+          attributes: [],
+          where: {
+            role: {
+              [Op.ne]: "creator",
+            },
+          },
+        },
       },
       {
         model: Folder,
         as: "accessibleFolders",
         attributes: ["id", "text", "parent", "createdBy"],
+        through: {
+          attributes: [],
+          where: {
+            role: {
+              [Op.ne]: "creator",
+            },
+          },
+        },
       },
       {
         model: Folder,

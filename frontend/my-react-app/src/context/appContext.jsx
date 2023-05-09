@@ -21,7 +21,7 @@ const sharedWithRoot = {
   type: "folder",
   children: [],
 };
-const myRoot = {
+const personalRoot = {
   id: null,
   createdBy: 1,
   parent: "root",
@@ -60,14 +60,12 @@ const AppProvider = ({ children }) => {
       });
 
       (folders || []).forEach((folder) => {
-        const parent = tree[folder.parentFolderId] || tree["null"]; // Add to root if parent is not found
+        const parent = tree[folder.parent] || tree["null"]; // Add to root if parent is not found
         if (parent) parent.children.push(folder);
       });
 
       (documents || []).forEach((document) => {
-        document.type = "document";
-
-        const parent = tree[document.folderId];
+        const parent = tree[document.parent];
         if (parent) {
           parent.children.push(document);
         }
@@ -76,13 +74,13 @@ const AppProvider = ({ children }) => {
     }
     const tree = createTree(root, documents, folders);
     return {
-      myTree: tree,
+      tree: tree,
       reactTree: [root, ...(documents || []), ...(folders || [])],
     };
   }
 
   const myTrees = useMemo(() => {
-    return createTreeData(myRoot, createdDocuments, createdFolders);
+    return createTreeData(personalRoot, createdDocuments, createdFolders);
   }, [createdDocuments, createdFolders]);
   const sharedTrees = useMemo(() => {
     return createTreeData(
@@ -91,7 +89,6 @@ const AppProvider = ({ children }) => {
       accessibleFolders
     );
   }, [accessibleDocuments, accessibleFolders]);
-
   return (
     <AppContext.Provider
       value={{

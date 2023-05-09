@@ -1,5 +1,6 @@
 const db = require("../db/models");
 const { User, Document, Folder } = db;
+const { Op } = require("sequelize");
 const {
   queryUsersWithAccess,
   queryUsersWithoutAccess,
@@ -14,18 +15,38 @@ const getUser = async (req, res) => {
       {
         model: Document,
         as: "createdDocuments",
-        attributes: ["id"],
+        attributes: ["id", "text", "parent", "createdBy"],
       },
       {
         model: Document,
         as: "accessibleDocuments",
-        attributes: ["id", "title", "createdBy"],
-        through: { attributes: [] },
+        attributes: ["id", "text", "parent", "createdBy"],
+        through: {
+          attributes: [],
+          where: {
+            role: {
+              [Op.ne]: "creator",
+            },
+          },
+        },
       },
       {
         model: Folder,
         as: "accessibleFolders",
-        through: { attributes: [] },
+        attributes: ["id", "text", "parent", "createdBy"],
+        through: {
+          attributes: [],
+          where: {
+            role: {
+              [Op.ne]: "creator",
+            },
+          },
+        },
+      },
+      {
+        model: Folder,
+        as: "createdFolders",
+        attributes: ["id", "text", "parent", "createdBy"],
       },
     ],
   });
@@ -39,20 +60,23 @@ const getUsers = async (req, res) => {
   return res.status(200).json(users);
 };
 const getUsersWithAccess = async (req, res) => {
-  const { documentId } = req.params;
-
-  const usersWithAccess = await queryUsersWithAccess(documentId);
+  const { documentId, folderId } = req.query;
+  const usersWithAccess = await queryUsersWithAccess(documentId, folderId);
 
   return res.status(200).json(usersWithAccess);
 };
 const getUsersWithoutAccess = async (req, res) => {
-  const { documentId } = req.params;
-  const usersWithoutAccess = await queryUsersWithoutAccess(documentId);
+  const { documentId, folderId } = req.query;
+
+  const usersWithoutAccess = await queryUsersWithoutAccess(
+    documentId,
+    folderId
+  );
 
   return res.status(200).json(usersWithoutAccess);
 };
 const addUserToDocument = async (req, res) => {
-  const { name, documentId } = req.body;
+  const { name, documentId } = req.body; // add type and change documentId to nodeId
 
   const user = await User.findOne({ where: { name: name } });
 
