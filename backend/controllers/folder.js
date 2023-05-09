@@ -39,7 +39,6 @@ const editFolder = async (req, res) => {
   const { parent } = req.body;
   const { folderId } = req.params;
   const folder = await Folder.findByPk(folderId);
-  console.log(parent, folder);
   if (parent) folder.parent = parent === "root" ? null : parent;
   await folder.save();
   return res.status(201).send("All changes saved!");

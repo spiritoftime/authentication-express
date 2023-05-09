@@ -10,8 +10,8 @@ const PeopleWithAccess = ({ isAccessFetching, userAccess }) => {
       </Typography>
       <Box display="flex" flexDirection="column" gap={2}>
         {!isAccessFetching &&
-          userAccess.data &&
-          userAccess.data.map((user) => {
+          userAccess &&
+          userAccess.map((user) => {
             return (
               <Box key={user.id} display="flex" gap={2}>
                 <Avatar {...stringAvatar(user.name)} />

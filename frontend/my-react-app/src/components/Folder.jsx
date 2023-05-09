@@ -68,7 +68,8 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
   const { tree, isDarkMode, authDetails, setAuthDetails, setIsLoadingAuth } =
     useAppContext();
   const reloginMutation = useReLoginMutation();
-
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [message, setMessage] = useState("");
   const [newNodeName, setNewNodeName] = useState("");
   const [showInput, setShowInput] = useState({
     visible: false,

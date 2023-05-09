@@ -26,8 +26,8 @@ import SelectOption from "./SelectOption";
 const AccessDialog = ({ documentId, residingFolder }) => {
   const [open, setOpen] = useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
-  const [addUsers, setAddUsers] = useState([]);
   const [message, setMessage] = useState("");
+  const [addUsers, setAddUsers] = useState([]);
   const [option, setOption] = useState("document");
   const {
     mutate: addUserAccessMutation,
@@ -43,13 +43,13 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     },
   });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
-    queryKey: ["users", "withoutAccess", "documentId", open], // it will refetch whenever user opens the dialog
+    queryKey: ["users", "withoutAccess", "documentId", open, residingFolder], // it will refetch whenever user opens the dialog
     queryFn: () => getUsersWithoutAccess(documentId, residingFolder),
     refetchOnWindowFocus: false,
   });
 
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
-    queryKey: ["users", "withAccess", "documentId", open],
+    queryKey: ["users", "withAccess", "documentId", open, residingFolder],
     queryFn: () => getUsersWithAccess(documentId, residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
@@ -67,6 +67,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     setAddUsers([]);
     setOpen(false);
   };
+
   return (
     <Box>
       <AccessSnackBar
@@ -97,6 +98,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           dividers={true}
         >
           <SelectOption
+            setAddUsers={setAddUsers}
             residingFolder={residingFolder}
             option={option}
             setOption={setOption}
@@ -106,13 +108,29 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           ) : (
             <AutoComplete
               setAddUsers={setAddUsers}
-              usersWithoutAccess={usersWithoutAccess}
+              usersWithoutAccess={
+                usersWithoutAccess?.data && option === "document"
+                  ? usersWithoutAccess.data.filter(
+                      (user) => user.documentRole === null
+                    )
+                  : usersWithoutAccess && option === "folder"
+                  ? usersWithoutAccess.data.filter(
+                      (user) => user.folderRole === null
+                    )
+                  : ""
+              }
             />
           )}
           {addUsers.length > 0 && <PeopleToAdd addUsers={addUsers} />}
           <PeopleWithAccess
             isAccessFetching={isAccessFetching}
-            userAccess={userAccess}
+            userAccess={
+              userAccess?.data && option === "document"
+                ? userAccess.data.filter((user) => user.documentRole !== null)
+                : userAccess?.data && option === "folder"
+                ? userAccess.data.filter((user) => user.folderRole !== null)
+                : ""
+            }
           />
           <Typography variant="h6" component="h5">
             General access

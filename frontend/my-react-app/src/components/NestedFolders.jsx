@@ -16,7 +16,7 @@ import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const NestedFolders = ({ switchRoom, socket, type }) => {
   const treeRef = useRef(null);
   const handleOpen = (nodeId) => treeRef.current.open(nodeId);
-  const { myTrees, sharedTrees, setAuthDetails, setIsLoadingAuth } =
+  const { myTrees, sharedTrees,  } =
     useAppContext();
   const reloginMutation = useReLoginMutation();
   const {

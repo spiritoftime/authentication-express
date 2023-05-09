@@ -2,7 +2,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-const SelectOption = ({ setOption, option, residingFolder }) => {
+const SelectOption = ({ setOption, option, residingFolder, setAddUsers }) => {
   return (
     <FormControl variant="standard" sx={{ width: "100%" }}>
       <InputLabel id="demo-simple-select-standard-label">
@@ -12,7 +12,10 @@ const SelectOption = ({ setOption, option, residingFolder }) => {
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
         value={option}
-        onChange={(e) => setOption(e.target.value)}
+        onChange={(e) => {
+          setOption(e.target.value);
+          setAddUsers([]);
+        }}
         label="grant access to"
       >
         <MenuItem value={"document"}>Current Document</MenuItem>
