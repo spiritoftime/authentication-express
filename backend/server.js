@@ -48,11 +48,15 @@ io.on("connection", (socket) => {
   socket.on("join-document", (documentId) => {
     socket.join(documentId);
     socket.lastDocument = documentId;
+    console.log(documentToUsers[documentId]);
     io.to(documentId).emit("users", [...documentToUsers[documentId]]);
   });
   socket.on("disconnect", () => {
     console.count("disconnect ran");
-    documentToUsers[socket.lastDocument].delete(socket.username);
+    if (documentToUsers[socket.lastDocument].has(socket.username)) {
+      documentToUsers[socket.lastDocument].delete(socket.username);
+      console.log(documentToUsers[socket.lastDocument]);
+    }
     io.to(socket.lastDocument).emit("users", [
       ...documentToUsers[socket.lastDocument],
     ]);

@@ -7,8 +7,9 @@ const PeopleToAdd = ({ addUsers }) => {
         People to add
       </Typography>
       <Box display="flex" gap={2}>
-        {addUsers.map((name) => (
+        {addUsers.map((name, idx) => (
           <Box
+            key={idx}
             sx={{
               borderRadius: "5px",
               color: "black",

@@ -37,6 +37,7 @@ const login = async (req, res) => {
   const user = await User.findOne({
     where: { username: username },
   });
+
   if (!user) {
     return res
       .status(404)

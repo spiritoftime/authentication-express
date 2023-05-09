@@ -12,14 +12,37 @@ const AppContext = React.createContext();
 //   "title": "Untitled Document",
 //   "folderId": null
 // },
+const sharedWithRoot = {
+  id: null,
+  createdBy: 1,
+  parent: "root",
+  text: "Shared With me",
+  droppable: true,
+  type: "folder",
+  children: [],
+};
+const myRoot = {
+  id: null,
+  createdBy: 1,
+  parent: "root",
+  text: "Personal Drive",
+  droppable: true,
+  type: "folder",
+  children: [],
+};
 const AppProvider = ({ children }) => {
   const [authDetails, setAuthDetails] = useState({});
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
-  const { accessibleDocuments: documents, accessibleFolders: folders } =
-    authDetails;
-  function createTreeData() {
+  const {
+    accessibleDocuments,
+    accessibleFolders,
+    createdDocuments,
+    createdFolders,
+  } = authDetails;
+  function createTreeData(root, documents, folders) {
+    // create the array for nestedFolder
     (documents || []).forEach((document) => {
       document.droppable = false;
       document.type = "document";
@@ -28,29 +51,53 @@ const AppProvider = ({ children }) => {
       folder.droppable = true;
       folder.type = "folder";
     });
-    return [
-      {
-        id: null,
-        createdBy: 1,
-        parent: "root",
-        text: "root",
-        droppable: true,
-        type: "folder",
-      },
-      ...(documents || []),
-      ...(folders || []),
-    ];
+    function createTree(root, documents, folders) {
+      const tree = { null: root }; // the key will be 'null'
+      // traverse through all folders and add them to the tree first
+      (folders || []).forEach((folder) => {
+        folder.children = [];
+        tree[folder.id] = folder;
+      });
+
+      (folders || []).forEach((folder) => {
+        const parent = tree[folder.parentFolderId] || tree["null"]; // Add to root if parent is not found
+        if (parent) parent.children.push(folder);
+      });
+
+      (documents || []).forEach((document) => {
+        document.type = "document";
+
+        const parent = tree[document.folderId];
+        if (parent) {
+          parent.children.push(document);
+        }
+      });
+      return tree;
+    }
+    const tree = createTree(root, documents, folders);
+    return {
+      myTree: tree,
+      reactTree: [root, ...(documents || []), ...(folders || [])],
+    };
   }
 
-  const tree = useMemo(() => {
-    return createTreeData();
-  }, [documents, folders]);
+  const myTrees = useMemo(() => {
+    return createTreeData(myRoot, createdDocuments, createdFolders);
+  }, [createdDocuments, createdFolders]);
+  const sharedTrees = useMemo(() => {
+    return createTreeData(
+      sharedWithRoot,
+      accessibleDocuments,
+      accessibleFolders
+    );
+  }, [accessibleDocuments, accessibleFolders]);
 
   return (
     <AppContext.Provider
       value={{
         authDetails,
-        tree,
+        myTrees,
+        sharedTrees,
         setAuthDetails,
         isLoadingAuth,
         setIsLoadingAuth,

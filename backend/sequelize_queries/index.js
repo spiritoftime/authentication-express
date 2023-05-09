@@ -1,3 +1,4 @@
+const { text } = require("express");
 const db = require("../db/models");
 const { Op } = require("sequelize");
 const { User, Document, UserDocumentAccess, Folder } = db;
@@ -11,7 +12,7 @@ async function queryUserDetails(username) {
       {
         model: Document,
         as: "createdDocuments",
-        attributes: ["id"],
+        attributes: ["id", "text", "parent", "createdBy"],
       },
       {
         model: Document,
@@ -22,7 +23,12 @@ async function queryUserDetails(username) {
       {
         model: Folder,
         as: "accessibleFolders",
-        through: { attributes: [] },
+        attributes: ["id", "text", "parent", "createdBy"],
+      },
+      {
+        model: Folder,
+        as: "createdFolders",
+        attributes: ["id", "text", "parent", "createdBy"],
       },
     ],
   });

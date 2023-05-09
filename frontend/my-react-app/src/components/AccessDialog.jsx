@@ -53,9 +53,6 @@ const AccessDialog = ({ documentId }) => {
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
 
-  // if (!isUserFetching) console.log(usersWithoutAccess.data);
-  // if (!isAccessFetching) console.log(userAccess.data);
-
   const handleClickOpen = () => {
     setOpen(true);
   };

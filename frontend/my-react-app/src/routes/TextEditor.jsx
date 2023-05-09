@@ -121,7 +121,18 @@ export default function TextEditor() {
         documentSaved={documentSaved}
       />
       <Box display="flex">
-        <NestedFolders socket={socket} switchRoom={switchRoom} />
+        <Box display="flex" flexDirection="column">
+          <NestedFolders
+            type="personal"
+            socket={socket}
+            switchRoom={switchRoom}
+          />
+          <NestedFolders
+            type="shared"
+            socket={socket}
+            switchRoom={switchRoom}
+          />
+        </Box>
         <ReactQuill
           ref={quillRef}
           modules={{ toolbar: TOOLBAR_OPTIONS }}

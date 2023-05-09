@@ -26,20 +26,11 @@ const AccessSnackBar = ({ setOpenSnackBar, openSnackBar, message }) => {
   );
 
   return (
-    // <Button onClick={handleClick}>Open simple snackbar</Button>
     <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose}>
       <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
         {message}
       </Alert>
     </Snackbar>
-    // <Snackbar
-    //   color="success"
-    //   open={openSnackBar}
-    //   autoHideDuration={6000}
-    //   onClose={handleClose}
-    //   message={message}
-    //   action={action}
-    // />
   );
 };
 

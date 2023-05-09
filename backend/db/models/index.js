@@ -108,6 +108,16 @@ db.Folder.hasMany(db.Document, {
   as: "documents",
   onDelete: "CASCADE",
 });
+db.Folder.belongsTo(db.User, {
+  foreignKey: "createdBy",
+  as: "creator",
+});
+
+db.User.hasMany(db.Folder, {
+  foreignKey: "createdBy",
+  onDelete: "CASCADE",
+  as: "createdFolders",
+});
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

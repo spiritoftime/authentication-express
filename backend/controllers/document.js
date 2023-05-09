@@ -50,6 +50,7 @@ async function createDocument(req, res) {
   }
 }
 async function editDocument(req, res) {
+  // for edit title and drag and drop functionality
   const { title, parent } = req.body;
 
   const { documentId } = req.params;
