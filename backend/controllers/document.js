@@ -39,10 +39,10 @@ async function createDocument(req, res) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    const userDocumentAccess = await UserDocumentAccess.create({
-      userId: createdBy,
-      documentId: document.id,
-    });
+    // const userDocumentAccess = await UserDocumentAccess.create({
+    //   userId: createdBy,
+    //   documentId: document.id,
+    // });
     return res.status(201).json({ document, type: "document" });
   } catch (err) {
     console.log(err);

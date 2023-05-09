@@ -18,6 +18,11 @@ const ProtectedRoute = ({ children }) => {
       return <>{children}</>;
     }
   }
+  for (const document of authDetails.createdDocuments) {
+    if (document.id === documentId) {
+      return <>{children}</>;
+    }
+  }
   return <Navigate to="/unauthorized" state={{ from: location }} replace />;
 };
 
