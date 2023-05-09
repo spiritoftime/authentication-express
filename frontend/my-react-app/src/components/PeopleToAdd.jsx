@@ -1,6 +1,10 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-const PeopleToAdd = ({ addUsers }) => {
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { useAppContext } from "../context/appContext";
+const PeopleToAdd = ({ addUsers, setAddUsers }) => {
+  const { isDarkMode } = useAppContext();
   return (
     <>
       <Typography variant="h6" component="h6">
@@ -12,12 +16,23 @@ const PeopleToAdd = ({ addUsers }) => {
             key={idx}
             sx={{
               borderRadius: "5px",
-              color: "black",
-              padding: "5px 8px",
-              backgroundColor: "#f1f1f1",
+              color: "#fff",
+              backgroundColor: "#1e1e1e",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "0px 8px",
             }}
           >
             {name}
+            <IconButton
+              onClick={() =>
+                setAddUsers((prev) => prev.filter((user) => user !== name))
+              }
+              aria-label="close"
+            >
+              <CloseIcon color="warning" />
+            </IconButton>
           </Box>
         ))}
       </Box>

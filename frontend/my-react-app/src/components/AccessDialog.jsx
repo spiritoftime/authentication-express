@@ -121,9 +121,12 @@ const AccessDialog = ({ documentId, residingFolder }) => {
               }
             />
           )}
-          {addUsers.length > 0 && <PeopleToAdd addUsers={addUsers} />}
+          {addUsers.length > 0 && (
+            <PeopleToAdd setAddUsers={setAddUsers} addUsers={addUsers} />
+          )}
           <PeopleWithAccess
             isAccessFetching={isAccessFetching}
+            option={option}
             userAccess={
               userAccess?.data && option === "document"
                 ? userAccess.data.filter((user) => user.documentRole !== null)
