@@ -10,10 +10,11 @@ const createFolder = async (req, res) => {
       text: title,
     });
 
-    // const userFolderAccess = await UserFolderAccess.create({
-    //   userId: createdBy,
-    //   folderId: folder.id,
-    // });
+    const userFolderAccess = await UserFolderAccess.create({
+      userId: createdBy,
+      folderId: folder.id,
+      role: "creator",
+    });
 
     // Send a response back to the client with the created folder and UserFolderAccess record
     res.status(201).json({

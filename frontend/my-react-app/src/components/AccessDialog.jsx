@@ -15,31 +15,46 @@ import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import {
   getUsersWithoutAccess,
   getUsersWithAccess,
-  addUserToDocument,
+  addUsersToDocument,
+  addUsersToFolder,
 } from "../services/user";
 import AutoComplete from "./AutoComplete";
 import PeopleToAdd from "./PeopleToAdd";
 import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
 import SelectOption from "./SelectOption";
+import { useAppContext } from "../context/appContext";
 
 const AccessDialog = ({ documentId, residingFolder }) => {
   const [open, setOpen] = useState(false);
+  const { myTrees, sharedTrees } = useAppContext();
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [message, setMessage] = useState("");
   const [addUsers, setAddUsers] = useState([]);
   const [option, setOption] = useState("document");
   const {
-    mutate: addUserAccessMutation,
+    mutate: addUsersDocumentMutation,
     error: userAccessError,
     isError: isUserAccessError,
   } = useMutation({
-    mutationFn: ({ name, documentId }) => {
-      return addUserToDocument({ name, documentId });
+    mutationFn: ({ people, documentId }) => {
+      return addUsersToDocument({ people, documentId });
     },
     onSuccess: (res) => {
       setMessage(res.data);
       setOpenSnackBar(true);
+    },
+  });
+  const {
+    mutate: addUsersFolderMutation,
+    error: userFolderError,
+    isError: isUserFolderError,
+  } = useMutation({
+    mutationFn: ({ people, documentId }) => {
+      return addUsersToFolder({ people, documentId });
+    },
+    onSuccess: (res) => {
+      setMessage(res.data);
     },
   });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
@@ -53,7 +68,8 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     queryFn: () => getUsersWithAccess(documentId, residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-
+  console.log(userAccess, usersWithoutAccess);
+  console.log(residingFolder);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -61,11 +77,26 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     setOpen(false);
   };
   const saveChanges = () => {
-    for (const name of addUsers) {
-      addUserAccessMutation({ name: name, documentId });
+    if (addUsers.length == 0) return;
+    if (option === "document")
+      addUsersDocumentMutation({ people: addUsers, documentId });
+    else {
+      const folderNode =
+        myTrees.tree[residingFolder] || sharedTrees.tree[residingFolder]; //locate node in its tree
+      const dfs = (node) => {
+        if (node.type === "document") {
+          addUsersDocumentMutation({ people: addUsers, documentId: node.id });
+          return;
+        }
+        addUsersFolderMutation({ people: addUsers, folderId: node.id });
+        if (node.children.length > 0)
+          node.children.forEach((child) => dfs(child));
+      };
+      dfs(folderNode);
     }
     setAddUsers([]);
     setOpen(false);
+    setOpenSnackBar(true);
   };
 
   return (

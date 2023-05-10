@@ -136,6 +136,7 @@ async function queryUsersWithoutAccess(documentId, folderId) {
         "$accessibleDocuments.id$": null,
       },
     });
+
   return await db.User.findAll({
     attributes: [
       "id",
@@ -147,44 +148,30 @@ async function queryUsersWithoutAccess(documentId, folderId) {
       {
         model: db.Document,
         as: "accessibleDocuments",
+        where: { id: documentId },
+        attributes: [],
         through: {
-          model: UserDocumentAccess,
+          model: db.UserDocumentAccess,
           attributes: ["role"],
         },
-        attributes: [],
         required: false,
       },
       {
         model: db.Folder,
         as: "accessibleFolders",
+        where: { id: folderId },
+        attributes: [],
         through: {
-          model: UserFolderAccess,
+          model: db.UserFolderAccess,
           attributes: ["role"],
         },
-        attributes: [],
         required: false,
       },
     ],
     where: {
       [Op.or]: [
-        {
-          [Op.and]: [
-            { "$accessibleDocuments.id$": { [Op.is]: null } },
-            { "$accessibleFolders.id$": { [Op.is]: null } },
-          ],
-        },
-        {
-          [Op.and]: [
-            { "$accessibleDocuments.id$": { [Op.eq]: documentId } },
-            { "$accessibleFolders.id$": { [Op.is]: null } },
-          ],
-        },
-        {
-          [Op.and]: [
-            { "$accessibleDocuments.id$": { [Op.is]: null } },
-            { "$accessibleFolders.id$": { [Op.eq]: folderId } },
-          ],
-        },
+        { "$accessibleDocuments.id$": { [Op.is]: null } },
+        { "$accessibleFolders.id$": { [Op.is]: null } },
       ],
     },
   });

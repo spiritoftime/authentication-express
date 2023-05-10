@@ -75,20 +75,31 @@ const getUsersWithoutAccess = async (req, res) => {
 
   return res.status(200).json(usersWithoutAccess);
 };
-const addUserToDocument = async (req, res) => {
-  const { name, documentId } = req.body; // add type and change documentId to nodeId
+const addUsersToDocument = async (req, res) => {
+  const { people, documentId } = req.body; // add type and change documentId to nodeId
+  for (const person of people) {
+    const user = await User.findOne({ where: { name: name } });
 
-  const user = await User.findOne({ where: { name: name } });
+    const document = await Document.findOne({ where: { id: documentId } });
 
-  const document = await Document.findOne({ where: { id: documentId } });
-
-  await user.addAccessibleDocument(document);
+    await user.addAccessibleDocument(document);
+  }
   return res.status(200).send("Users added to document!");
+};
+const addUsersToFolder = async (req, res) => {
+  const { people, folderId } = req.body;
+  for (const person of people) {
+    const user = await User.findOne({ where: { name } });
+    const folder = await Folder.findOne({ where: { id: folderId } });
+    await user.addAccessibleFolder(folder);
+  }
+  return res.status(200).send("Users added to folder!");
 };
 module.exports = {
   getUser,
   getUsers,
   getUsersWithAccess,
   getUsersWithoutAccess,
-  addUserToDocument,
+  addUsersToDocument,
+  addUsersToFolder,
 };

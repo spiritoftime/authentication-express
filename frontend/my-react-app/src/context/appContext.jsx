@@ -1,17 +1,7 @@
 import { useContext, useMemo, useState } from "react";
 import React from "react";
 const AppContext = React.createContext();
-// const accessibleFolder = {
-//   id: "488db8e7-59a5-4fda-9f63-dc48f5e1e2b3",
-//   createdBy: 1,
-//   parentFolderId: "857b7472-9122-43e2-bd74-ec4d1f9df25d",
-//   folderName: "Custom Hooks",
-// };
-// const accessibleDocument =  {
-//   "id": "81fcb940-400f-4dfe-9630-d9bfc98987f4",
-//   "title": "Untitled Document",
-//   "folderId": null
-// },
+
 const sharedWithRoot = {
   id: null,
   createdBy: 1,
@@ -89,6 +79,7 @@ const AppProvider = ({ children }) => {
       accessibleFolders
     );
   }, [accessibleDocuments, accessibleFolders]);
+
   return (
     <AppContext.Provider
       value={{

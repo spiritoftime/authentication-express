@@ -62,8 +62,8 @@ const DocumentBar = ({
       </Box>
       <Box gap={2} display="flex" alignItems="center">
         <ActiveUsers users={users} />
-        <HistoryIcon />
-        <CommentIcon />
+        {/* <HistoryIcon />
+        <CommentIcon /> */}
         <AccessDialog residingFolder={residingFolder} documentId={documentId} />
       </Box>
     </Box>
