@@ -77,9 +77,11 @@ const getUsersWithoutAccess = async (req, res) => {
 };
 const addUsersToDocument = async (req, res) => {
   const { people, documentId } = req.body; // add type and change documentId to nodeId
+  console.log(people);
   for (const person of people) {
-    const user = await User.findOne({ where: { name: name } });
-
+    console.log(person);
+    const user = await User.findOne({ where: { name: person } });
+    console.log(user);
     const document = await Document.findOne({ where: { id: documentId } });
 
     await user.addAccessibleDocument(document);
@@ -89,7 +91,7 @@ const addUsersToDocument = async (req, res) => {
 const addUsersToFolder = async (req, res) => {
   const { people, folderId } = req.body;
   for (const person of people) {
-    const user = await User.findOne({ where: { name } });
+    const user = await User.findOne({ where: { name: person } });
     const folder = await Folder.findOne({ where: { id: folderId } });
     await user.addAccessibleFolder(folder);
   }

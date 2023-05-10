@@ -50,8 +50,8 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     error: userFolderError,
     isError: isUserFolderError,
   } = useMutation({
-    mutationFn: ({ people, documentId }) => {
-      return addUsersToFolder({ people, documentId });
+    mutationFn: ({ people, folderId }) => {
+      return addUsersToFolder({ people, folderId });
     },
     onSuccess: (res) => {
       setMessage(res.data);
@@ -68,8 +68,6 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     queryFn: () => getUsersWithAccess(documentId, residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
-  console.log(userAccess, usersWithoutAccess);
-  console.log(residingFolder);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -88,6 +86,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           addUsersDocumentMutation({ people: addUsers, documentId: node.id });
           return;
         }
+
         addUsersFolderMutation({ people: addUsers, folderId: node.id });
         if (node.children.length > 0)
           node.children.forEach((child) => dfs(child));
