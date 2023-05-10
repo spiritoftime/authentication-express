@@ -105,6 +105,7 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
         title: e.target.value,
         folderId: node.id,
         createdBy: authDetails.id,
+
         isFolder: showInput.isFolder,
       });
     }

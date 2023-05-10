@@ -5,7 +5,7 @@ export function editDocument(data) {
     data: data,
   });
 }
-export function createDocument({ folderId, title, createdBy }) {
+export function createDocument({ folderId, title, createdBy, parent }) {
   return makeRequest(`/documents/`, {
     method: "POST",
     data: { folderId, title, createdBy },

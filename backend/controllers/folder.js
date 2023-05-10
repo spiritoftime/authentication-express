@@ -1,5 +1,6 @@
 const db = require("../db/models");
 const { User, Folder, UserFolderAccess } = db;
+const { Op } = require("sequelize");
 const createFolder = async (req, res) => {
   const { title, folderId, createdBy } = req.body;
 
@@ -9,12 +10,37 @@ const createFolder = async (req, res) => {
       parent: folderId,
       text: title,
     });
-
-    const userFolderAccess = await UserFolderAccess.create({
+    await UserFolderAccess.create({
       userId: createdBy,
       folderId: folder.id,
       role: "creator",
     });
+
+    const users = await UserFolderAccess.findAll({
+      attributes: ["userId", "role"],
+      where: { folderId: { [Op.eq]: folderId } },
+    });
+    for (const user of users) {
+      if (user.role === "creator" && user.userId !== createdBy)
+        // if the creator of this document is not the one who created the subfolder
+        await UserFolderAccess.create({
+          userId: user.userId,
+          folderId: folder.id,
+          role: "collaborator",
+        });
+      else if (user.userId === createdBy)
+        await UserFolderAccess.create({
+          userId: user.userId,
+          folderId: folder.id,
+          role: "creator",
+        });
+      else
+        await UserFolderAccess.create({
+          userId: user.userId,
+          folderId: folder.id,
+          role: user.role,
+        });
+    }
 
     // Send a response back to the client with the created folder and UserFolderAccess record
     res.status(201).json({

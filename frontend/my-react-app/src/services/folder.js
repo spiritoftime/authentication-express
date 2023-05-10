@@ -1,5 +1,5 @@
 import { makeRequest } from "./makeRequest";
-export function createFolder({ folderId, title, createdBy }) {
+export function createFolder({ folderId, title, createdBy, parent }) {
   return makeRequest(`/folders/`, {
     method: "POST",
     data: { folderId, title, createdBy },

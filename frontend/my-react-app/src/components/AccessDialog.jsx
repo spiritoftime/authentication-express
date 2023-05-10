@@ -68,6 +68,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     queryFn: () => getUsersWithAccess(documentId, residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
+  console.log(residingFolder);
   const handleClickOpen = () => {
     setOpen(true);
   };

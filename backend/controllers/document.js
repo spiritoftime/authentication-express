@@ -1,6 +1,6 @@
 const db = require("../db/models");
-const { User, Document, UserDocumentAccess } = db;
-
+const { User, Document, UserDocumentAccess, UserFolderAccess } = db;
+const { Op } = require("sequelize");
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
   const document = await Document.findByPk(documentId, {
@@ -37,11 +37,33 @@ async function createDocument(req, res) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    const userDocumentAccess = await UserDocumentAccess.create({
-      userId: createdBy,
-      documentId: document.id,
-      role: "creator",
-    });
+
+    const users = await UserFolderAccess.findAll({
+      attributes: ["userId", "role"],
+      where: { folderId: { [Op.eq]: folderId } },
+    }); // find users with the access to the parent folder, and add them into this document with the same permission settings
+    for (const user of users) {
+      if (user.role === "creator" && user.userId !== createdBy)
+        // if the creator of this document is not the one who created the subfolder
+        await UserDocumentAccess.create({
+          userId: user.userId,
+          documentId: document.id,
+          role: "collaborator",
+        });
+      else if (user.userId === createdBy)
+        await UserDocumentAccess.create({
+          userId: user.userId,
+          documentId: document.id,
+          role: "creator",
+        });
+      else
+        await UserDocumentAccess.create({
+          userId: user.userId,
+          documentId: document.id,
+          role: user.role,
+        });
+    }
+
     return res.status(201).json({ document, type: "document" });
   } catch (err) {
     console.log(err);

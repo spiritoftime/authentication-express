@@ -81,7 +81,6 @@ const addUsersToDocument = async (req, res) => {
   for (const person of people) {
     console.log(person);
     const user = await User.findOne({ where: { name: person } });
-    console.log(user);
     const document = await Document.findOne({ where: { id: documentId } });
 
     await user.addAccessibleDocument(document);
