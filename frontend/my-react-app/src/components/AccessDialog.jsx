@@ -45,6 +45,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
       setOpenSnackBar(true);
     },
   });
+  console.log(residingFolder);
   const {
     mutate: addUsersFolderMutation,
     error: userFolderError,
@@ -58,14 +59,14 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     },
   });
   const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
-    queryKey: ["users", "withoutAccess", "documentId", open, residingFolder], // it will refetch whenever user opens the dialog
-    queryFn: () => getUsersWithoutAccess(documentId, residingFolder),
+    queryKey: ["users", "withoutAccess", open, residingFolder], // it will refetch whenever user opens the dialog
+    queryFn: () => getUsersWithoutAccess(residingFolder),
     refetchOnWindowFocus: false,
   });
 
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
     queryKey: ["users", "withAccess", "documentId", open, residingFolder],
-    queryFn: () => getUsersWithAccess(documentId, residingFolder),
+    queryFn: () => getUsersWithAccess(residingFolder),
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
   });
   console.log(residingFolder);
@@ -139,17 +140,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           ) : (
             <AutoComplete
               setAddUsers={setAddUsers}
-              usersWithoutAccess={
-                usersWithoutAccess?.data && option === "document"
-                  ? usersWithoutAccess.data.filter(
-                      (user) => user.documentRole === null
-                    )
-                  : usersWithoutAccess && option === "folder"
-                  ? usersWithoutAccess.data.filter(
-                      (user) => user.folderRole === null
-                    )
-                  : ""
-              }
+              usersWithoutAccess={usersWithoutAccess && usersWithoutAccess.data}
             />
           )}
           {addUsers.length > 0 && (
@@ -158,13 +149,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           <PeopleWithAccess
             isAccessFetching={isAccessFetching}
             option={option}
-            userAccess={
-              userAccess?.data && option === "document"
-                ? userAccess.data.filter((user) => user.documentRole !== null)
-                : userAccess?.data && option === "folder"
-                ? userAccess.data.filter((user) => user.folderRole !== null)
-                : ""
-            }
+            userAccess={userAccess && userAccess.data}
           />
           <Typography variant="h6" component="h5">
             General access

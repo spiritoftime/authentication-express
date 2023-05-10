@@ -60,26 +60,23 @@ const getUsers = async (req, res) => {
   return res.status(200).json(users);
 };
 const getUsersWithAccess = async (req, res) => {
-  const { documentId, folderId } = req.query;
-  const usersWithAccess = await queryUsersWithAccess(documentId, folderId);
+  const { folderId } = req.query;
+  console.log(folderId);
+  const usersWithAccess = await queryUsersWithAccess(folderId);
 
   return res.status(200).json(usersWithAccess);
 };
 const getUsersWithoutAccess = async (req, res) => {
-  const { documentId, folderId } = req.query;
+  const { folderId } = req.query;
 
-  const usersWithoutAccess = await queryUsersWithoutAccess(
-    documentId,
-    folderId
-  );
+  const usersWithoutAccess = await queryUsersWithoutAccess(folderId);
 
   return res.status(200).json(usersWithoutAccess);
 };
 const addUsersToDocument = async (req, res) => {
   const { people, documentId } = req.body; // add type and change documentId to nodeId
-  console.log(people);
+
   for (const person of people) {
-    console.log(person);
     const user = await User.findOne({ where: { name: person } });
     const document = await Document.findOne({ where: { id: documentId } });
 

@@ -25,9 +25,7 @@ const PeopleWithAccess = ({ isAccessFetching, userAccess, option }) => {
                     {user.name}
                   </Typography>
                   <Typography variant="h6" component="h6">
-                    {option === "document"
-                      ? user.documentRole
-                      : user.folderRole}
+                    {user.folderRole}
                   </Typography>
                 </Box>
               </Box>

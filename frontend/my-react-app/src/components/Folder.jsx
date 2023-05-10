@@ -152,15 +152,17 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
             >
               <CreateNewFolderIcon />
             </IconButton>
-            <IconButton
-              color="success"
-              onClick={() => {
-                setShowInput({ visible: true, isFolder: false });
-                handleOpen(node.id);
-              }}
-            >
-              <PostAddIcon />
-            </IconButton>
+            {node.id !== null && (
+              <IconButton
+                color="success"
+                onClick={() => {
+                  setShowInput({ visible: true, isFolder: false });
+                  handleOpen(node.id);
+                }}
+              >
+                <PostAddIcon />
+              </IconButton>
+            )}
             <IconButton
               onClick={(e) => {
                 deleteFolderMutation(node.id);

@@ -7,6 +7,7 @@ module.exports = {
       {
         id: "81fcb940-400f-4dfe-9630-d9bfc98987f4",
         text: "Untitled Document",
+        parent: "857b7472-9122-43e2-bd74-ec4d1f9df25d",
         created_by: 1,
         data: JSON.stringify({
           ops: [
@@ -31,9 +32,10 @@ module.exports = {
       {
         created_at: new Date(),
         updated_at: new Date(),
+        parent: "857b7472-9122-43e2-bd74-ec4d1f9df25d",
         id: "6c228b2d-c165-4699-a734-08c3c5b23fe8",
         text: "Random Rant",
-        created_by: 3,
+        created_by: 1,
         data: JSON.stringify({
           ops: [
             {

@@ -1,16 +1,16 @@
 import { makeRequest } from "./makeRequest";
-export function getUsersWithoutAccess(documentId, folderId) {
+export function getUsersWithoutAccess(folderId) {
+  if (!folderId) return;
   return makeRequest(`/users/withoutAccess/`, {
     params: {
-      documentId: documentId,
       folderId: folderId,
     },
   });
 }
-export function getUsersWithAccess(documentId, folderId) {
+export function getUsersWithAccess(folderId) {
+  if (!folderId) return;
   return makeRequest(`/users/withAccess/`, {
     params: {
-      documentId: documentId,
       folderId: folderId,
     },
   });
