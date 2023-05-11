@@ -73,37 +73,10 @@ const getUsersWithoutAccess = async (req, res) => {
 
   return res.status(200).json(usersWithoutAccess);
 };
-const addUsersToDocument = async (req, res) => {
-  const { people, documentId } = req.body; // add type and change documentId to nodeId
-  console.log("adding doc", documentId);
-  for (const person of people) {
-    const user = await User.findOne({ where: { name: person } });
-    await UserDocumentAccess.create({
-      userId: user.id,
-      documentId: documentId,
-      role: "collaborator",
-    });
-  }
-  return res.status(200).send("Users added to document!");
-};
-const addUsersToFolder = async (req, res) => {
-  const { people, folderId } = req.body;
-  console.log("adding folder", folderId);
-  for (const person of people) {
-    const user = await User.findOne({ where: { name: person } });
-    await UserFolderAccess.create({
-      userId: user.id,
-      folderId: folderId,
-      role: "collaborator",
-    });
-  }
-  return res.status(200).send("Users added to folder!");
-};
+
 module.exports = {
   getUser,
   getUsers,
   getUsersWithAccess,
   getUsersWithoutAccess,
-  addUsersToDocument,
-  addUsersToFolder,
 };

@@ -4,25 +4,26 @@ import Box from "@mui/material/Box";
 import HttpsIcon from "@mui/icons-material/Https";
 
 import Dialog from "@mui/material/Dialog";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-
 import Typography from "@mui/material/Typography";
 import AccessDialogTitle from "./AccessDialogTitle";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 
+import { getUsersWithoutAccess, getUsersWithAccess } from "../services/user";
 import {
-  getUsersWithoutAccess,
-  getUsersWithAccess,
   addUsersToDocument,
+  editDocumentAccess,
+} from "../services/userDocumentAccess";
+import {
   addUsersToFolder,
-} from "../services/user";
+  editFolderAccess,
+} from "../services/userFolderAccess";
 import AutoComplete from "./AutoComplete";
 import PeopleToAdd from "./PeopleToAdd";
 import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
-import SelectOption from "./SelectOption";
 import { useAppContext } from "../context/appContext";
 
 const AccessDialog = ({ documentId, residingFolder }) => {
@@ -31,7 +32,8 @@ const AccessDialog = ({ documentId, residingFolder }) => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [message, setMessage] = useState("");
   const [addUsers, setAddUsers] = useState([]);
-  const [option, setOption] = useState("document");
+  const [changeAccess, setChangeAccess] = useState({});
+
   const {
     mutate: addUsersDocumentMutation,
     error: userAccessError,
@@ -45,7 +47,7 @@ const AccessDialog = ({ documentId, residingFolder }) => {
       setOpenSnackBar(true);
     },
   });
-  console.log(residingFolder);
+
   const {
     mutate: addUsersFolderMutation,
     error: userFolderError,
@@ -58,48 +60,99 @@ const AccessDialog = ({ documentId, residingFolder }) => {
       setMessage(res.data);
     },
   });
-  const { data: usersWithoutAccess, isLoading: isUserFetching } = useQuery({
-    queryKey: ["users", "withoutAccess", open, residingFolder], // it will refetch whenever user opens the dialog
-    queryFn: () => getUsersWithoutAccess(residingFolder),
+  const { mutate: editDocumentAccessMutation } = useMutation({
+    mutationFn: ({ changeAccess, documentId }) => {
+      return editDocumentAccess({ changeAccess, documentId });
+    },
+    onSuccess: (res) => {
+      setMessage(res.data);
+    },
+  });
+  const { mutate: editFolderAccessMutation } = useMutation({
+    mutationFn: ({ changeAccess, folderId }) => {
+      return editFolderAccess({ changeAccess, folderId });
+    },
+    onSuccess: (res) => {
+      setMessage(res.data);
+    },
+  });
+  const { data: usersWithoutAccess, isLoading: isWithoutFetching } = useQuery({
+    queryKey: ["users", "withoutAccess", residingFolder], // it will refetch whenever user opens the dialog
+    queryFn: () => {
+      return getUsersWithoutAccess(residingFolder);
+    },
+    enabled: residingFolder !== null, // only start fetching when residingFolder has been fetched from textEditor to prevent warning
     refetchOnWindowFocus: false,
+    staleTime: 1,
   });
 
   const { data: userAccess, isLoading: isAccessFetching } = useQuery({
-    queryKey: ["users", "withAccess", "documentId", open, residingFolder],
-    queryFn: () => getUsersWithAccess(residingFolder),
+    queryKey: ["users", "withAccess", residingFolder],
+    queryFn: () => {
+      return getUsersWithAccess(residingFolder);
+    },
+    enabled: residingFolder !== null,
     refetchOnWindowFocus: false, // it is not necessary to keep refetching
+    staleTime: 1,
   });
-  console.log(residingFolder);
+  const queryClient = useQueryClient();
   const handleClickOpen = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["users", "withoutAccess", residingFolder],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["users", "withAccess", residingFolder],
+    });
     setOpen(true);
   };
   const handleClose = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["users", "withoutAccess", residingFolder],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["users", "withAccess", residingFolder],
+    });
     setOpen(false);
   };
+  console.log(userAccess.data, usersWithoutAccess.data);
   const saveChanges = () => {
-    if (addUsers.length == 0) return;
-    if (option === "document")
-      addUsersDocumentMutation({ people: addUsers, documentId });
-    else {
-      const folderNode =
-        myTrees.tree[residingFolder] || sharedTrees.tree[residingFolder]; //locate node in its tree
-      const dfs = (node) => {
-        if (node.type === "document") {
-          addUsersDocumentMutation({ people: addUsers, documentId: node.id });
-          return;
-        }
+    if (addUsers.length === 0 && Object.keys(changeAccess).length === 0) return;
 
-        addUsersFolderMutation({ people: addUsers, folderId: node.id });
-        if (node.children.length > 0)
-          node.children.forEach((child) => dfs(child));
-      };
-      dfs(folderNode);
+    const folderNode =
+      myTrees.tree[residingFolder] || sharedTrees.tree[residingFolder]; //locate node in its tree
+
+    const dfs = (node, processDocument, processFolder) => {
+      if (node.type === "document") {
+        processDocument(node);
+        return;
+      }
+      processFolder(node);
+      if (node.children.length > 0)
+        node.children.forEach((child) =>
+          dfs(child, processDocument, processFolder)
+        );
+    };
+    if (addUsers.length > 0)
+      dfs(
+        folderNode,
+        (node) =>
+          addUsersDocumentMutation({ people: addUsers, documentId: node.id }),
+        (node) =>
+          addUsersFolderMutation({ people: addUsers, folderId: node.id })
+      );
+    if (Object.keys(changeAccess).length > 0) {
+      dfs(
+        folderNode,
+        (node) =>
+          editDocumentAccessMutation({ documentId: node.id, changeAccess }),
+        (node) => editFolderAccessMutation({ folderId: node.id, changeAccess })
+      );
     }
     setAddUsers([]);
+    setChangeAccess({});
     setOpen(false);
     setOpenSnackBar(true);
   };
-
   return (
     <Box>
       <AccessSnackBar
@@ -123,19 +176,13 @@ const AccessDialog = ({ documentId, residingFolder }) => {
       <Dialog fullWidth maxWidth="sm" onClose={handleClose} open={open}>
         {/* add document title here */}
         <AccessDialogTitle onClose={handleClose}>
-          <Typography>Share</Typography>
+          <Typography>Grant access to current folder</Typography>
         </AccessDialogTitle>
         <DialogContent
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           dividers={true}
         >
-          <SelectOption
-            setAddUsers={setAddUsers}
-            residingFolder={residingFolder}
-            option={option}
-            setOption={setOption}
-          />
-          {isUserFetching ? (
+          {isAccessFetching || isWithoutFetching ? (
             <Typography>Loading...</Typography>
           ) : (
             <AutoComplete
@@ -147,8 +194,8 @@ const AccessDialog = ({ documentId, residingFolder }) => {
             <PeopleToAdd setAddUsers={setAddUsers} addUsers={addUsers} />
           )}
           <PeopleWithAccess
+            setChangeAccess={setChangeAccess}
             isAccessFetching={isAccessFetching}
-            option={option}
             userAccess={userAccess && userAccess.data}
           />
           <Typography variant="h6" component="h5">

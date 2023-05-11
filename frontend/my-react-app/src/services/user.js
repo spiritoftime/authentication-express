@@ -15,15 +15,3 @@ export function getUsersWithAccess(folderId) {
     },
   });
 }
-export function addUsersToDocument({ documentId, people }) {
-  return makeRequest(`/users/addUsersToDocument`, {
-    method: "POST",
-    data: { documentId, people },
-  });
-}
-export function addUsersToFolder({ folderId, people }) {
-  return makeRequest(`/users/addUsersToFolder`, {
-    method: "POST",
-    data: { folderId, people },
-  });
-}

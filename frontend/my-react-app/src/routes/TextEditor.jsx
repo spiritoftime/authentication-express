@@ -32,7 +32,7 @@ export default function TextEditor() {
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
-  const [residingFolder, setResidingFolder] = useState("");
+  const [residingFolder, setResidingFolder] = useState(null);
   const switchRoom = (newDocumentId, socket) => {
     if (socket && newDocumentId !== documentId) {
       // Emit a 'switch-room' event to the server with the old and new documentId

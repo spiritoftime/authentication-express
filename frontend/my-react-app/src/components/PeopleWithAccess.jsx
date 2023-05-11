@@ -2,7 +2,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
-const PeopleWithAccess = ({ isAccessFetching, userAccess, option }) => {
+import SelectOption from "./SelectOption";
+const PeopleWithAccess = ({
+  isAccessFetching,
+  userAccess,
+  setChangeAccess,
+}) => {
   return (
     <>
       <Typography variant="h6" component="h6">
@@ -24,9 +29,17 @@ const PeopleWithAccess = ({ isAccessFetching, userAccess, option }) => {
                   <Typography variant="h6" component="h6">
                     {user.name}
                   </Typography>
-                  <Typography variant="h6" component="h6">
-                    {user.folderRole}
-                  </Typography>
+                  {user.folderRole === "creator" ? (
+                    <Typography variant="h6" component="h6">
+                      {user.folderRole}
+                    </Typography>
+                  ) : (
+                    <SelectOption
+                      setChangeAccess={setChangeAccess}
+                      currentUser={user}
+                      role={user.folderRole}
+                    />
+                  )}
                 </Box>
               </Box>
             );

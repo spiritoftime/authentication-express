@@ -2,24 +2,30 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-const SelectOption = ({ setOption, option, residingFolder, setAddUsers }) => {
+import { useState, useEffect } from "react";
+const SelectOption = ({ role, currentUser, setChangeAccess }) => {
+  const [currentRole, setCurrentRole] = useState(role);
+  useEffect(() => {
+    setCurrentRole(role);
+  }, [role]);
   return (
-    <FormControl variant="standard" sx={{ width: "100%" }}>
-      <InputLabel id="demo-simple-select-standard-label">
-        Grant Access to:
-      </InputLabel>
+    <FormControl variant="standard">
       <Select
+        onChange={(e) => {
+          setChangeAccess((prev) => ({
+            ...prev,
+            [currentUser.id]: e.target.value,
+          }));
+          setCurrentRole(e.target.value);
+        }}
+        displayEmpty
         labelId="demo-simple-select-standard-label"
         id="demo-simple-select-standard"
-        value={option}
-        onChange={(e) => {
-          setOption(e.target.value);
-          setAddUsers([]);
-        }}
-        label="grant access to"
+        label="Access Type"
+        value={currentRole}
       >
-        <MenuItem value={"document"}>Current Document</MenuItem>
-        {residingFolder && <MenuItem value={"folder"}>Current Folder</MenuItem>}
+        <MenuItem value={"collaborator"}>Collaborator</MenuItem>
+        <MenuItem value={"viewer"}>Viewer</MenuItem>
       </Select>
     </FormControl>
   );

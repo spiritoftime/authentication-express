@@ -12,6 +12,8 @@ const documentRouter = require("./routes/documentRouter");
 const userRouter = require("./routes/userRouter");
 const folderRouter = require("./routes/folderRouter");
 const authRouter = require("./routes/authRouter");
+const documentAccessRouter = require("./routes/UserDocumentAccessRouter");
+const folderAccessRouter = require("./routes/UserFolderAccessRouter");
 const cookieParser = require("cookie-parser");
 const { findDocument } = require("./controllers/document");
 const io = require("socket.io")(3001, {
@@ -30,8 +32,6 @@ app.use(
 let documentToUsers = {};
 app.use(express.json());
 io.on("connection", (socket) => {
-  console.log(documentToUsers);
-
   socket.on("get-document", async (documentId, username) => {
     console.count("connect ran");
     socket.username = username;
@@ -47,14 +47,12 @@ io.on("connection", (socket) => {
   socket.on("join-document", (documentId) => {
     socket.join(documentId);
     socket.lastDocument = documentId;
-    console.log(documentToUsers[documentId]);
     io.to(documentId).emit("users", [...documentToUsers[documentId]]);
   });
   socket.on("disconnect", () => {
     console.count("disconnect ran");
     if (documentToUsers[socket.lastDocument].has(socket.username)) {
       documentToUsers[socket.lastDocument].delete(socket.username);
-      console.log(documentToUsers[socket.lastDocument]);
     }
     io.to(socket.lastDocument).emit("users", [
       ...documentToUsers[socket.lastDocument],
@@ -68,7 +66,6 @@ io.on("connection", (socket) => {
     io.to(documentId).emit("document-saved", "All changes saved!");
   });
   socket.on("switch-document", (oldDocumentId, newDocumentId, username) => {
-    console.log("running");
     // Leave the old room
     socket.leave(oldDocumentId);
     // Remove the user from the old room's user list
@@ -85,7 +82,6 @@ io.on("connection", (socket) => {
     } else {
       documentToUsers[newDocumentId] = new Set([username]);
     }
-    console.log(documentToUsers[newDocumentId]);
     // Emit the updated user list for the new room
     io.to(newDocumentId).emit("users", [...documentToUsers[newDocumentId]]);
   });
@@ -94,6 +90,8 @@ app.use("/", authRouter);
 app.use("/documents", authenticateToken, documentRouter);
 app.use("/users", authenticateToken, userRouter);
 app.use("/folders", authenticateToken, folderRouter);
+app.use("/folderAccess", authenticateToken, folderAccessRouter);
+app.use("/documentAccess", authenticateToken, documentAccessRouter);
 // app.get("/posts", authenticateToken, (req, res) => {
 //   res.status(200).json({ message: "you made it!" });
 // });
