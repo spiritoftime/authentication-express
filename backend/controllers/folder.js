@@ -5,41 +5,28 @@ const createFolder = async (req, res) => {
   const { title, folderId, createdBy } = req.body;
 
   try {
+    const parentFolder = Folder.findByPk(folderId);
     const folder = await Folder.create({
-      createdBy: createdBy,
+      createdBy: parentFolder.createdBy,
       parent: folderId,
       text: title,
     });
     await UserFolderAccess.create({
-      userId: createdBy,
+      userId: parentFolder.createdBy,
       folderId: folder.id,
       role: "creator",
     });
 
     const users = await UserFolderAccess.findAll({
       attributes: ["userId", "role"],
-      where: { folderId: { [Op.eq]: folderId } },
+      where: { folderId: folderId, role: { [Op.ne]: "creator" } },
     });
     for (const user of users) {
-      if (user.role === "creator" && user.userId !== createdBy)
-        // if the creator of this document is not the one who created the subfolder
-        await UserFolderAccess.create({
-          userId: user.userId,
-          folderId: folder.id,
-          role: "collaborator",
-        });
-      else if (user.userId === createdBy)
-        await UserFolderAccess.create({
-          userId: user.userId,
-          folderId: folder.id,
-          role: "creator",
-        });
-      else
-        await UserFolderAccess.create({
-          userId: user.userId,
-          folderId: folder.id,
-          role: user.role,
-        });
+      await UserFolderAccess.create({
+        userId: user.userId,
+        folderId: folder.id,
+        role: user.role,
+      });
     }
 
     // Send a response back to the client with the created folder and UserFolderAccess record
@@ -66,7 +53,7 @@ const editFolder = async (req, res) => {
   const { parent } = req.body;
   const { folderId } = req.params;
   const folder = await Folder.findByPk(folderId);
-  if (parent) folder.parent = parent === "root" ? null : parent;
+  if (parent) folder.parent = parent;
   await folder.save();
   return res.status(201).send("All changes saved!");
 };

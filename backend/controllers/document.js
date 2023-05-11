@@ -1,5 +1,5 @@
 const db = require("../db/models");
-const { User, Document, UserDocumentAccess, UserFolderAccess } = db;
+const { User, Document, UserDocumentAccess, UserFolderAccess, Folder } = db;
 const { Op } = require("sequelize");
 const getDocument = async (req, res) => {
   const { documentId } = req.params;
@@ -30,9 +30,10 @@ async function findDocument(documentId, username) {
 async function createDocument(req, res) {
   const { title, folderId, createdBy } = req.body;
   try {
+    const parentFolder = await Folder.findByPk(folderId);
     const document = await Document.create({
       parent: folderId,
-      createdBy: createdBy,
+      createdBy: parentFolder.createdBy,
       text: title,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -40,29 +41,14 @@ async function createDocument(req, res) {
 
     const users = await UserFolderAccess.findAll({
       attributes: ["userId", "role"],
-      where: { folderId: { [Op.eq]: folderId } },
+      where: { folderId: folderId, role: { [Op.ne]: "creator" } },
     }); // find users with the access to the parent folder, and add them into this document with the same permission settings
-    for (const user of users) {
-      if (user.role === "creator" && user.userId !== createdBy)
-        // if the creator of this document is not the one who created the subfolder
-        await UserDocumentAccess.create({
-          userId: user.userId,
-          documentId: document.id,
-          role: "collaborator",
-        });
-      else if (user.userId === createdBy)
-        await UserDocumentAccess.create({
-          userId: user.userId,
-          documentId: document.id,
-          role: "creator",
-        });
-      else
-        await UserDocumentAccess.create({
-          userId: user.userId,
-          documentId: document.id,
-          role: user.role,
-        });
-    }
+    for (const user of users)
+      await UserDocumentAccess.create({
+        userId: user.userId,
+        documentId: document.id,
+        role: user.role,
+      });
 
     return res.status(201).json({ document, type: "document" });
   } catch (err) {
@@ -77,7 +63,7 @@ async function editDocument(req, res) {
   const { documentId } = req.params;
   const document = await Document.findByPk(documentId);
   if (title) document.text = title;
-  if (parent) document.parent = parent === "root" ? null : parent;
+  if (parent) document.parent = parent;
 
   await document.save();
   return res.status(200).send("All changes saved!");

@@ -68,6 +68,7 @@ io.on("connection", (socket) => {
     io.to(documentId).emit("document-saved", "All changes saved!");
   });
   socket.on("switch-document", (oldDocumentId, newDocumentId, username) => {
+    console.log("running");
     // Leave the old room
     socket.leave(oldDocumentId);
     // Remove the user from the old room's user list
@@ -84,6 +85,7 @@ io.on("connection", (socket) => {
     } else {
       documentToUsers[newDocumentId] = new Set([username]);
     }
+    console.log(documentToUsers[newDocumentId]);
     // Emit the updated user list for the new room
     io.to(newDocumentId).emit("users", [...documentToUsers[newDocumentId]]);
   });

@@ -1,5 +1,5 @@
 const db = require("../db/models");
-const { User, Document, Folder } = db;
+const { User, Document, Folder, UserDocumentAccess, UserFolderAccess } = db;
 const { Op } = require("sequelize");
 const {
   queryUsersWithAccess,
@@ -61,7 +61,7 @@ const getUsers = async (req, res) => {
 };
 const getUsersWithAccess = async (req, res) => {
   const { folderId } = req.query;
-  console.log(folderId);
+
   const usersWithAccess = await queryUsersWithAccess(folderId);
 
   return res.status(200).json(usersWithAccess);
@@ -75,21 +75,27 @@ const getUsersWithoutAccess = async (req, res) => {
 };
 const addUsersToDocument = async (req, res) => {
   const { people, documentId } = req.body; // add type and change documentId to nodeId
-
+  console.log("adding doc", documentId);
   for (const person of people) {
     const user = await User.findOne({ where: { name: person } });
-    const document = await Document.findOne({ where: { id: documentId } });
-
-    await user.addAccessibleDocument(document);
+    await UserDocumentAccess.create({
+      userId: user.id,
+      documentId: documentId,
+      role: "collaborator",
+    });
   }
   return res.status(200).send("Users added to document!");
 };
 const addUsersToFolder = async (req, res) => {
   const { people, folderId } = req.body;
+  console.log("adding folder", folderId);
   for (const person of people) {
     const user = await User.findOne({ where: { name: person } });
-    const folder = await Folder.findOne({ where: { id: folderId } });
-    await user.addAccessibleFolder(folder);
+    await UserFolderAccess.create({
+      userId: user.id,
+      folderId: folderId,
+      role: "collaborator",
+    });
   }
   return res.status(200).send("Users added to folder!");
 };
