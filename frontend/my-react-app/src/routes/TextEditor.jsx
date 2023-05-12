@@ -1,26 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { io } from "socket.io-client";
 import { useAppContext } from "../context/appContext";
-
 import DocumentBar from "../components/DocumentBar";
 import NestedFolders from "../components/NestedFolders";
 import { useNavigate } from "react-router-dom";
+import ReactQuillBar, { formats, modules } from "../components/ReactQuillBar";
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const SAVE_INTERVAL_MS = 1000;
-const TOOLBAR_OPTIONS = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  [{ font: [] }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  ["bold", "italic", "underline"],
-  [{ script: "sub" }, { script: "super" }],
-  [{ align: [] }],
-  ["image", "blockquote", "code-block"],
-  ["clean"],
-];
+
 export default function TextEditor() {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const [documentTitle, setDocumentTitle] = useState("Untitled Document");
@@ -33,7 +26,9 @@ export default function TextEditor() {
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
+
   const [residingFolder, setResidingFolder] = useState(null);
+
   const switchRoom = (newDocumentId, socket) => {
     if (socket && newDocumentId !== documentId) {
       // Emit a 'switch-room' event to the server with the old and new documentId
@@ -49,6 +44,7 @@ export default function TextEditor() {
   // mount the socket.io
   useEffect(() => {
     const s = io("http://localhost:3001"); // connect to backend URI
+
     setSocket(s);
     return () => {
       s.disconnect();
@@ -142,11 +138,15 @@ export default function TextEditor() {
             switchRoom={switchRoom}
           />
         </Box>
-        <ReactQuill
-          ref={quillRef}
-          modules={{ toolbar: TOOLBAR_OPTIONS }}
-          theme="snow"
-        />
+        <Box sx={{ maxWidth: "8.3in" }} display="flex" flexDirection="column">
+          <ReactQuillBar />
+          <ReactQuill
+            ref={quillRef}
+            modules={modules}
+            formats={formats}
+            theme="snow"
+          />
+        </Box>
       </Box>
     </Box>
   );

@@ -24,7 +24,6 @@ const Folder = ({
   handleOpen,
   accessType,
 }) => {
-  console.log(accessType);
   if (isPreview)
     return (
       <Grid
