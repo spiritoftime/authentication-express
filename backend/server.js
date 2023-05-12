@@ -15,6 +15,7 @@ const authRouter = require("./routes/authRouter");
 const documentAccessRouter = require("./routes/UserDocumentAccessRouter");
 const folderAccessRouter = require("./routes/UserFolderAccessRouter");
 const cookieParser = require("cookie-parser");
+const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
 const io = require("socket.io")(3001, {
   cors: {
@@ -41,8 +42,14 @@ io.on("connection", (socket) => {
       documentToUsers[documentId] = new Set([username]);
     }
     const document = await findDocument(documentId, username);
-
-    socket.emit("load-document", document.data, document.text, document.parent);
+    const accessType = await getAccessType(documentId, username);
+    await socket.emit(
+      "load-document",
+      document.data,
+      document.text,
+      document.parent,
+      accessType
+    );
   });
   socket.on("join-document", (documentId) => {
     socket.join(documentId);

@@ -3,7 +3,6 @@ const { User, Document, Folder, UserDocumentAccess, UserFolderAccess } = db;
 const { Op } = require("sequelize");
 const addUsersToDocument = async (req, res) => {
   const { people, documentId } = req.body; // add type and change documentId to nodeId
-  console.log("adding doc", documentId);
   for (const person of people) {
     const user = await User.findOne({ where: { name: person } });
     await UserDocumentAccess.create({
@@ -25,4 +24,11 @@ const editAccessDocument = async (req, res) => {
   }
   return res.status(200).send("Access changed for users!");
 };
-module.exports = { addUsersToDocument, editAccessDocument };
+const getAccessType = async (documentId, username) => {
+  const { id: userId } = await User.findOne({ where: { username: username } });
+  const { role } = await UserDocumentAccess.findOne({
+    where: { userId: userId, documentId: documentId },
+  });
+  return role;
+};
+module.exports = { addUsersToDocument, editAccessDocument, getAccessType };

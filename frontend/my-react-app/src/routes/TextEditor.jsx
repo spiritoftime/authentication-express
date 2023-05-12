@@ -24,6 +24,7 @@ const TOOLBAR_OPTIONS = [
 export default function TextEditor() {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
   const [documentTitle, setDocumentTitle] = useState("Untitled Document");
+  const [accessType, setAccessType] = useState("");
   const { id: documentId } = useParams();
   const [users, setUsers] = useState([]);
   const reloginMutation = useReLoginMutation();
@@ -61,15 +62,19 @@ export default function TextEditor() {
     quillInstance.setText("Loading...");
     quillInstance.disable();
     socket.emit("join-document", documentId);
-    socket.once("load-document", (document, title, residingFolder) => {
-      setDocumentTitle(title);
-      setResidingFolder(residingFolder);
-      setIsLoadingAuth(true);
-      reloginMutation();
-      setIsLoadingAuth(false);
-      quillInstance.setContents(document);
-      quillInstance.enable();
-    });
+    socket.once(
+      "load-document",
+      (document, title, residingFolder, accessType) => {
+        setDocumentTitle(title);
+        setResidingFolder(residingFolder);
+        setIsLoadingAuth(true);
+        reloginMutation();
+        setAccessType(accessType);
+        setIsLoadingAuth(false);
+        quillInstance.setContents(document);
+        if (accessType !== "viewer") quillInstance.enable();
+      }
+    );
   }, [documentId, quillRef, socket]);
   // all the socket logic
   useEffect(() => {

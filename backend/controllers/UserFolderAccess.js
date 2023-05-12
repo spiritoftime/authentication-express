@@ -24,4 +24,5 @@ const editAccessFolder = async (req, res) => {
   }
   return res.status(200).send("Access changed for users!");
 };
+
 module.exports = { addUsersToFolder, editAccessFolder };

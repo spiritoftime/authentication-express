@@ -114,7 +114,6 @@ const AccessDialog = ({ documentId, residingFolder }) => {
     });
     setOpen(false);
   };
-  console.log(userAccess.data, usersWithoutAccess.data);
   const saveChanges = () => {
     if (addUsers.length === 0 && Object.keys(changeAccess).length === 0) return;
 
