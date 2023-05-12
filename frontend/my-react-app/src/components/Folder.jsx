@@ -15,7 +15,16 @@ import { createDocument } from "../services/document";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 
-const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
+const Folder = ({
+  node,
+  depth,
+  isOpen,
+  onToggle,
+  isPreview,
+  handleOpen,
+  accessType,
+}) => {
+  console.log(accessType);
   if (isPreview)
     return (
       <Grid
@@ -143,16 +152,18 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
             {node.text}
           </Typography>
           <Box display="flex" alignItems="center">
-            <IconButton
-              color="info"
-              onClick={() => {
-                setShowInput({ visible: true, isFolder: true });
-                handleOpen(node.id);
-              }}
-            >
-              <CreateNewFolderIcon />
-            </IconButton>
-            {node.id !== null && (
+            {accessType !== "viewer" && (
+              <IconButton
+                color="info"
+                onClick={() => {
+                  setShowInput({ visible: true, isFolder: true });
+                  handleOpen(node.id);
+                }}
+              >
+                <CreateNewFolderIcon />
+              </IconButton>
+            )}
+            {node.id !== null && accessType !== "viewer" && (
               <IconButton
                 color="success"
                 onClick={() => {
@@ -163,14 +174,16 @@ const Folder = ({ node, depth, isOpen, onToggle, isPreview, handleOpen }) => {
                 <PostAddIcon />
               </IconButton>
             )}
-            <IconButton
-              onClick={(e) => {
-                deleteFolderMutation(node.id);
-              }}
-              color="error"
-            >
-              <DeleteIcon />
-            </IconButton>
+            {accessType !== "viewer" && (
+              <IconButton
+                onClick={(e) => {
+                  deleteFolderMutation(node.id);
+                }}
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+            )}
           </Box>
         </Grid>
       }

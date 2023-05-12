@@ -117,7 +117,8 @@ export default function TextEditor() {
 
   return (
     <Box display="flex" flexDirection="column" gap={2} padding={2}>
-      <DocumentBar accessType={accessType} 
+      <DocumentBar
+        accessType={accessType}
         residingFolder={residingFolder}
         users={users}
         setDocumentSaved={setDocumentSaved}
@@ -129,12 +130,14 @@ export default function TextEditor() {
       <Box display="flex">
         <Box display="flex" flexDirection="column">
           <NestedFolders
+            accessType={"creator"}
             type="personal"
             socket={socket}
             switchRoom={switchRoom}
           />
           <NestedFolders
             type="shared"
+            accessType={accessType}
             socket={socket}
             switchRoom={switchRoom}
           />

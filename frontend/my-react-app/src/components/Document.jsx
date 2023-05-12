@@ -10,7 +10,14 @@ import { deleteDocument } from "../services/document";
 import IconButton from "@mui/material/IconButton";
 
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
-const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
+const Document = ({
+  node,
+  depth,
+  isPreview,
+  switchRoom,
+  socket,
+  accessType,
+}) => {
   if (isPreview)
     return (
       <Box display="flex" alignItems="center">
@@ -62,15 +69,17 @@ const Document = ({ node, depth, isPreview, switchRoom, socket }) => {
         <ArticleIcon color="primary" />
         {node.text}
       </Typography>
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation(); // prevent switchRoom from firing
-          deleteDocumentMutation(node.id);
-        }}
-        color="error"
-      >
-        <DeleteIcon />
-      </IconButton>
+      {accessType !== "viewer" && (
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation(); // prevent switchRoom from firing
+            deleteDocumentMutation(node.id);
+          }}
+          color="error"
+        >
+          <DeleteIcon />
+        </IconButton>
+      )}
     </Box>
   );
 };

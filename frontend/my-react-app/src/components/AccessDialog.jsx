@@ -25,6 +25,7 @@ import PeopleToAdd from "./PeopleToAdd";
 import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
 import { useAppContext } from "../context/appContext";
+import GeneralAccess from "./GeneralAccess";
 
 const AccessDialog = ({ documentId, residingFolder, accessType }) => {
   const [open, setOpen] = useState(false);
@@ -201,12 +202,7 @@ const AccessDialog = ({ documentId, residingFolder, accessType }) => {
             isAccessFetching={isAccessFetching}
             userAccess={userAccess && userAccess.data}
           />
-          <Typography variant="h6" component="h5">
-            General access
-          </Typography>
-          <Box display="flex" gap={2}>
-            {/* general access */}
-          </Box>
+          <GeneralAccess />
           <Box display="flex" justifyContent="space-between">
             <Button
               onClick={() =>

@@ -13,11 +13,10 @@ import { editDocument } from "../services/document";
 import { editFolder } from "../services/folder";
 
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
-const NestedFolders = ({ switchRoom, socket, type }) => {
+const NestedFolders = ({ switchRoom, socket, type, accessType }) => {
   const treeRef = useRef(null);
   const handleOpen = (nodeId) => treeRef.current.open(nodeId);
-  const { myTrees, sharedTrees,  } =
-    useAppContext();
+  const { myTrees, sharedTrees } = useAppContext();
   const reloginMutation = useReLoginMutation();
   const {
     mutate: editMutation,
@@ -55,8 +54,8 @@ const NestedFolders = ({ switchRoom, socket, type }) => {
         rootId={"root"}
         render={(node, { depth, isOpen, onToggle }) => {
           if (node.type === "document")
-            return (
-              <Document
+            return ( 
+              <Document accessType={accessType}
                 switchRoom={switchRoom}
                 socket={socket}
                 node={node}
@@ -66,6 +65,7 @@ const NestedFolders = ({ switchRoom, socket, type }) => {
           else
             return (
               <Folder
+                accessType={accessType}
                 handleOpen={handleOpen}
                 node={node}
                 depth={depth}
