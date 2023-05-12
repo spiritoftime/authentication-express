@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import ActiveUsers from "./ActiveUsers";
 const DocumentBar = ({
   documentSaved,
+  accessType,
   documentId,
   setDocumentSaved,
   users,
@@ -64,7 +65,11 @@ const DocumentBar = ({
         <ActiveUsers users={users} />
         {/* <HistoryIcon />
         <CommentIcon /> */}
-        <AccessDialog residingFolder={residingFolder} documentId={documentId} />
+        <AccessDialog
+          accessType={accessType}
+          residingFolder={residingFolder}
+          documentId={documentId}
+        />
       </Box>
     </Box>
   );

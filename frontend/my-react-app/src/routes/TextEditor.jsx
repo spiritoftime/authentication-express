@@ -117,7 +117,7 @@ export default function TextEditor() {
 
   return (
     <Box display="flex" flexDirection="column" gap={2} padding={2}>
-      <DocumentBar
+      <DocumentBar accessType={accessType} 
         residingFolder={residingFolder}
         users={users}
         setDocumentSaved={setDocumentSaved}

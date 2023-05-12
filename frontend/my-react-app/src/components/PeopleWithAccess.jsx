@@ -29,7 +29,8 @@ const PeopleWithAccess = ({
                   <Typography variant="h6" component="h6">
                     {user.name}
                   </Typography>
-                  {user.folderRole === "creator" ? (
+                  {user.folderRole === "creator" ||
+                  user.folderRole === "viewer" ? (
                     <Typography variant="h6" component="h6">
                       {user.folderRole}
                     </Typography>

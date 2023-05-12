@@ -26,7 +26,7 @@ import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
 import { useAppContext } from "../context/appContext";
 
-const AccessDialog = ({ documentId, residingFolder }) => {
+const AccessDialog = ({ documentId, residingFolder, accessType }) => {
   const [open, setOpen] = useState(false);
   const { myTrees, sharedTrees } = useAppContext();
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -184,10 +184,14 @@ const AccessDialog = ({ documentId, residingFolder }) => {
           {isAccessFetching || isWithoutFetching ? (
             <Typography>Loading...</Typography>
           ) : (
-            <AutoComplete
-              setAddUsers={setAddUsers}
-              usersWithoutAccess={usersWithoutAccess && usersWithoutAccess.data}
-            />
+            accessType !== "viewer" && (
+              <AutoComplete
+                setAddUsers={setAddUsers}
+                usersWithoutAccess={
+                  usersWithoutAccess && usersWithoutAccess.data
+                }
+              />
+            )
           )}
           {addUsers.length > 0 && (
             <PeopleToAdd setAddUsers={setAddUsers} addUsers={addUsers} />
@@ -215,9 +219,11 @@ const AccessDialog = ({ documentId, residingFolder }) => {
               Copy Link
             </Button>
             <DialogActions>
-              <Button variant="contained" autoFocus onClick={saveChanges}>
-                Save changes
-              </Button>
+              {accessType !== "viewer" && (
+                <Button variant="contained" autoFocus onClick={saveChanges}>
+                  Save changes
+                </Button>
+              )}
             </DialogActions>
           </Box>
         </DialogContent>
