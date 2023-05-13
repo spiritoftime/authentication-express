@@ -63,7 +63,7 @@ const Document = ({
         display="flex"
         alignItems="center"
         gap={1}
-        variant="h6"
+        variant="body1"
         component="span"
       >
         <ArticleIcon color="primary" />

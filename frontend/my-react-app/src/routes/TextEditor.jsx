@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import hljs from "highlight.js";
-import "highlight.js/styles/github.css";
+
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { io } from "socket.io-client";
@@ -15,7 +14,8 @@ import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 const SAVE_INTERVAL_MS = 1000;
 
 export default function TextEditor() {
-  const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
+  const { authDetails, setAuthDetails, setIsLoadingAuth, isDarkMode } =
+    useAppContext();
   const [documentTitle, setDocumentTitle] = useState("Untitled Document");
   const [accessType, setAccessType] = useState("");
   const { id: documentId } = useParams();
@@ -112,19 +112,22 @@ export default function TextEditor() {
   }, [socket, quillRef]);
 
   return (
-    <Box display="flex" flexDirection="column" gap={2} padding={2}>
-      <DocumentBar
-        accessType={accessType}
-        residingFolder={residingFolder}
-        users={users}
-        setDocumentSaved={setDocumentSaved}
-        setDocumentTitle={setDocumentTitle}
-        documentTitle={documentTitle}
-        documentId={documentId}
-        documentSaved={documentSaved}
-      />
+    <Box display="flex" flexDirection="column">
       <Box display="flex">
-        <Box display="flex" flexDirection="column">
+        <Box
+          display="flex"
+          position="sticky"
+          sx={{
+            backgroundColor: isDarkMode
+              ? "hsl(160, 0%, 20%)"
+              : "hsl(160, 0%, 92%)",
+            padding: "64px 16px",
+            height: "100vh",
+            top: 0,
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+          }}
+          flexDirection="column"
+        >
           <NestedFolders
             accessType={"creator"}
             type="personal"
@@ -138,7 +141,21 @@ export default function TextEditor() {
             switchRoom={switchRoom}
           />
         </Box>
-        <Box sx={{ maxWidth: "8.3in" }} display="flex" flexDirection="column">
+        <Box
+          display="flex"
+          sx={{ flexGrow: 1, padding: "0 16px" }}
+          flexDirection="column"
+        >
+          <DocumentBar
+            accessType={accessType}
+            residingFolder={residingFolder}
+            users={users}
+            setDocumentSaved={setDocumentSaved}
+            setDocumentTitle={setDocumentTitle}
+            documentTitle={documentTitle}
+            documentId={documentId}
+            documentSaved={documentSaved}
+          />
           <ReactQuillBar />
           <ReactQuill
             ref={quillRef}

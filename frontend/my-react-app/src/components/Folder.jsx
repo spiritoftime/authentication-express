@@ -143,9 +143,9 @@ const Folder = ({
             sx={{ cursor: "pointer" }}
             display="flex"
             alignItems="center"
-            variant="h6"
             gap={1}
-            component="h6"
+            variant="body1"
+            component="body1"
           >
             <FolderIcon color="warning" />
             {node.text}

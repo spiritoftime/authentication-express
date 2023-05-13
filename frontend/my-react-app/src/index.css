@@ -4,8 +4,10 @@
   padding: 0;
 }
 
-.ql-container.ql-snow {
+.quill .ql-container.ql-snow {
   min-height: 11.7in;
+
+  border: none;
 }
 .node-input {
   font-size: 12px;
@@ -21,4 +23,22 @@
 }
 .MuiBox-root.css-k008qs ul {
   list-style: none;
+}
+#toolbar {
+  border: none;
+  background-color: rgb(247, 249, 252);
+}
+
+.ql-snow .ql-picker {
+  color: rgb(110, 126, 141);
+}
+#toolbar .ql-formats.dark {
+  background-color: rgb(247, 249, 252);
+  padding: 4px 6px;
+}
+.ql-formats {
+  margin-right: 0 !important ;
+}
+.ql-active {
+  background-color: rgb(214, 228, 252);
 }

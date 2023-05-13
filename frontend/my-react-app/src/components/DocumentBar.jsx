@@ -41,7 +41,12 @@ const DocumentBar = ({
     return () => clearTimeout(delayDebounceFn);
   }, [documentTitle]);
   return (
-    <Box justifyContent="space-between" display="flex" alignItems="center">
+    <Box
+      padding={2}
+      justifyContent="space-between"
+      display="flex"
+      alignItems="center"
+    >
       <Box gap={2} display="flex" alignItems="center">
         <TextField
           sx={{ border: "none" }}
@@ -52,7 +57,7 @@ const DocumentBar = ({
 
         <Box display="flex" gap={2} alignItems="center">
           {documentSaved === "All changes saved!" ? (
-            <CloudDoneIcon />
+            <CloudDoneIcon color="success" />
           ) : (
             <RestartAltIcon />
           )}

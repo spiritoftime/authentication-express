@@ -40,7 +40,7 @@ const Navbar = () => {
   const loggedIn = Object.keys(authDetails).length !== 0;
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky" sx={{ top: 0 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Box
