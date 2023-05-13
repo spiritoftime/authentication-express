@@ -59,7 +59,12 @@ const DocumentBar = ({
         />
       </Grid>
       <Grid item xs={12} sm={8}>
-        <Box justifyContent="space-between" display="flex" alignItems="center">
+        <Box
+          flexWrap={"wrap"}
+          justifyContent="space-between"
+          display="flex"
+          alignItems="center"
+        >
           <Box display="flex" gap={{ xs: 1, sm: 1, md: 1 }} alignItems="center">
             {documentSaved === "All changes saved!" ? (
               <CloudDoneIcon color="success" />
@@ -74,7 +79,12 @@ const DocumentBar = ({
               {documentSaved}
             </Typography>
           </Box>
-          <Box display="flex" gap={2}>
+          <Box
+            alignItems={"center"}
+            justifyContent={"space-between"}
+            display="flex"
+            gap={{ xs: 0, s: 2 }}
+          >
             <ActiveUsers users={users} />
             {/* <HistoryIcon />
         <CommentIcon /> */}

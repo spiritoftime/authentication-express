@@ -36,7 +36,6 @@ export default function Auth({ isLogin }) {
       setAuthDetails({ ...res.data.user, isNewDocument: false });
       const accessToken = res.headers.authorization.split(" ")[1];
 
-
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       navigate(from, { replace: true });
@@ -55,7 +54,6 @@ export default function Auth({ isLogin }) {
       setAuthDetails({ ...res.data.userWithDocuments, isNewDocument: false });
 
       const accessToken = res.headers.authorization.split(" ")[1];
-
 
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       navigate(from, { replace: true });
@@ -86,7 +84,13 @@ export default function Auth({ isLogin }) {
       <Typography component="h1" variant="h5">
         {isLogin ? "Sign in" : "Sign Up"}
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box
+        paddingX={2}
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           margin="normal"
           required
