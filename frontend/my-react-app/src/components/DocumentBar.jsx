@@ -42,7 +42,7 @@ const DocumentBar = ({
   }, [documentTitle]);
   return (
     <Box
-      padding={2}
+      padding={"16px 0"}
       justifyContent="space-between"
       display="flex"
       alignItems="center"
@@ -61,7 +61,7 @@ const DocumentBar = ({
           ) : (
             <RestartAltIcon />
           )}
-          <Typography variant="h6" component="h5">
+          <Typography variant="body1" component="p">
             {documentSaved}
           </Typography>
         </Box>

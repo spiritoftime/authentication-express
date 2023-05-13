@@ -19,6 +19,7 @@ export default function TextEditor() {
   const [documentTitle, setDocumentTitle] = useState("Untitled Document");
   const [accessType, setAccessType] = useState("");
   const { id: documentId } = useParams();
+  console.log("useparams", documentId);
   const [users, setUsers] = useState([]);
   const reloginMutation = useReLoginMutation();
   const [documentSaved, setDocumentSaved] = useState("All changes saved!");
@@ -80,11 +81,6 @@ export default function TextEditor() {
         if (accessType !== "viewer") quillInstance.enable();
       }
     );
-  }, [documentId, quillRef, socket]);
-  // all the socket logic
-  useEffect(() => {
-    if (socket == null || quillRef == null) return;
-    const quillInstance = quillRef.current.getEditor();
 
     const sendChangehandler = (delta, oldDelta, source) => {
       if (source !== "user") return;
@@ -107,6 +103,7 @@ export default function TextEditor() {
       quillInstance.updateContents(delta);
     };
     socket.on("document-saved", (message) => {
+      console.log("document-saved", message);
       setDocumentSaved(message);
     });
     quillInstance.on("text-change", sendChangehandler);
@@ -118,7 +115,7 @@ export default function TextEditor() {
 
       quillInstance.off("text-change", sendChangehandler);
     };
-  }, [socket, quillRef]);
+  }, [documentId, quillRef, socket]);
 
   return (
     <Box display="flex" flexDirection="column">
@@ -154,20 +151,28 @@ export default function TextEditor() {
         </Box>
         <Box
           display="flex"
-          sx={{ flexGrow: 1, padding: "0 16px" }}
+          sx={{ padding: "0 16px", flexGrow: 1 }}
           flexDirection="column"
         >
-          <DocumentBar
-            accessType={accessType}
-            residingFolder={residingFolder}
-            users={users}
-            setDocumentSaved={setDocumentSaved}
-            setDocumentTitle={setDocumentTitle}
-            documentTitle={documentTitle}
-            documentId={documentId}
-            documentSaved={documentSaved}
-          />
-          <ReactQuillBar />
+          <Box
+            sx={{
+              flexDirection: "column",
+
+              flexGrow: 1,
+            }}
+          >
+            <DocumentBar
+              accessType={accessType}
+              residingFolder={residingFolder}
+              users={users}
+              setDocumentSaved={setDocumentSaved}
+              setDocumentTitle={setDocumentTitle}
+              documentTitle={documentTitle}
+              documentId={documentId}
+              documentSaved={documentSaved}
+            />
+            <ReactQuillBar />
+          </Box>
           <ReactQuill
             ref={quillRef}
             modules={modules}

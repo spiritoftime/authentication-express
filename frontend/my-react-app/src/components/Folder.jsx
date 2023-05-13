@@ -47,9 +47,9 @@ const Folder = ({
         <Typography
           display="flex"
           alignItems="center"
-          variant="h6"
+          variant="body1"
           gap={1}
-          component="h6"
+          component="p"
         >
           <FolderIcon color="warning" />
           {node.text}
@@ -145,7 +145,7 @@ const Folder = ({
             alignItems="center"
             gap={1}
             variant="body1"
-            component="body1"
+            component="p"
           >
             <FolderIcon color="warning" />
             {node.text}

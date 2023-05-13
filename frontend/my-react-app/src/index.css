@@ -26,6 +26,8 @@
 }
 #toolbar {
   border: none;
+  position: sticky;
+  padding: 16px 0 !important;
   background-color: rgb(247, 249, 252);
 }
 
