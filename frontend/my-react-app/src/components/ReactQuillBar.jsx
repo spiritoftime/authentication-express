@@ -103,6 +103,7 @@ export const ReactQuillBar = () => {
       <span className={`ql-formats ${isDarkMode ? "dark" : "light"}`}>
         <button className="ql-formula" />
         <button className="ql-code-block" />
+
         <button className="ql-clean" />
       </span>
     </div>

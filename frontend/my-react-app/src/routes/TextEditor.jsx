@@ -15,6 +15,7 @@ import ReactQuillBar, { formats, modules } from "../components/ReactQuillBar";
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import Prettier from "prettier";
 
 const SAVE_INTERVAL_MS = 1000;
 
@@ -123,7 +124,7 @@ export default function TextEditor() {
   }, [documentId, quillRef, socket]);
 
   return (
-    <Box display="flex" sx={{ overflowX: "hidden" }} flexDirection="column">
+    <Box display="flex" flexDirection="column">
       <Box display="flex">
         <Box paddingTop={2}>
           {showNested !== true && (
