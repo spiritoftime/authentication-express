@@ -26,8 +26,10 @@ export default function TextEditor() {
   const quillRef = useRef();
   const saveTimeout = useRef(null);
   const [socket, setSocket] = useState();
+  const [scrolled, setScrolled] = useState(false);
 
   const [residingFolder, setResidingFolder] = useState(null);
+  const paddingTop = scrolled ? "80px" : "16px";
 
   const switchRoom = (newDocumentId, socket) => {
     if (socket && newDocumentId !== documentId) {
@@ -44,9 +46,16 @@ export default function TextEditor() {
   // mount the socket.io
   useEffect(() => {
     const s = io("http://localhost:3001"); // connect to backend URI
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 0;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
 
     setSocket(s);
     return () => {
+      window.removeEventListener("scroll", handleScroll);
       s.disconnect();
       setSocket(false);
     };
@@ -121,8 +130,10 @@ export default function TextEditor() {
             backgroundColor: isDarkMode
               ? "hsl(160, 0%, 20%)"
               : "hsl(160, 0%, 92%)",
-            padding: "64px 16px",
+            padding: `${paddingTop} 16px 0 `,
             height: "100vh",
+            transition: "padding-top 0.3s ease",
+
             top: 0,
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
           }}
