@@ -3,14 +3,14 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { editDocument } from "../services/document";
 import { useMutation } from "@tanstack/react-query";
-import CommentIcon from "@mui/icons-material/Comment";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CloudDoneIcon from "@mui/icons-material/CloudDone";
-import HistoryIcon from "@mui/icons-material/History";
 import AccessDialog from "./AccessDialog";
 import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import ActiveUsers from "./ActiveUsers";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 const DocumentBar = ({
   documentSaved,
   accessType,
@@ -43,7 +43,9 @@ const DocumentBar = ({
   }, [documentTitle]);
   return (
     <Grid
+      alignItems="center"
       container
+      spacing={1}
       padding={"16px 0"}
       rowGap={2}
       justifyContent="space-between"
@@ -57,13 +59,8 @@ const DocumentBar = ({
         />
       </Grid>
       <Grid item xs={12} sm={8}>
-        <Box
-          gap={2}
-          justifyContent="space-between"
-          display="flex"
-          alignItems="center"
-        >
-          <Box display="flex" gap={2} alignItems="center">
+        <Box justifyContent="space-between" display="flex" alignItems="center">
+          <Box display="flex" gap={{ xs: 1, sm: 1, md: 1 }} alignItems="center">
             {documentSaved === "All changes saved!" ? (
               <CloudDoneIcon color="success" />
             ) : (

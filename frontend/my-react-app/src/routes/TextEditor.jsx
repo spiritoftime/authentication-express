@@ -123,7 +123,7 @@ export default function TextEditor() {
   }, [documentId, quillRef, socket]);
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" overflowX="hidden" flexDirection="column">
       <Box display="flex">
         <Box paddingTop={2}>
           {showNested !== true && (
@@ -133,45 +133,54 @@ export default function TextEditor() {
           )}
         </Box>
         <Box
-          className={showNested === true ? "animate-show" : "animate-hide"}
-          position="sticky"
           sx={{
             backgroundColor: isDarkMode
               ? "hsl(160, 0%, 20%)"
               : "hsl(160, 0%, 92%)",
-            padding: `${paddingTop} 16px 0 `,
-            height: "100vh",
-            transition: "padding-top 0.3s ease",
-            top: 0,
             boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-            display: {
-              xs: showNested ? "flex" : "none",
-              sm: showNested ? "flex" : "none",
-              md: !showNested && "flex",
-            },
           }}
-          flexDirection="column"
         >
-          {showNested !== false && (
-            <IconButton
-              sx={{ marginLeft: "auto" }}
-              onClick={() => setShowNested(false)}
-            >
-              <CloseIcon />
-            </IconButton>
-          )}
-          <NestedFolders
-            accessType={"creator"}
-            type="personal"
-            socket={socket}
-            switchRoom={switchRoom}
-          />
-          <NestedFolders
-            type="shared"
-            accessType={accessType}
-            socket={socket}
-            switchRoom={switchRoom}
-          />
+          <Box
+            className={showNested === true ? "animate-show" : "animate-hide"}
+            position="sticky" // not working
+            sx={{
+              backgroundColor: isDarkMode
+                ? "hsl(160, 0%, 20%)"
+                : "hsl(160, 0%, 92%)",
+              padding: `${paddingTop} 16px 0 `,
+              transition: "padding-top 0.3s ease",
+              top: 0,
+              height: "400px",
+
+              display: {
+                xs: showNested ? "flex" : "none",
+                sm: showNested ? "flex" : "none",
+                md: showNested ? "flex" : "none",
+              },
+            }}
+            flexDirection="column"
+          >
+            {showNested !== false && (
+              <IconButton
+                sx={{ marginLeft: "auto" }}
+                onClick={() => setShowNested(false)}
+              >
+                <CloseIcon />
+              </IconButton>
+            )}
+            <NestedFolders
+              accessType={"creator"}
+              type="personal"
+              socket={socket}
+              switchRoom={switchRoom}
+            />
+            <NestedFolders
+              type="shared"
+              accessType={accessType}
+              socket={socket}
+              switchRoom={switchRoom}
+            />
+          </Box>
         </Box>
         <Box
           display="flex"

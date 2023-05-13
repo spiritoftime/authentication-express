@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -26,6 +28,8 @@ const Navbar = () => {
   const toggleTheme = () => {
     setIsDarkMode((prev) => !prev);
   };
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const {
     mutate: logoutMutation,
     error: logoutError,
@@ -53,7 +57,17 @@ const Navbar = () => {
               sx={{ height: "40px", width: "40px", objectFit: "cover" }}
             />
           </Link>
-          <Typography variant="body1" component="p">
+          <Typography
+            sx={{
+              display: {
+                xs: "none",
+                s: "none",
+                sm: "block",
+              },
+            }}
+            variant="body1"
+            component="p"
+          >
             CommonDocs
           </Typography>
         </Box>
@@ -85,6 +99,7 @@ const Navbar = () => {
             )}
             {loggedIn ? (
               <Button
+                size={isSmDown ? "small" : "medium"}
                 onClick={() => logoutMutation(authDetails.id)}
                 variant="contained"
               >

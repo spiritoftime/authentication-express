@@ -26,8 +26,11 @@ import PeopleWithAccess from "./PeopleWithAccess";
 import AccessSnackBar from "./AccessSnackBar";
 import { useAppContext } from "../context/appContext";
 import GeneralAccess from "./GeneralAccess";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 const AccessDialog = ({ documentId, residingFolder, accessType }) => {
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [open, setOpen] = useState(false);
   const { myTrees, sharedTrees } = useAppContext();
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -161,6 +164,7 @@ const AccessDialog = ({ documentId, residingFolder, accessType }) => {
         message={message}
       />
       <Button
+        size={isSmDown ? "small" : "medium"}
         onClick={handleClickOpen}
         variant="contained"
         sx={{
