@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "../services/makeRequest";
 import { logout } from "../services/auth";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import Avatar from "@mui/material/Avatar";
+import { stringAvatar } from "../helper_functions/muiAvatar";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 const Navbar = () => {
   const {
@@ -42,16 +44,21 @@ const Navbar = () => {
   return (
     <AppBar position="sticky" sx={{ top: 0 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <Box
-            component="img"
-            src={google_docs_logo}
-            alt="Logo"
-            sx={{ height: "40px", width: "40px", objectFit: "cover" }}
-          />
-        </Link>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <Box
+              component="img"
+              src={google_docs_logo}
+              alt="Logo"
+              sx={{ height: "40px", width: "40px", objectFit: "cover" }}
+            />
+          </Link>
+          <Typography variant="body1" component="p">
+            CommonDocs
+          </Typography>
+        </Box>
         {
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" gap={2}>
             <IconButton
               onClick={toggleTheme}
               aria-label="toggle color mode"
@@ -59,38 +66,9 @@ const Navbar = () => {
             >
               {isDarkMode ? <NightlightIcon /> : <LightModeIcon />}
             </IconButton>
-            <Typography
-              onClick={() =>
-                setAuthDetails((prev) => ({ ...prev, isNewDocument: true }))
-              }
-              variant="body1"
-              component={Link}
-              to="/createDocument"
-              sx={{ marginRight: 2, textDecoration: "none", color: "inherit" }}
-            >
-              Create Document
-            </Typography>
-            <Typography
-              variant="body1"
-              component={Link}
-              to="/joinDocument"
-              sx={{ marginRight: 2, textDecoration: "none", color: "inherit" }}
-            >
-              Join Document
-            </Typography>
+
             {loggedIn ? (
-              <Typography
-                variant="body1"
-                component={Link}
-                to="/profile"
-                sx={{
-                  marginRight: 2,
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                Profile
-              </Typography>
+              <Avatar {...stringAvatar(authDetails.name)} />
             ) : (
               <Typography
                 variant="body1"

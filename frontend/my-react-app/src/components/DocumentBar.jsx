@@ -9,6 +9,7 @@ import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import HistoryIcon from "@mui/icons-material/History";
 import AccessDialog from "./AccessDialog";
 import { useEffect } from "react";
+import Grid from "@mui/material/Grid";
 import ActiveUsers from "./ActiveUsers";
 const DocumentBar = ({
   documentSaved,
@@ -41,46 +42,54 @@ const DocumentBar = ({
     return () => clearTimeout(delayDebounceFn);
   }, [documentTitle]);
   return (
-    <Box
+    <Grid
+      container
       padding={"16px 0"}
+      rowGap={2}
       justifyContent="space-between"
-      display="flex"
-      alignItems="center"
     >
-      <Box gap={2} display="flex" alignItems="center">
+      <Grid item xs={12} sm={4}>
         <TextField
-          sx={{ border: "none" }}
+          sx={{ border: "none", width: "100%" }}
           variant="outlined"
           value={documentTitle}
           onChange={(e) => setDocumentTitle(e.target.value)}
         />
-
-        <Box display="flex" gap={2} alignItems="center">
-          {documentSaved === "All changes saved!" ? (
-            <CloudDoneIcon color="success" />
-          ) : (
-            <RestartAltIcon />
-          )}
-          <Typography
-            sx={{ whiteSpace: "nowrap" }}
-            variant="body1"
-            component="p"
-          >
-            {documentSaved}
-          </Typography>
-        </Box>
-      </Box>
-      <Box gap={2} display="flex" alignItems="center">
-        <ActiveUsers users={users} />
-        {/* <HistoryIcon />
+      </Grid>
+      <Grid item xs={12} sm={8}>
+        <Box
+          gap={2}
+          justifyContent="space-between"
+          display="flex"
+          alignItems="center"
+        >
+          <Box display="flex" gap={2} alignItems="center">
+            {documentSaved === "All changes saved!" ? (
+              <CloudDoneIcon color="success" />
+            ) : (
+              <RestartAltIcon />
+            )}
+            <Typography
+              sx={{ whiteSpace: "nowrap" }}
+              variant="body1"
+              component="p"
+            >
+              {documentSaved}
+            </Typography>
+          </Box>
+          <Box display="flex" gap={2}>
+            <ActiveUsers users={users} />
+            {/* <HistoryIcon />
         <CommentIcon /> */}
-        <AccessDialog
-          accessType={accessType}
-          residingFolder={residingFolder}
-          documentId={documentId}
-        />
-      </Box>
-    </Box>
+            <AccessDialog
+              accessType={accessType}
+              residingFolder={residingFolder}
+              documentId={documentId}
+            />
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
