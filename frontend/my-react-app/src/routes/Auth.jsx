@@ -143,7 +143,10 @@ export default function Auth({ isLogin }) {
               Forgot password?
             </Link>
           </Grid>
-          <Grid onClick={() => navigate(isLogin ? "/register" : "/login")}>
+          <Grid
+            sx={{ cursor: "pointer" }}
+            onClick={() => navigate(isLogin ? "/register" : "/login")}
+          >
             {isLogin ? (
               <Link variant="body2">Don't have an account? Sign Up</Link>
             ) : (

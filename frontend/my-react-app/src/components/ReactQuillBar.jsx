@@ -8,11 +8,11 @@ Quill.register(Size, true);
 const Font = Quill.import("formats/font");
 Font.whitelist = [
   "Arial",
-  "Comic Sans MS",
-  "Courier New",
+  "ComicSansMS",
+  "CourierNew",
   "Georgia",
   "Helvetica",
-  "Lucida Sans Unicode",
+  "LucidaSansUnicode",
 ];
 Quill.register(Font, true);
 
@@ -54,11 +54,11 @@ export const ReactQuillBar = () => {
       <span className={`ql-formats ${isDarkMode ? "dark" : "light"}`}>
         <select className="ql-font" defaultValue="Arial">
           <option value="Arial">Arial</option>
-          <option value="Comic Sans MS">Comic Sans</option>
-          <option value="Courier New">Courier New</option>
+          <option value="ComicSansMS">Comic Sans</option>
+          <option value="CourierNew">Courier New</option>
           <option value="Georgia">Georgia</option>
           <option value="Helvetica">Helvetica</option>
-          <option value="Lucida Sans Unicode">Lucida</option>
+          <option value="LucidaSansUnicode">Lucida</option>
         </select>
         <select className="ql-size" defaultValue="medium">
           <option value="extra-small">Size 1</option>

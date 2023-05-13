@@ -123,7 +123,7 @@ export default function TextEditor() {
   }, [documentId, quillRef, socket]);
 
   return (
-    <Box display="flex" overflowX="hidden" flexDirection="column">
+    <Box display="flex" sx={{ overflowX: "hidden" }} flexDirection="column">
       <Box display="flex">
         <Box paddingTop={2}>
           {showNested !== true && (

@@ -26,7 +26,7 @@
 }
 #toolbar {
   border: none;
-  position: sticky;
+
   padding: 16px 0 !important;
   background-color: rgb(247, 249, 252);
 }
@@ -69,4 +69,27 @@
   100% {
     transform: translateX(-100%);
   }
+}
+.ql-font-Arial {
+  font-family: Arial, sans-serif;
+}
+
+.ql-font-ComicSansMS {
+  font-family: "Comic Sans MS", cursive;
+}
+
+.ql-font-CourierNew {
+  font-family: "Courier New", monospace;
+}
+
+.ql-font-Georgia {
+  font-family: Georgia, serif;
+}
+
+.ql-font-Helvetica {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.ql-font-LucidaSansUnicode {
+  font-family: "Lucida Sans Unicode", sans-serif;
 }
