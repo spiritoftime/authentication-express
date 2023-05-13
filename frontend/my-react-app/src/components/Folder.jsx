@@ -122,6 +122,7 @@ const Folder = ({
     <Grid>
       {
         <Grid
+          minHeight="40px"
           item
           xs={12}
           display="flex"
@@ -140,7 +141,7 @@ const Folder = ({
             />
           )}
           <Typography
-            sx={{ cursor: "pointer" }}
+            sx={{ cursor: "pointer", whiteSpace: "nowrap" }}
             display="flex"
             alignItems="center"
             gap={1}
@@ -173,7 +174,7 @@ const Folder = ({
                 <PostAddIcon />
               </IconButton>
             )}
-            {accessType !== "viewer" && (
+            {accessType !== "viewer" && node.id !== null && (
               <IconButton
                 onClick={(e) => {
                   deleteFolderMutation(node.id);

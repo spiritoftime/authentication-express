@@ -52,6 +52,7 @@ const Document = ({
   });
   return (
     <Box
+      minHeight="40px"
       onClick={() => switchRoom(node.id, socket)}
       paddingLeft={`${depth * 16}px`}
       display="flex"
@@ -59,7 +60,7 @@ const Document = ({
     >
       <KeyboardArrowRightIcon />
       <Typography
-        sx={{ cursor: "pointer" }}
+        sx={{ cursor: "pointer", whiteSpace: "nowrap" }}
         display="flex"
         alignItems="center"
         gap={1}

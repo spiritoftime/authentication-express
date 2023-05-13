@@ -61,7 +61,11 @@ const DocumentBar = ({
           ) : (
             <RestartAltIcon />
           )}
-          <Typography variant="body1" component="p">
+          <Typography
+            sx={{ whiteSpace: "nowrap" }}
+            variant="body1"
+            component="p"
+          >
             {documentSaved}
           </Typography>
         </Box>
