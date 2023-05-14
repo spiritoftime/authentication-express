@@ -46,7 +46,7 @@ const Demo = () => {
             textAlign: "left",
             position: "absolute",
             top: { xs: "25%" },
-            left: { xs: "10%", md: "30%" },
+            left: { xs: "7%", md: "30%" },
           }}
           variant="body2"
           style={{

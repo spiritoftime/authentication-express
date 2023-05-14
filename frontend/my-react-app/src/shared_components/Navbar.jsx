@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -17,7 +17,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
 import NightlightIcon from "@mui/icons-material/Nightlight";
-
+import darkLogo from "../assets/common_docs_dark.png";
 const Navbar = () => {
   const {
     authDetails,
@@ -56,7 +56,7 @@ const Navbar = () => {
           <Link to="/" style={{ textDecoration: "none" }}>
             <Box
               component="img"
-              src={google_docs_logo}
+              src={isDarkMode ? darkLogo : google_docs_logo}
               alt="Logo"
               sx={{ height: "40px", width: "40px", objectFit: "cover" }}
             />
@@ -104,8 +104,20 @@ const Navbar = () => {
             )}
             {loggedIn ? (
               <Button
+                component="a"
                 size={isSmDown ? "small" : "medium"}
                 onClick={() => logoutMutation(authDetails.id)}
+                href="#demo"
+                sx={{
+                  borderRadius: "35px",
+                  border: `1px solid ${theme.palette.landingPage.accent}`,
+                  bgcolor: theme.palette.landingPage.primary,
+                  color: theme.palette.landingPage.accent,
+                  "&:hover": {
+                    bgcolor: isDarkMode ? "#1A1A1A" : "#EDEDED",
+                  },
+                  fontWeight: 600,
+                }}
                 variant="contained"
               >
                 Logout

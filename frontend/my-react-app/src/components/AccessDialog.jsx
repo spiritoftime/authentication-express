@@ -163,6 +163,7 @@ const AccessDialog = ({ documentId, residingFolder, accessType }) => {
         openSnackBar={openSnackBar}
         message={message}
       />
+
       <Button
         size={isSmDown ? "small" : "medium"}
         onClick={handleClickOpen}

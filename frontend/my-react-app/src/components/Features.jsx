@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import CreateIcon from "@mui/icons-material/Create";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import ShareIcon from "@mui/icons-material/Share";
 import SecurityIcon from "@mui/icons-material/Security";
 import { useAppContext } from "../context/appContext";
@@ -36,15 +36,16 @@ const Features = () => {
             borderRadius: "15px",
           }}
         >
-          <CreateIcon sx={{ color: "#fcfcfc" }} fontSize="large" />
+          <DragIndicatorIcon sx={{ color: "#fcfcfc" }} fontSize="large" />
         </Box>
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
-          Real-Time Editing and Comments
+          Simplify. Organize. Collaborate
         </Typography>
         <Typography variant="body1" color={theme.palette.text.secondary}>
-          Collaborate effectively with real-time editing and commenting
-          features. Make suggestions, provide feedback, and track changes within
-          the document.
+          Streamline document organization and collaboration with CommonDocs.
+          Effortlessly categorize your files using nested folders, allowing for
+          easy management and quick access. Simplify your workflow by dragging
+          and dropping documents with our intuitive interface.
         </Typography>
       </Box>
       <Box
