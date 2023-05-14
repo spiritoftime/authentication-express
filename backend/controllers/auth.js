@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { queryUserDetails } = require("../sequelize_queries/index.js");
 const register = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, name } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   // store in the db
 
@@ -16,6 +16,7 @@ const register = async (req, res) => {
     newUser = await User.create({
       username: username,
       password: hashedPassword,
+      name: name,
     });
   } catch (err) {
     if (err.name === "SequelizeUniqueConstraintError") {

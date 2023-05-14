@@ -5,9 +5,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LandingPage from "../assets/image-removebg-preview.png";
+import { useNavigate } from "react-router-dom";
 const Hero = () => {
   const { isDarkMode } = useAppContext();
   const theme = useTheme();
+  const navigate = useNavigate();
   return (
     <Box
       sx={{ padding: { xs: 2, s: 4, sm: "64px 64px 0 64px", lg: 8 } }}
@@ -75,6 +77,7 @@ const Hero = () => {
                 fontWeight: 600,
               }}
               variant="contained"
+              onClick={() => navigate("/register")}
             >
               Sign Up
             </Button>
@@ -95,9 +98,8 @@ const Hero = () => {
             </Button>
           </Box>
         </Box>
-        <Box>
-          <img src={LandingPage} alt="demo CommonDocs" className="hero-img" />
-        </Box>
+
+        <img src={LandingPage} alt="CommonDocs teaser" className="hero-img" />
       </Box>
     </Box>
   );

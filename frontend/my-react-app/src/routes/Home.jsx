@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
-
+import Demo from "../components/Demo";
 import { useAppContext } from "../context/appContext";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
@@ -19,6 +19,7 @@ const Home = () => {
       flexDirection="column"
     >
       <Hero />
+      <Demo />
       <Features />
     </Box>
   );

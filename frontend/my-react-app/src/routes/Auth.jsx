@@ -29,8 +29,8 @@ export default function Auth({ isLogin }) {
     error: registerError,
     isError: isRegisterError,
   } = useMutation({
-    mutationFn: ({ username, password }) => {
-      return register({ username, password });
+    mutationFn: ({ username, password, name }) => {
+      return register({ username, password, name });
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.user, isNewDocument: false });
@@ -62,11 +62,14 @@ export default function Auth({ isLogin }) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (username == null || password == null) return;
+    if (isLogin && (username == null || password == null)) return;
+    if (!isLogin && (username == null || password == null || name == null))
+      return;
     if (isLogin) loginMutation({ username, password });
-    else registerMutation({ username, password });
+    else registerMutation({ username, password, name });
     // navigate to profile or something after that
   };
   return (
@@ -91,6 +94,19 @@ export default function Auth({ isLogin }) {
         noValidate
         sx={{ mt: 1 }}
       >
+        {!isLogin && (
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            name="name"
+            label="Name"
+            type="name"
+            id="name"
+          />
+        )}
         <TextField
           margin="normal"
           required
@@ -103,6 +119,7 @@ export default function Auth({ isLogin }) {
           onChange={(e) => setUsername(e.target.value)}
           autoFocus
         />
+
         <TextField
           margin="normal"
           required

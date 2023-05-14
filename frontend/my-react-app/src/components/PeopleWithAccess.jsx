@@ -3,11 +3,15 @@ import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
 import SelectOption from "./SelectOption";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 const PeopleWithAccess = ({
   isAccessFetching,
   userAccess,
   setChangeAccess,
 }) => {
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <>
       <Typography variant="h6" component="h6">
@@ -19,7 +23,7 @@ const PeopleWithAccess = ({
           userAccess.map((user) => {
             return (
               <Box key={user.id} display="flex" gap={2}>
-                <Avatar {...stringAvatar(user.name)} />
+                {!isSmDown && <Avatar {...stringAvatar(user.name)} />}
                 <Box
                   display="flex"
                   alignItems="center"

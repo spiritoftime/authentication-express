@@ -30,14 +30,14 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 const AccessDialog = ({ documentId, residingFolder, accessType }) => {
   const theme = useTheme();
-  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [open, setOpen] = useState(false);
   const { myTrees, sharedTrees } = useAppContext();
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [message, setMessage] = useState("");
   const [addUsers, setAddUsers] = useState([]);
   const [changeAccess, setChangeAccess] = useState({});
-
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const {
     mutate: addUsersDocumentMutation,
     error: userAccessError,
@@ -207,8 +207,13 @@ const AccessDialog = ({ documentId, residingFolder, accessType }) => {
             userAccess={userAccess && userAccess.data}
           />
           <GeneralAccess />
-          <Box display="flex" justifyContent="space-between">
+          <Box
+            display="flex"
+            sx={{ flexDirection: { xs: "column", s: "row" } }}
+            justifyContent="space-between"
+          >
             <Button
+              size={isSmDown ? "small" : "medium"}
               onClick={() =>
                 navigator.clipboard.writeText(window.location.href)
               }
@@ -220,7 +225,13 @@ const AccessDialog = ({ documentId, residingFolder, accessType }) => {
             </Button>
             <DialogActions>
               {accessType !== "viewer" && (
-                <Button variant="contained" autoFocus onClick={saveChanges}>
+                <Button
+                  size={isSmDown ? "small" : "medium"}
+                  sx={{ width: { xs: "100%", s: "unset" } }}
+                  variant="contained"
+                  autoFocus
+                  onClick={saveChanges}
+                >
                   Save changes
                 </Button>
               )}

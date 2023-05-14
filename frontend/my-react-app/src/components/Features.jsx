@@ -21,7 +21,7 @@ const Features = () => {
       <Box
         display="flex"
         sx={{
-          border: "1px solid #eee",
+          border: `1px solid ${isDarkMode ? "#eee" : "#1f1f1f"}`,
           borderRadius: "15px",
           padding: 2,
           gap: 2,
@@ -30,13 +30,13 @@ const Features = () => {
       >
         <Box
           sx={{
-            backgroundColor: "#1F1F1F",
+            backgroundColor: "#1f1f1f",
             padding: 2,
             width: "fit-content",
             borderRadius: "15px",
           }}
         >
-          <CreateIcon fontSize="large" />
+          <CreateIcon sx={{ color: "#fcfcfc" }} fontSize="large" />
         </Box>
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           Real-Time Editing and Comments
@@ -50,7 +50,7 @@ const Features = () => {
       <Box
         display="flex"
         sx={{
-          border: "1px solid #eee",
+          border: `1px solid ${isDarkMode ? "#eee" : "#1f1f1f"}`,
           borderRadius: "15px",
           padding: 2,
           gap: 2,
@@ -65,21 +65,21 @@ const Features = () => {
             borderRadius: "15px",
           }}
         >
-          <ShareIcon fontSize="large" />
+          <ShareIcon sx={{ color: "#fcfcfc" }} fontSize="large" />
         </Box>
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           Efficient Document Sharing
         </Typography>
         <Typography variant="body1" color={theme.palette.text.secondary}>
-          Share documents effortlessly. Our Google Docs clone enables easy
-          sharing with specific individuals or groups, granting control over
-          access permissions.
+          Share documents effortlessly. CommonDocs enables easy sharing with
+          specific individuals or groups, granting control over access
+          permissions.
         </Typography>
       </Box>
       <Box
         display="flex"
         sx={{
-          border: "1px solid #eee",
+          border: `1px solid ${isDarkMode ? "#eee" : "#1f1f1f"}`,
           borderRadius: "15px",
           padding: 2,
           gap: 2,
@@ -94,7 +94,7 @@ const Features = () => {
             borderRadius: "15px",
           }}
         >
-          <SecurityIcon fontSize="large" />
+          <SecurityIcon sx={{ color: "#fcfcfc" }} fontSize="large" />
         </Box>
         <Typography variant="h5" sx={{ fontWeight: 600 }}>
           Enhanced Security Features

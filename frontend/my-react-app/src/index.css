@@ -97,3 +97,32 @@
   height: 100%;
   width: 100%;
 }
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid;
+  padding-right: 5px;
+  white-space: nowrap;
+  font-weight: lighter;
+  margin: 0 auto;
+  animation: typing 2s steps(20, end), cursor 1.5s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes cursor {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: inherit;
+  }
+}

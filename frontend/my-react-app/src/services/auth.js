@@ -1,9 +1,9 @@
 import { makeRequest } from "./makeRequest";
 
-export function register({ username, password }) {
+export function register({ username, password, name }) {
   return makeRequest("/register", {
     method: "POST",
-    data: { username, password },
+    data: { username, password, name },
   });
 }
 export function login({ username, password }) {
