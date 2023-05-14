@@ -7,6 +7,7 @@ const Demo = () => {
   const theme = useTheme();
   return (
     <Box
+      id="demo"
       sx={{
         textAlign: "center",
         padding: { xs: 2, s: 4, sm: "64px 64px 0 64px", lg: 8 },

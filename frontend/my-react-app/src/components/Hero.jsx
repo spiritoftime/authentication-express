@@ -12,6 +12,7 @@ const Hero = () => {
   const navigate = useNavigate();
   return (
     <Box
+      id="hero"
       sx={{ padding: { xs: 2, s: 4, sm: "64px 64px 0 64px", lg: 8 } }}
       display="flex"
     >
@@ -82,6 +83,8 @@ const Hero = () => {
               Sign Up
             </Button>
             <Button
+              component="a"
+              href="#demo"
               sx={{
                 borderRadius: "35px",
                 border: `1px solid ${theme.palette.landingPage.accent}`,
