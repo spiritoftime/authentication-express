@@ -93,3 +93,7 @@
 .ql-font-LucidaSansUnicode {
   font-family: "Lucida Sans Unicode", sans-serif;
 }
+.hero-img {
+  height: 100%;
+  width: 100%;
+}

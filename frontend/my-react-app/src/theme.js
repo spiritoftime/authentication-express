@@ -1,6 +1,9 @@
 import { createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
+  typography: {
+    fontFamily: "Kumbh Sans, sans-serif",
+  },
   breakpoints: {
     values: {
       xs: 0,
@@ -32,17 +35,27 @@ const darkTheme = createTheme({
       main: "#4caf50", // Green
     },
     background: {
-      default: "#1e1e1e",
+      default: "#0f0f0f",
       paper: "#2c2c2c",
     },
     text: {
       primary: "#ffffff",
       secondary: "#bbbbbb",
     },
+    landingPage: {
+      primary: "#0f0f0f",
+      secondary: "#45a0f5",
+      tertiary: "#26e3c2",
+      accent: "#fcfcfc",
+      hover: "#D5D5D5",
+    },
   },
 });
 
 const lightTheme = createTheme({
+  typography: {
+    fontFamily: "Kumbh Sans, sans-serif",
+  },
   values: {
     xs: 0,
     s: 350,
@@ -72,12 +85,19 @@ const lightTheme = createTheme({
       main: "#4caf50", // Green
     },
     background: {
-      default: "#ffffff",
+      default: "#f5f5f5",
       paper: "#f5f5f5",
     },
     text: {
-      primary: "#000000",
+      primary: "#0f0f0f",
       secondary: "#4a4a4a",
+    },
+    landingPage: {
+      primary: "#f5f5f5",
+      secondary: "#45a0f5",
+      tertiary: "#26e3c2",
+      accent: "#0f0f0f",
+      hover: "#1A1A1A",
     },
   },
 });

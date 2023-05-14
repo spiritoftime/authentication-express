@@ -14,14 +14,20 @@ import ProtectedRoute from "./shared_components/ProtectedRoute";
 import Auth from "./routes/Auth";
 import Unauthorized from "./routes/Unauthorized";
 import { useAppContext } from "./context/appContext";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider, responsiveFontSizes } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
 
 function App() {
   usePersistLogin();
   const { isDarkMode } = useAppContext();
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider
+      theme={
+        isDarkMode
+          ? responsiveFontSizes(darkTheme)
+          : responsiveFontSizes(lightTheme)
+      }
+    >
       <CssBaseline />
       <div className="App">
         <Navbar />

@@ -17,6 +17,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
 import NightlightIcon from "@mui/icons-material/Nightlight";
+
 const Navbar = () => {
   const {
     authDetails,
@@ -46,10 +47,13 @@ const Navbar = () => {
   const loggedIn = Object.keys(authDetails).length !== 0;
 
   return (
-    <AppBar position="sticky" sx={{ top: 0 }}>
+    <AppBar
+      position="sticky"
+      sx={{ top: 0, backgroundColor: theme.palette.landingPage.primary }}
+    >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box display="flex" alignItems="center" gap={2}>
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Box
               component="img"
               src={google_docs_logo}
@@ -64,6 +68,7 @@ const Navbar = () => {
                 s: "none",
                 sm: "block",
               },
+              color: theme.palette.text.primary,
             }}
             variant="body1"
             component="p"

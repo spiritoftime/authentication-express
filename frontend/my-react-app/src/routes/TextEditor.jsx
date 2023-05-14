@@ -15,7 +15,6 @@ import ReactQuillBar, { formats, modules } from "../components/ReactQuillBar";
 import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import Prettier from "prettier";
 
 const SAVE_INTERVAL_MS = 1000;
 
@@ -62,6 +61,7 @@ export default function TextEditor() {
     window.addEventListener("scroll", handleScroll);
 
     setSocket(s);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       s.disconnect();
