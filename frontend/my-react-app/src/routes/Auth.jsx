@@ -2,14 +2,12 @@ import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 
 import { useMutation } from "@tanstack/react-query";
 import { register, login } from "../services/auth";
@@ -141,10 +139,7 @@ export default function Auth({ isLogin }) {
             {loginError}
           </Typography>
         )}
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
+
         <Button
           type="submit"
           fullWidth
@@ -154,11 +149,7 @@ export default function Auth({ isLogin }) {
           {isLogin ? "Sign In" : "Sign Up"}
         </Button>
         <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
-            </Link>
-          </Grid>
+          <Grid item xs></Grid>
           <Grid
             sx={{ cursor: "pointer" }}
             onClick={() => navigate(isLogin ? "/register" : "/login")}
