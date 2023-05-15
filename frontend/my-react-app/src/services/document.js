@@ -5,10 +5,16 @@ export function editDocument(data) {
     data: data,
   });
 }
-export function createDocument({ folderId, title, createdBy, parent }) {
+export function createDocument({
+  folderId,
+  title,
+  createdBy,
+  parent,
+  accessType,
+}) {
   return makeRequest(`/documents/`, {
     method: "POST",
-    data: { folderId, title, createdBy },
+    data: { folderId, title, createdBy, accessType },
   });
 }
 export function deleteDocument(documentId) {

@@ -28,15 +28,20 @@ async function findDocument(documentId, username) {
   return documentWithCreator;
 }
 async function createDocument(req, res) {
-  const { title, folderId, createdBy } = req.body;
+  const { title, folderId, createdBy, accessType } = req.body;
   try {
     const parentFolder = await Folder.findByPk(folderId);
     const document = await Document.create({
       parent: folderId,
-      createdBy: parentFolder.createdBy,
+      createdBy: accessType === "creator" ? createdBy : parentFolder.createdBy,
       text: title,
       createdAt: new Date(),
       updatedAt: new Date(),
+    });
+    await UserDocumentAccess.create({
+      userId: accessType === "creator" ? createdBy : parentFolder.createdBy,
+      documentId: document.id,
+      role: "creator",
     });
 
     const users = await UserFolderAccess.findAll({

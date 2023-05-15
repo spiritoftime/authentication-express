@@ -77,7 +77,7 @@ const Navbar = () => {
           </Typography>
         </Box>
         {
-          <Box display="flex" alignItems="center" gap={2}>
+          <Box display="flex" alignItems="center" sx={{ gap: { xs: 0, s: 2 } }}>
             <IconButton
               onClick={toggleTheme}
               aria-label="toggle color mode"
@@ -96,32 +96,46 @@ const Navbar = () => {
                 sx={{
                   marginRight: 2,
                   textDecoration: "none",
-                  color: "inherit",
+                  color: theme.palette.text.primary,
                 }}
               >
                 Register
               </Typography>
             )}
             {loggedIn ? (
-              <Button
-                component="a"
-                size={isSmDown ? "small" : "medium"}
-                onClick={() => logoutMutation(authDetails.id)}
-                href="#demo"
-                sx={{
-                  borderRadius: "35px",
-                  border: `1px solid ${theme.palette.landingPage.accent}`,
-                  bgcolor: theme.palette.landingPage.primary,
-                  color: theme.palette.landingPage.accent,
-                  "&:hover": {
-                    bgcolor: isDarkMode ? "#1A1A1A" : "#EDEDED",
-                  },
-                  fontWeight: 600,
-                }}
-                variant="contained"
-              >
-                Logout
-              </Button>
+              <>
+                <Typography
+                  variant="body1"
+                  component={Link}
+                  to="/home"
+                  sx={{
+                    marginRight: 2,
+                    textDecoration: "none",
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  Overview
+                </Typography>
+                <Button
+                  component="a"
+                  size={isSmDown ? "small" : "medium"}
+                  onClick={() => logoutMutation(authDetails.id)}
+                  href="#demo"
+                  sx={{
+                    borderRadius: "35px",
+                    border: `1px solid ${theme.palette.landingPage.accent}`,
+                    bgcolor: theme.palette.landingPage.primary,
+                    color: theme.palette.landingPage.accent,
+                    "&:hover": {
+                      bgcolor: isDarkMode ? "#1A1A1A" : "#EDEDED",
+                    },
+                    fontWeight: 600,
+                  }}
+                  variant="contained"
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               ""
             )}

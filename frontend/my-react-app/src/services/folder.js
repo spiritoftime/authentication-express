@@ -1,8 +1,14 @@
 import { makeRequest } from "./makeRequest";
-export function createFolder({ folderId, title, createdBy, parent }) {
+export function createFolder({
+  folderId,
+  title,
+  createdBy,
+  parent,
+  accessType,
+}) {
   return makeRequest(`/folders/`, {
     method: "POST",
-    data: { folderId, title, createdBy },
+    data: { folderId, title, createdBy, accessType },
   });
 }
 export function deleteFolder(folderId) {

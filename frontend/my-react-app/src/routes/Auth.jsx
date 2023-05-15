@@ -70,7 +70,6 @@ export default function Auth({ isLogin }) {
       return;
     if (isLogin) loginMutation({ username, password });
     else registerMutation({ username, password, name });
-    // navigate to profile or something after that
   };
   return (
     <Box

@@ -42,7 +42,6 @@ const Features = () => {
           Simplify. Organize. Collaborate
         </Typography>
         <Typography variant="body1" color={theme.palette.text.secondary}>
-          Streamline document organization and collaboration with CommonDocs.
           Effortlessly categorize your files using nested folders, allowing for
           easy management and quick access. Simplify your workflow by dragging
           and dropping documents with our intuitive interface.

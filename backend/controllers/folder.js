@@ -1,18 +1,50 @@
 const db = require("../db/models");
-const { User, Folder, UserFolderAccess } = db;
+const { User, Folder, UserFolderAccess, UserDocumentAccess } = db;
 const { Op } = require("sequelize");
+const getFolders = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const myFolders = await Folder.findAll({
+      where: { createdBy: userId },
+      attributes: ["text", "updatedAt"],
+      include: [
+        {
+          model: User,
+          as: "foldersAccessibleTo",
+          required: true, // This ensures LEFT JOIN behavior
+          attributes: ["name"],
+          through: { attributes: [] }, // Exclude UserFolderAccess attributes
+        },
+      ],
+    });
+    const sharedFolders = await UserFolderAccess.findAll({
+      where: {
+        userId: userId,
+        role: {
+          [Op.and]: [{ [Op.ne]: "creator" }, { [Op.ne]: null }],
+        },
+      },
+    });
+
+    res.status(200).json({ myFolders, sharedFolders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching folders" });
+  }
+};
 const createFolder = async (req, res) => {
-  const { title, folderId, createdBy } = req.body;
+  const { title, folderId, createdBy, accessType } = req.body;
+  console.log(accessType);
 
   try {
     const parentFolder = Folder.findByPk(folderId);
     const folder = await Folder.create({
-      createdBy: parentFolder.createdBy,
+      createdBy: accessType === "creator" ? createdBy : parentFolder.createdBy,
       parent: folderId,
       text: title,
     });
     await UserFolderAccess.create({
-      userId: parentFolder.createdBy,
+      userId: accessType === "creator" ? createdBy : parentFolder.createdBy,
       folderId: folder.id,
       role: "creator",
     });
@@ -57,4 +89,4 @@ const editFolder = async (req, res) => {
   await folder.save();
   return res.status(201).send("All changes saved!");
 };
-module.exports = { createFolder, deleteFolder, editFolder };
+module.exports = { createFolder, deleteFolder, editFolder, getFolders };

@@ -33,7 +33,7 @@ function initFolder(sequelize) {
         allowNull: false,
       },
     },
-    { underscored: true, timestamps: false }
+    { underscored: true }
   );
   return Folder;
 }

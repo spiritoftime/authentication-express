@@ -30,7 +30,7 @@ async function queryUserDetails(username) {
       {
         model: Folder,
         as: "accessibleFolders",
-        attributes: ["id", "text", "parent", "createdBy"],
+        attributes: ["id", "text", "parent", "createdBy", "updatedAt"],
         through: {
           attributes: [],
           where: {
@@ -43,7 +43,7 @@ async function queryUserDetails(username) {
       {
         model: Folder,
         as: "createdFolders",
-        attributes: ["id", "text", "parent", "createdBy"],
+        attributes: ["id", "text", "parent", "createdBy", "updatedAt"],
       },
     ],
   });

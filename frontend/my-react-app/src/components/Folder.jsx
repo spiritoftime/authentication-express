@@ -96,9 +96,10 @@ const Folder = ({
     error: addFolderNodeError,
     isError: IsaddFolderNodeError,
   } = useMutation({
-    mutationFn: ({ title, folderId, createdBy, isFolder }) => {
-      if (isFolder) return createFolder({ title, folderId, createdBy });
-      return createDocument({ title, folderId, createdBy });
+    mutationFn: ({ title, folderId, createdBy, isFolder, accessType }) => {
+      if (isFolder)
+        return createFolder({ title, folderId, createdBy, accessType });
+      return createDocument({ title, folderId, createdBy, accessType });
     },
     onSuccess: (res) => {
       reloginMutation(); // rerun login to get the updated tree
@@ -113,7 +114,7 @@ const Folder = ({
         title: e.target.value,
         folderId: node.id,
         createdBy: authDetails.id,
-
+        accessType,
         isFolder: showInput.isFolder,
       });
     }
