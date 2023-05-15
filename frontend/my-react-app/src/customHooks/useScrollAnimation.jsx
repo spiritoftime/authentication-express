@@ -4,7 +4,14 @@ const useScrollAnimation = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        entry.target.classList.toggle("show", entry.isIntersecting);
+        if (entry.isIntersecting) {
+          if (entry.target.id === "demo") {
+            document
+              .querySelector(".demo-text")
+              .classList.add("typing-animation");
+          }
+          entry.target.classList.add("show");
+        }
       });
     });
     const hiddenElements = document.querySelectorAll(".hide");

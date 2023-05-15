@@ -55,9 +55,7 @@ const Demo = () => {
             fontWeight: 600,
           }}
         >
-          <span className="typing-animation">
-            Hello there, how is your day going?
-          </span>
+          <span className="demo-text">Hello there, how is your day going?</span>
         </Typography>
       </Box>
     </Box>
