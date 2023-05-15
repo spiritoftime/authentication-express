@@ -17,13 +17,32 @@ const getFolders = async (req, res) => {
         },
       ],
     });
-    const sharedFolders = await UserFolderAccess.findAll({
+    const sharedFolders = await db.Folder.findAll({
       where: {
-        userId: userId,
-        role: {
-          [Op.and]: [{ [Op.ne]: "creator" }, { [Op.ne]: null }],
+        createdBy: {
+          [Op.ne]: userId,
         },
       },
+      attributes: ["text", "updatedAt"],
+      include: [
+        {
+          model: User,
+          as: "foldersAccessibleTo",
+          where: {
+            id: userId,
+          },
+          attributes: ["id", "name"],
+          through: {
+            model: UserFolderAccess,
+            attributes: ["role"],
+            where: {
+              role: {
+                [Op.and]: [{ [Op.ne]: "creator" }, { [Op.ne]: null }], // Not equal to 'creator'
+              },
+            },
+          },
+        },
+      ],
     });
 
     res.status(200).json({ myFolders, sharedFolders });
