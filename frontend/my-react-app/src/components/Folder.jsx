@@ -17,6 +17,7 @@ import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 
 const Folder = ({
   node,
+  type,
   depth,
   isOpen,
   onToggle,
@@ -153,17 +154,18 @@ const Folder = ({
             {node.text}
           </Typography>
           <Box display="flex" alignItems="center">
-            {accessType !== "viewer" && (
-              <IconButton
-                color="info"
-                onClick={() => {
-                  setShowInput({ visible: true, isFolder: true });
-                  handleOpen(node.id);
-                }}
-              >
-                <CreateNewFolderIcon />
-              </IconButton>
-            )}
+            {accessType !== "viewer" &&
+              (node.id !== null || (node.id === null && type !== "shared")) && (
+                <IconButton
+                  color="info"
+                  onClick={() => {
+                    setShowInput({ visible: true, isFolder: true });
+                    handleOpen(node.id);
+                  }}
+                >
+                  <CreateNewFolderIcon />
+                </IconButton>
+              )}
             {node.id !== null && accessType !== "viewer" && (
               <IconButton
                 color="success"

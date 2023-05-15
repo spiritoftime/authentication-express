@@ -54,8 +54,10 @@ const NestedFolders = ({ switchRoom, socket, type, accessType }) => {
         rootId={"root"}
         render={(node, { depth, isOpen, onToggle }) => {
           if (node.type === "document")
-            return ( 
-              <Document accessType={accessType}
+            return (
+              <Document
+                type={type}
+                accessType={accessType}
                 switchRoom={switchRoom}
                 socket={socket}
                 node={node}
@@ -65,6 +67,7 @@ const NestedFolders = ({ switchRoom, socket, type, accessType }) => {
           else
             return (
               <Folder
+                type={type}
                 accessType={accessType}
                 handleOpen={handleOpen}
                 node={node}

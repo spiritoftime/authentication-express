@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import getDateDiff from "../helper_functions/convertTimeStamp";
@@ -12,24 +12,111 @@ import TableRow from "@mui/material/TableRow";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
 import { useAppContext } from "../context/appContext";
-import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import { createFolder } from "../services/folder";
+import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
+import { useMutation } from "@tanstack/react-query";
+import IconButton from "@mui/material/IconButton";
+import { createDocument } from "../services/document";
 const FolderTable = ({ data, tableType, header }) => {
+  const [showInput, setShowInput] = useState(false);
+  const [title, setTitle] = useState("");
   const theme = useTheme();
   const navigate = useNavigate();
-  const { authDetails } = useAppContext();
+  const reloginMutation = useReLoginMutation();
+  const {
+    mutate: createDocumentMutation,
+    error: createDocError,
+    isError: IscreateDocError,
+  } = useMutation({
+    mutationFn: (folderId) => {
+      return createDocument({
+        title: "Untitled Document",
+        folderId,
+        createdBy: authDetails.id,
+        accessType: "creator",
+      });
+      // create the document
+    },
+    onSuccess: (res) => {
+      reloginMutation();
+      navigate(`/documents/${res.data.document.id}`);
+    },
+  });
+  const {
+    mutate: createFolderMutation,
+    error: createError,
+    isError: IscreateError,
+  } = useMutation({
+    mutationFn: (title) => {
+      return createFolder({
+        title,
+        folderId: null,
+        createdBy: authDetails.id,
+        accessType: "creator",
+      });
+      // create the document
+    },
+    onSuccess: (res) => {
+      const folderId = res.data.folder.id;
+      createDocumentMutation(folderId);
+    },
+  });
+  const createNewFolder = (e) => {
+    if (e.keyCode === 13 && title) {
+      createFolderMutation(title);
+    }
+  };
+  const { authDetails, isDarkMode } = useAppContext();
   return (
     <Box>
-      <Typography
-        style={{
-          color: theme.palette.landingPage.accent,
-
-          fontWeight: 600,
-        }}
-        variant="h4"
+      <Box
+        display="flex"
+        alignItems={"center"}
+        justifyContent={"space-between"}
       >
-        {header}
-      </Typography>
+        <Typography
+          style={{
+            color: theme.palette.landingPage.accent,
+
+            fontWeight: 600,
+          }}
+          variant="h4"
+        >
+          {header}
+        </Typography>
+        {tableType === "created" && !showInput && (
+          <IconButton
+            color="info"
+            onClick={() => {
+              setShowInput(true);
+            }}
+          >
+            <CreateNewFolderIcon />
+          </IconButton>
+        )}
+        {showInput && (
+          <input
+            onChange={(e) => setTitle(e.target.value)}
+            style={{
+              color: isDarkMode ? "white" : "#1f2b44",
+              backgroundColor: isDarkMode ? "#fff" : "",
+              background: "none",
+              border: `1px solid ${isDarkMode ? "#d6b8b7" : "#1f2b44"}`,
+            }}
+            autoFocus
+            onKeyDown={createNewFolder}
+            onBlur={() => {
+              setShowInput(false);
+              setTitle("");
+            }}
+            className="node-input"
+            placeholder={"Untitled Folder"}
+            value={title}
+          ></input>
+        )}
+      </Box>
       <TableContainer>
         <Table aria-label="folder table">
           <TableHead>

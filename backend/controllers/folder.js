@@ -11,13 +11,9 @@ const getFolders = async (req, res) => {
         {
           model: User,
           as: "foldersAccessibleTo",
-          required: true, // This ensures LEFT JOIN behavior
           attributes: ["name", "id"],
           through: {
             attributes: [],
-            where: {
-              role: { [Op.ne]: "creator" },
-            },
           },
         },
         {
@@ -75,7 +71,6 @@ const getFolders = async (req, res) => {
 };
 const createFolder = async (req, res) => {
   const { title, folderId, createdBy, accessType } = req.body;
-  console.log(accessType);
 
   try {
     const parentFolder = Folder.findByPk(folderId);

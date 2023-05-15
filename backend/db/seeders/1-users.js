@@ -8,7 +8,7 @@ module.exports = {
         name: "User1",
         username: "user1",
         password:
-          "$2b$10$yghbD0VbdEJrD.Dogv791OSakJKqktt426622vkcqkgxFra/p1d7G",
+          "$2b$10$yghbD0VbdEJrD.Dogv791OSakJKqktt426622vkcqkgxFra/p1d7G", // askdaadda
         created_at: new Date(),
         updated_at: new Date(),
       },
