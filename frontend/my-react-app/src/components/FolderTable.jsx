@@ -19,8 +19,20 @@ import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
 import { useMutation } from "@tanstack/react-query";
 import IconButton from "@mui/material/IconButton";
 import { createDocument } from "../services/document";
+import TablePagination from "@mui/material/TablePagination";
+
 const FolderTable = ({ data, tableType, header }) => {
   const [showInput, setShowInput] = useState(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   const [title, setTitle] = useState("");
   const theme = useTheme();
   const navigate = useNavigate();
@@ -129,36 +141,47 @@ const FolderTable = ({ data, tableType, header }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((folder, idx) => (
-              <TableRow
-                onClick={() => {
-                  navigate(`/documents/${folder.documents[0].id}`);
-                }}
-                key={idx}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {folder.text}
-                </TableCell>
+            {data
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((folder, idx) => (
+                <TableRow
+                  onClick={() => {
+                    navigate(`/documents/${folder.documents[0].id}`);
+                  }}
+                  key={idx}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {folder.text}
+                  </TableCell>
 
-                <TableCell align="right">
-                  {tableType === "shared"
-                    ? folder.creator.name
-                    : authDetails.name}
-                </TableCell>
+                  <TableCell align="right">
+                    {tableType === "shared"
+                      ? folder.creator.name
+                      : authDetails.name}
+                  </TableCell>
 
-                <TableCell align="right">
-                  {getDateDiff(folder.updatedAt)}
-                </TableCell>
-                <TableCell sx={{ display: "flex", gap: 1 }} align="right">
-                  {folder.foldersAccessibleTo.map((person) => (
-                    <Avatar key={person.id} {...stringAvatar(person.name)} />
-                  ))}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell align="right">
+                    {getDateDiff(folder.updatedAt)}
+                  </TableCell>
+                  <TableCell sx={{ display: "flex", gap: 1 }} align="right">
+                    {folder.foldersAccessibleTo.map((person) => (
+                      <Avatar key={person.id} {...stringAvatar(person.name)} />
+                    ))}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={data.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+        />
       </TableContainer>
     </Box>
   );
