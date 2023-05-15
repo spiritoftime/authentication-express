@@ -22,6 +22,7 @@ import { createDocument } from "../services/document";
 import TablePagination from "@mui/material/TablePagination";
 
 const FolderTable = ({ data, tableType, header }) => {
+  const { authDetails, isDarkMode, setIsLoadingAuth } = useAppContext();
   const [showInput, setShowInput] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -51,7 +52,8 @@ const FolderTable = ({ data, tableType, header }) => {
       });
       // create the document
     },
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
+      setIsLoadingAuth(true);
       reloginMutation();
       navigate(`/documents/${res.data.document.id}`);
     },
@@ -80,7 +82,7 @@ const FolderTable = ({ data, tableType, header }) => {
       createFolderMutation(title);
     }
   };
-  const { authDetails, isDarkMode } = useAppContext();
+
   return (
     <Box>
       <Box

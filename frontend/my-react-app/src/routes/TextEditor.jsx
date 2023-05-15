@@ -152,6 +152,7 @@ export default function TextEditor() {
               transition: "padding-top 0.3s ease",
               top: 0,
               height: "400px",
+              overflow: "scroll",
 
               display: {
                 xs: showNested ? "flex" : "none",

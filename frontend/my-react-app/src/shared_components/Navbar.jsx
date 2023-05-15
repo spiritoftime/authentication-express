@@ -45,7 +45,7 @@ const Navbar = () => {
     },
   });
   const loggedIn = Object.keys(authDetails).length !== 0;
-
+  console.log(authDetails);
   return (
     <AppBar
       position="sticky"

@@ -29,7 +29,8 @@ const register = async (req, res) => {
   const { refreshToken } = generateTokensAndCookies(username, false, res);
   newUser.refreshToken = refreshToken;
   await newUser.save();
-  res.status(201).json({ user: { username: username, id: newUser.id } });
+  const userWithDocuments = await queryUserDetails(username);
+  res.status(201).json({ userWithDocuments });
 };
 const login = async (req, res) => {
   const { username, password } = req.body;

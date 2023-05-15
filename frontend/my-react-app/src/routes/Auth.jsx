@@ -33,7 +33,7 @@ export default function Auth({ isLogin }) {
       return register({ username, password, name });
     },
     onSuccess: (res) => {
-      setAuthDetails({ ...res.data.user, isNewDocument: false });
+      setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
 
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -51,7 +51,7 @@ export default function Auth({ isLogin }) {
       return login({ username, password });
     },
     onSuccess: (res) => {
-      setAuthDetails({ ...res.data.userWithDocuments, isNewDocument: false });
+      setAuthDetails({ ...res.data.userWithDocuments });
 
       const accessToken = res.headers.authorization.split(" ")[1];
 
