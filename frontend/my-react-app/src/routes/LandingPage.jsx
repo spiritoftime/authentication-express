@@ -5,9 +5,11 @@ import Demo from "../components/Demo";
 import { useAppContext } from "../context/appContext";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
+import useScrollAnimation from "../customHooks/useScrollAnimation";
 const LandingPage = () => {
   const { isDarkMode } = useAppContext();
   const theme = useTheme();
+  useScrollAnimation();
   return (
     <Box
       sx={{

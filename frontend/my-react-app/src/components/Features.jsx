@@ -11,6 +11,8 @@ const Features = () => {
   const { isDarkMode } = useAppContext();
   return (
     <Box
+      className="hide"
+      id="features"
       sx={{
         padding: { xs: "0px 16px 16px", s: "0 32px 32px", sm: 8 },
         flexDirection: { xs: "column", md: "row" },

@@ -127,3 +127,10 @@
     border-color: inherit;
   }
 }
+.hide {
+  opacity: 0;
+  transition: all 1s;
+}
+.show {
+  opacity: 1;
+}

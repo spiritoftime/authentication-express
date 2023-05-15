@@ -7,6 +7,7 @@ const Demo = () => {
   const theme = useTheme();
   return (
     <Box
+      className="hide"
       id="demo"
       sx={{
         textAlign: "center",

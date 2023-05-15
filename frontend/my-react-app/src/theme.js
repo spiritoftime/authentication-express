@@ -56,13 +56,15 @@ const lightTheme = createTheme({
   typography: {
     fontFamily: "Kumbh Sans, sans-serif",
   },
-  values: {
-    xs: 0,
-    s: 350,
-    sm: 600,
-    md: 900,
-    lg: 1200,
-    xl: 1536,
+  breakpoints: {
+    values: {
+      xs: 0,
+      s: 350,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
   },
   palette: {
     mode: "light",

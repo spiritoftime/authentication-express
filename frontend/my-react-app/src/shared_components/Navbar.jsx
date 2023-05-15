@@ -52,30 +52,31 @@ const Navbar = () => {
       sx={{ top: 0, backgroundColor: theme.palette.landingPage.primary }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box display="flex" alignItems="center" gap={2}>
-          <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Box display="flex" alignItems="center" gap={2}>
             <Box
               component="img"
               src={isDarkMode ? darkLogo : google_docs_logo}
               alt="Logo"
               sx={{ height: "40px", width: "40px", objectFit: "cover" }}
             />
-          </Link>
-          <Typography
-            sx={{
-              display: {
-                xs: "none",
-                s: "none",
-                sm: "block",
-              },
-              color: theme.palette.text.primary,
-            }}
-            variant="body1"
-            component="p"
-          >
-            CommonDocs
-          </Typography>
-        </Box>
+
+            <Typography
+              sx={{
+                display: {
+                  xs: "none",
+                  s: "none",
+                  sm: "block",
+                },
+                color: theme.palette.text.primary,
+              }}
+              variant="body1"
+              component="p"
+            >
+              CommonDocs
+            </Typography>
+          </Box>
+        </Link>
         {
           <Box
             display="flex"
@@ -91,7 +92,7 @@ const Navbar = () => {
             </IconButton>
 
             {loggedIn ? (
-              <Avatar {...stringAvatar(authDetails.name)} />
+              !isSmDown && <Avatar {...stringAvatar(authDetails.name)} />
             ) : (
               <Typography
                 variant="body1"
@@ -124,7 +125,6 @@ const Navbar = () => {
                   component="a"
                   size={isSmDown ? "small" : "medium"}
                   onClick={() => logoutMutation(authDetails.id)}
-                  href="#demo"
                   sx={{
                     borderRadius: "35px",
                     border: `1px solid ${theme.palette.landingPage.accent}`,

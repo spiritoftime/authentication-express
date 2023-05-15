@@ -12,6 +12,7 @@ const Hero = () => {
   const navigate = useNavigate();
   return (
     <Box
+      className="hide"
       id="hero"
       sx={{ padding: { xs: 2, s: 4, sm: "64px 64px 0 64px", lg: 8 } }}
       display="flex"
