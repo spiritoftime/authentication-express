@@ -12,8 +12,11 @@ import TableRow from "@mui/material/TableRow";
 import Avatar from "@mui/material/Avatar";
 import { stringAvatar } from "../helper_functions/muiAvatar";
 import { useAppContext } from "../context/appContext";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const FolderTable = ({ data, tableType, header }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { authDetails } = useAppContext();
   return (
     <Box>
@@ -28,7 +31,7 @@ const FolderTable = ({ data, tableType, header }) => {
         {header}
       </Typography>
       <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="folder table">
+        <Table aria-label="folder table">
           <TableHead>
             <TableRow>
               <TableCell>Folder Name</TableCell>
@@ -41,6 +44,9 @@ const FolderTable = ({ data, tableType, header }) => {
           <TableBody>
             {data.map((folder, idx) => (
               <TableRow
+                onClick={() => {
+                  navigate(`/documents/${folder.documents[0].id}`);
+                }}
                 key={idx}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -59,7 +65,7 @@ const FolderTable = ({ data, tableType, header }) => {
                 </TableCell>
                 <TableCell sx={{ display: "flex", gap: 1 }} align="right">
                   {folder.foldersAccessibleTo.map((person) => (
-                    <Avatar {...stringAvatar(person.name)} />
+                    <Avatar key={person.id} {...stringAvatar(person.name)} />
                   ))}
                 </TableCell>
               </TableRow>

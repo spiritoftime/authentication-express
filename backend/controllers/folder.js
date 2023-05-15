@@ -1,5 +1,5 @@
 const db = require("../db/models");
-const { User, Folder, UserFolderAccess, UserDocumentAccess } = db;
+const { User, Folder, UserFolderAccess, UserDocumentAccess, Document } = db;
 const { Op } = require("sequelize");
 const getFolders = async (req, res) => {
   try {
@@ -12,13 +12,19 @@ const getFolders = async (req, res) => {
           model: User,
           as: "foldersAccessibleTo",
           required: true, // This ensures LEFT JOIN behavior
-          attributes: ["name"],
+          attributes: ["name", "id"],
           through: {
             attributes: [],
             where: {
               role: { [Op.ne]: "creator" },
             },
           },
+        },
+        {
+          model: db.Document,
+          as: "documents",
+          attributes: ["id"],
+          limit: 1,
         },
       ],
     });
@@ -50,7 +56,13 @@ const getFolders = async (req, res) => {
         {
           model: User,
           as: "creator",
-          attributes: ["name"],
+          attributes: ["name", "id"],
+        },
+        {
+          model: Document,
+          as: "documents",
+          attributes: ["id"],
+          limit: 1,
         },
       ],
     });
