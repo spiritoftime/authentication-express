@@ -22,3 +22,10 @@ export function editFolder(data) {
     data: { parent: data.parent },
   });
 }
+export function getFolders(userId) {
+  return makeRequest("/folders", {
+    params: {
+      userId: userId,
+    },
+  });
+}

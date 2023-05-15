@@ -13,7 +13,12 @@ const getFolders = async (req, res) => {
           as: "foldersAccessibleTo",
           required: true, // This ensures LEFT JOIN behavior
           attributes: ["name"],
-          through: { attributes: [] }, // Exclude UserFolderAccess attributes
+          through: {
+            attributes: [],
+            where: {
+              role: { [Op.ne]: "creator" },
+            },
+          },
         },
       ],
     });
@@ -41,6 +46,11 @@ const getFolders = async (req, res) => {
               },
             },
           },
+        },
+        {
+          model: User,
+          as: "creator",
+          attributes: ["name"],
         },
       ],
     });

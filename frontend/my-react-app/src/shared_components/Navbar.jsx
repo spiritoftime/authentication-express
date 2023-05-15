@@ -77,7 +77,11 @@ const Navbar = () => {
           </Typography>
         </Box>
         {
-          <Box display="flex" alignItems="center" sx={{ gap: { xs: 0, s: 2 } }}>
+          <Box
+            display="flex"
+            alignItems="center"
+            sx={{ gap: { xs: 0, s: "16px" } }}
+          >
             <IconButton
               onClick={toggleTheme}
               aria-label="toggle color mode"
