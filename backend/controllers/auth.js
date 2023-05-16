@@ -119,9 +119,12 @@ function generateTokensAndCookies(username, isRefresh, res) {
   const accessToken = generateToken(payload, "access", "5s");
   const refreshToken = generateToken(payload, "refresh", "3h");
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: process.env.NODE_ENV === "production" ? false : true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // since we are using react to render frontend and not client side render
+    httpOnly: process.env.NODE_ENV === "production" ? true : false,
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "lax",
+    domain:
+      process.env.NODE_ENV === "production" &&
+      "commondocs-backend.onrender.com",
   });
 
   res.setHeader("Authorization", "Bearer " + accessToken);
