@@ -54,7 +54,7 @@ export default function TextEditor() {
   // mount the socket.io
   useEffect(() => {
     const backendURL =
-      process.env.NODE_ENV === "production"
+      import.meta.env.VITE_ENV === "production"
         ? "https://commondocs-backend.onrender.com"
         : "http://localhost:3001";
     const s = io(backendURL);
