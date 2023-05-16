@@ -18,12 +18,17 @@ const cookieParser = require("cookie-parser");
 const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
 
-const io = require("socket.io")(3001, {
-  cors: {
-    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
-    methods: ["GET", "POST"],
-  },
-});
+const io = require("socket.io")(
+  process.env.NODE_ENV === "production"
+    ? "https://commondocs.vercel.app"
+    : 3001,
+  {
+    cors: {
+      origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
+      methods: ["GET", "POST"],
+    },
+  }
+);
 app.use(cookieParser());
 app.use(
   cors({
