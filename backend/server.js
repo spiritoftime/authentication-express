@@ -19,14 +19,14 @@ const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
 const io = require("socket.io")(3001, {
   cors: {
-    origin: ["http://127.0.0.1:5173", "https://commondocs.vercel.app/"],
+    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
     methods: ["GET", "POST"],
   },
 });
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5173", "https://commondocs.vercel.app/"],
+    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
     credentials: true,
   })
 );
