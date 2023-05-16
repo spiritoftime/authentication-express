@@ -107,9 +107,10 @@ app.use("/documentAccess", authenticateToken, documentAccessRouter);
 // app.get("/posts", authenticateToken, (req, res) => {
 //   res.status(200).json({ message: "you made it!" });
 // });
+
 const port =
   process.env.NODE_ENV === "production"
     ? process.env.PROD_PORT
     : process.env.PORT;
 
-app.listen(port, () => console.log(`app running on port ${port}`));
+server.listen(port, () => console.log(`server running on port ${port}`));
