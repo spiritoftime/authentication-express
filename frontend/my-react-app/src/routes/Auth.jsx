@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import { useMutation } from "@tanstack/react-query";
 import { register, login } from "../services/auth";
 import { useAppContext } from "../context/appContext";
-import { api } from "../services/makeRequest";
+import { axiosInstance } from "../services/makeRequest";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -34,7 +34,9 @@ export default function Auth({ isLogin }) {
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
 
       navigate(from, { replace: true });
     },
@@ -53,7 +55,7 @@ export default function Auth({ isLogin }) {
 
       const accessToken = res.headers.authorization.split(" ")[1];
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       navigate(from, { replace: true });
     },
   });

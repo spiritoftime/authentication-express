@@ -73,6 +73,7 @@ const FolderTable = ({ data, tableType, header }) => {
       // create the document
     },
     onSuccess: (res) => {
+      console.log("createFolder", res);
       const folderId = res.data.folder.id;
       createDocumentMutation(folderId);
     },

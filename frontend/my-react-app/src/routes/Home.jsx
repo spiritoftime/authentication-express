@@ -7,19 +7,25 @@ import { useNavigate } from "react-router-dom";
 import FolderTable from "../components/FolderTable";
 import { useTheme } from "@mui/material/styles";
 const Home = () => {
-  const { authDetails } = useAppContext();
+  const { authDetails, isLoadingAuth } = useAppContext();
+  console.log("authDetails", authDetails);
   const theme = useTheme();
   const navigate = useNavigate();
-  const { data: folders, isLoading: isFetching } = useQuery({
+  const {
+    data: folders,
+    isLoading: isFetching,
+    isError: error,
+  } = useQuery({
     queryKey: ["getFolders"],
     queryFn: () => {
+      console.log("check", authDetails.id);
       return getFolders(authDetails.id);
     },
     refetchOnWindowFocus: false,
   });
 
-  if (isFetching) return <div>Loading...</div>;
-
+  if (isFetching) return "Loading...";
+  if (error) return "An error has occurred: " + error.message;
   return (
     <Box sx={{ padding: { xs: 2, s: 4, sm: "64px 64px 0 64px", lg: 8 } }}>
       <Box display="flex" flexDirection="column">

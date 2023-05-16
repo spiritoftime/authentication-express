@@ -1,23 +1,20 @@
 import axios from "axios";
-const accessToken = localStorage.getItem("accessToken");
-export const api = axios.create({
+
+export const axiosInstance = axios.create({
   baseURL: "/api",
   withCredentials: true,
-  headers: {
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-  },
 });
+
 export function makeRequest(url, options) {
-  return api(url, options)
+  return axiosInstance(url, options)
     .then((res) => {
       if (!res.headers.authorization) return;
+
       const headerAccessToken = res.headers.authorization.split(" ")[1];
 
-      if (accessToken !== headerAccessToken) {
-        api.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${headerAccessToken}`;
-      }
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${headerAccessToken}`;
 
       return res;
     })

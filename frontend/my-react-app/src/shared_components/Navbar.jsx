@@ -11,7 +11,7 @@ import { useAppContext } from "../context/appContext";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { useMutation } from "@tanstack/react-query";
-import { api } from "../services/makeRequest";
+import { axiosInstance } from "../services/makeRequest";
 import { logout } from "../services/auth";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import Avatar from "@mui/material/Avatar";
@@ -41,11 +41,10 @@ const Navbar = () => {
     },
     onSuccess: (res) => {
       setAuthDetails({});
-      api.defaults.headers.common["Authorization"] = null;
+      axiosInstance.defaults.headers.common["Authorization"] = null;
     },
   });
   const loggedIn = Object.keys(authDetails).length !== 0;
-  console.log(authDetails);
   return (
     <AppBar
       position="sticky"

@@ -2,19 +2,21 @@ import React, { useEffect } from "react";
 import { persistLogin } from "../services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useAppContext } from "../context/appContext";
-import { api } from "../services/makeRequest";
+import { axiosInstance } from "../services/makeRequest";
 const usePersistLogin = () => {
   const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
 
   const { mutate: persistLoginMutation } = useMutation({
-    mutationFn: (accessToken) => {
+    mutationFn: () => {
       return persistLogin();
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.userWithDocuments });
       const accessToken = res.headers.authorization.split(" ")[1];
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
     },
     onSettled: () => setIsLoadingAuth(false), // Set loading state to false after checking
   });
