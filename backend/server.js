@@ -23,7 +23,7 @@ const io = require("socket.io")(3001, {
       "http://127.0.0.1:5173",
       "https://commondocs.vercel.app",
       "https://commondocs-git-main-spiritoftime.vercel.app",
-      "https://commondocs-9tikjsvbp-spiritoftime.vercel.app",
+      "https://commondocs-2qd8gb884-spiritoftime.vercel.app",
     ],
     methods: ["GET", "POST"],
   },
@@ -35,7 +35,7 @@ app.use(
       "http://127.0.0.1:5173",
       "https://commondocs.vercel.app",
       "https://commondocs-git-main-spiritoftime.vercel.app",
-      "https://commondocs-9tikjsvbp-spiritoftime.vercel.app",
+      "https://commondocs-2qd8gb884-spiritoftime.vercel.app",
     ],
     credentials: true,
   })
