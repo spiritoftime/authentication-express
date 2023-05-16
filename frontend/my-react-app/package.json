@@ -16,7 +16,6 @@
     "@tanstack/react-query": "^4.29.3",
     "@tanstack/react-query-devtools": "^4.29.3",
     "axios": "^1.3.5",
-    "highlight.js": "^11.8.0",
     "mui": "file:../../../../../../../material",
     "prismjs": "^1.29.0",
     "quill": "^1.3.7",
