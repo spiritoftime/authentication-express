@@ -112,4 +112,4 @@ const port =
     ? process.env.PROD_PORT
     : process.env.PORT;
 
-app.listen(port, () => console.log("app running on port 3000"));
+app.listen(port, () => console.log(`app running on port ${port}`));

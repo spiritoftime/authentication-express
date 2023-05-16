@@ -8,7 +8,6 @@ import FolderTable from "../components/FolderTable";
 import { useTheme } from "@mui/material/styles";
 const Home = () => {
   const { authDetails, isLoadingAuth } = useAppContext();
-  console.log("authDetails", authDetails);
   const theme = useTheme();
   const navigate = useNavigate();
   const {
@@ -18,7 +17,6 @@ const Home = () => {
   } = useQuery({
     queryKey: ["getFolders"],
     queryFn: () => {
-      console.log("check", authDetails.id);
       return getFolders(authDetails.id);
     },
     refetchOnWindowFocus: false,
