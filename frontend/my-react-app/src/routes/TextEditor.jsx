@@ -52,7 +52,9 @@ export default function TextEditor() {
   };
   // mount the socket.io
   useEffect(() => {
-    const s = io("http://localhost:3001"); // connect to backend URI
+    const s = io(
+      `${import.meta.env.VITE_ENV==='production'? 'https://commondocs-backend.onrender.com': ' http://localhost:3001'}`
+    ); // connect to backend URI
     const handleScroll = () => {
       const isScrolled = window.scrollY > 0;
       setScrolled(isScrolled);
