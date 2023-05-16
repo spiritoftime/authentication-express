@@ -17,18 +17,17 @@ const folderAccessRouter = require("./routes/UserFolderAccessRouter");
 const cookieParser = require("cookie-parser");
 const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
+const http = require("http");
+const { Server } = require("socket.io");
 
-const io = require("socket.io")(
-  process.env.NODE_ENV === "production"
-    ? process.env.PROD_PORT
-    : process.env.PORT,
-  {
-    cors: {
-      origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
-      methods: ["GET", "POST"],
-    },
-  }
-);
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
+    methods: ["GET", "POST"],
+  },
+});
 app.use(cookieParser());
 app.use(
   cors({
@@ -108,5 +107,9 @@ app.use("/documentAccess", authenticateToken, documentAccessRouter);
 // app.get("/posts", authenticateToken, (req, res) => {
 //   res.status(200).json({ message: "you made it!" });
 // });
+const port =
+  process.env.NODE_ENV === "production"
+    ? process.env.PROD_PORT
+    : process.env.PORT;
 
-app.listen(3000, () => console.log("app running on port 3000"));
+app.listen(port, () => console.log("app running on port 3000"));

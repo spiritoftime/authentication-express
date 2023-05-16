@@ -50,10 +50,15 @@ export default function TextEditor() {
       navigate(`/documents/${newDocumentId}`);
     }
   };
+
   // mount the socket.io
   useEffect(() => {
     const s = io(
-      `${import.meta.env.VITE_ENV==='production'? 'https://commondocs-backend.onrender.com': ' http://localhost:3001'}`
+      `${
+        import.meta.env.VITE_ENV === "production"
+          ? "https://commondocs-backend.onrender.com"
+          : " http://localhost:3001"
+      }`
     ); // connect to backend URI
     const handleScroll = () => {
       const isScrolled = window.scrollY > 0;
