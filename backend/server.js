@@ -20,8 +20,8 @@ const { findDocument } = require("./controllers/document");
 
 const io = require("socket.io")(
   process.env.NODE_ENV === "production"
-    ? "https://commondocs.vercel.app"
-    : 3001,
+    ? process.env.PROD_PORT
+    : process.env.PORT,
   {
     cors: {
       origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
