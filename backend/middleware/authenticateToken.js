@@ -23,7 +23,7 @@ async function authenticateToken(req, res, next) {
           .json({ error: "Invalid access token, Please login" }); // Invalid token
     }
 
-    next();
+    refreshTokenMiddleware(req, res, next);
   });
 }
 async function refreshTokenMiddleware(req, res, next) {

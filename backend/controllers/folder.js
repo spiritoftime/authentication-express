@@ -62,7 +62,6 @@ const getFolders = async (req, res) => {
         },
       ],
     });
-
     res.status(200).json({ myFolders, sharedFolders });
   } catch (error) {
     console.error(error);
@@ -96,7 +95,6 @@ const createFolder = async (req, res) => {
         role: user.role,
       });
     }
-
     // Send a response back to the client with the created folder and UserFolderAccess record
     res.status(201).json({
       folder,

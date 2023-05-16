@@ -19,14 +19,24 @@ const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
 const io = require("socket.io")(3001, {
   cors: {
-    origin: "http://127.0.0.1:5173",
+    origin: [
+      "http://127.0.0.1:5173",
+      "https://commondocs.vercel.app",
+      "https://commondocs-git-main-spiritoftime.vercel.app",
+      "https://commondocs-9tikjsvbp-spiritoftime.vercel.app",
+    ],
     methods: ["GET", "POST"],
   },
 });
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://127.0.0.1:5173",
+    origin: [
+      "http://127.0.0.1:5173",
+      "https://commondocs.vercel.app",
+      "https://commondocs-git-main-spiritoftime.vercel.app",
+      "https://commondocs-9tikjsvbp-spiritoftime.vercel.app",
+    ],
     credentials: true,
   })
 );
