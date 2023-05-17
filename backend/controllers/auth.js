@@ -116,7 +116,7 @@ function generateToken(payload, tokenType, expiresIn) {
 }
 function generateTokensAndCookies(username, isRefresh, res) {
   const payload = { name: username, isRefreshed: isRefresh };
-  const accessToken = generateToken(payload, "access", "5s");
+  const accessToken = generateToken(payload, "access", "15min");
   const refreshToken = generateToken(payload, "refresh", "3h");
   res.cookie("refreshToken", refreshToken, {
     httpOnly: process.env.NODE_ENV === "production" ? true : false,

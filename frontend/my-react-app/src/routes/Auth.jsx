@@ -19,7 +19,7 @@ import { useLocation } from "react-router-dom";
 export default function Auth({ isLogin }) {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const { authDetails, setAuthDetails } = useAppContext();
+  const { authDetails, setAuthDetails, setIsLoadingAuth } = useAppContext();
 
   const navigate = useNavigate();
   const {
@@ -37,7 +37,7 @@ export default function Auth({ isLogin }) {
       axiosInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${accessToken}`;
-
+      setIsLoadingAuth(false);
       navigate(from, { replace: true });
     },
   });
@@ -52,10 +52,11 @@ export default function Auth({ isLogin }) {
     },
     onSuccess: (res) => {
       setAuthDetails({ ...res.data.userWithDocuments });
-
       const accessToken = res.headers.authorization.split(" ")[1];
-
-      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+      setIsLoadingAuth(false);
       navigate(from, { replace: true });
     },
   });

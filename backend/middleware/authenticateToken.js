@@ -28,7 +28,6 @@ async function authenticateToken(req, res, next) {
 }
 async function refreshTokenMiddleware(req, res, next) {
   const refreshToken = req.cookies.refreshToken;
-
   if (refreshToken == null)
     return res.status(401).json({ error: "Please relogin or register" }); // no such cookie
   const user = await User.findOne({
@@ -58,7 +57,7 @@ async function refreshTokenMiddleware(req, res, next) {
       const accessToken = generateToken(
         { name: user.username, isRefreshed: true },
         "access",
-        "5s"
+        "15min"
       );
 
       res.setHeader("Authorization", "Bearer " + accessToken);
