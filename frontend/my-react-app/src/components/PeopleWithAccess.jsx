@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles";
 const PeopleWithAccess = ({
   isAccessFetching,
   userAccess,
+  accessType,
   setChangeAccess,
 }) => {
   const theme = useTheme();
@@ -33,8 +34,7 @@ const PeopleWithAccess = ({
                   <Typography variant="h6" component="h6">
                     {user.name}
                   </Typography>
-                  {user.folderRole === "creator" ||
-                  user.folderRole === "viewer" ? (
+                  {user.folderRole === "creator" || accessType === "viewer" ? (
                     <Typography variant="h6" component="h6">
                       {user.folderRole}
                     </Typography>
