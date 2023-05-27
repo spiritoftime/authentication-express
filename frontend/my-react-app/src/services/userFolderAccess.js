@@ -6,6 +6,7 @@ export function addUsersToFolder({ folderId, people }) {
   });
 }
 export function editFolderAccess({ folderId, changeAccess }) {
+  console.log("edit document access");
   return makeRequest(`/folderAccess/editFolderAccess`, {
     method: "PATCH",
     data: { folderId, changeAccess },
