@@ -1,47 +1,6 @@
-# CommonDocs 
-<code><img src="https://commondocs.vercel.app/assets/image-removebg-preview-09ec5f7e.png" alt="commondocs-preview"></code>
-## Full Stack Application for users to collaborate, edit and organize documents. *Project 3 for Rocket Academy Bootcamp*
+# authentication-express
+## Bug 1: IsLoadingAuth
+Right now, appContext runs first, then usePersistLogin. However, ProtectedRoute runs before the useeffect in the usePersistLogin can run, causing isLoadingAuth to not have been set to true before protectedRoute ran. Thus, we are always redirected into login route.
 
-### Features
-- Create, Update, Delete, Read Documents on realtime
-- Folders and documents directory for smooth user interface
-- Organizing documents under folders & nesting/ unnesting them for easy categorisation
-- Ability to share entire folders and its subfolders and subdocuments through implementation of a tree structure and dfs
-- Restricted Access to Folders - Viewer, Collaborator and creator
-- Custom Built Authentication system
+For now, this is fixed by setting isLoadingAuth to true.
 
-### Tech Used
-#### Frontend:
-- State Management: React-Query, useContext
-- Component Library: Material UI
-- Socket.io, React Quill for realtime document editing
-- React-tree-view
-#### Backend:
-- ORM: sequelize 
-- Database: PostgreSQL
-- Backend: Express
-
-
-#### Setup:
-1. clone the repo and run npm install on frontend/my-react-app and backend
-2. set up env variables:
- - backend:
-  ```
-// to generate a salt, run require('crypto').randomBytes(64).toString('hex')
-ACCESS_TOKEN_SECRET=<SALT>
-REFRESH_TOKEN_SECRET=<SALT>
-PORT=<POSTGRES PORT>
-DB_USER=<POSTGRES USER>
-DB_PASSWORD=<POSTGRES PW>
-DB_HOST=<POSTGRES HOST>
-DB_DATABASE=<POSTGRES DATABASE>
-DB_DIALECT=postgres
-NODE_ENV=development
-  ```
- -frontend:
- ```
- VITE_ENV=development
- VITE_BASE_URL=http://localhost:3000
- ```
-3. at backend cwd, run ./migrate-seed.sh
-4. at frontend/my-react-app, run npm run dev
