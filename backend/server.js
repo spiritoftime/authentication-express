@@ -19,33 +19,19 @@ const { getAccessType } = require("./controllers/UserDocumentAccess");
 const { findDocument } = require("./controllers/document");
 const http = require("http");
 const { Server } = require("socket.io");
-const path = require("path");
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
     methods: ["GET", "POST"],
   },
 });
-const _dirname = path.dirname("");
-const buildPath = path.join(_dirname, "../frontend/my-react-app/dist");
-app.use(express.static(buildPath));
-app.get("/*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "../frontend/my-react-app/dist/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
-    }
-  );
-});
-
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://commondocs.vercel.app", "http://127.0.0.1:5173"],
     credentials: true,
   })
 );
