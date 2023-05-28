@@ -183,7 +183,7 @@ export default function TextEditor() {
         </Box>
         <Box
           display="flex"
-          sx={{ padding: "0 16px", flexGrow: 1 }}
+          sx={{ padding: "0 16px", margin: { sm: "0 auto" }, width: "70%" }}
           flexDirection="column"
         >
           <Box
