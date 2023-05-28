@@ -101,9 +101,6 @@ app.use("/users", authenticateToken, userRouter);
 app.use("/folders", authenticateToken, folderRouter);
 app.use("/folderAccess", authenticateToken, folderAccessRouter);
 app.use("/documentAccess", authenticateToken, documentAccessRouter);
-// app.get("/posts", authenticateToken, (req, res) => {
-//   res.status(200).json({ message: "you made it!" });
-// });
 
 const port =
   process.env.NODE_ENV === "production"

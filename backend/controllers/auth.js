@@ -71,7 +71,7 @@ const logout = async (req, res) => {
   res.clearCookie("refreshToken");
   res.status(201).send("Logged out");
 };
-// const persistLogin = authenticateToken;
+
 const persistLogin = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
