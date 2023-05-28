@@ -6,10 +6,8 @@ import ArticleIcon from "@mui/icons-material/Article";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteDocument } from "../services/document";
-
 import IconButton from "@mui/material/IconButton";
-
-import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
+import useReLoginMutation from "../customHooks/useReLoginMutation";
 const Document = ({
   node,
   depth,

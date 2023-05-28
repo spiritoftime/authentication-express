@@ -131,4 +131,4 @@ function generateTokensAndCookies(username, isRefresh, res) {
   res.setHeader("Access-Control-Expose-Headers", "Authorization");
   return { refreshToken, accessToken };
 }
-module.exports = { register, login, logout, persistLogin };
+module.exports = { register, login, logout, persistLogin, generateToken };

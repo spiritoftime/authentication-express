@@ -1,8 +1,7 @@
-import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { persistLogin } from "../src/services/auth";
-import { useAppContext } from "../src/context/appContext";
-import { axiosInstance } from "../src/services/makeRequest";
+import { persistLogin } from "../services/auth";
+import { useAppContext } from "../context/appContext";
+import { axiosInstance } from "../services/makeRequest";
 const useReLoginMutation = () => {
   const { setIsLoadingAuth, setAuthDetails } = useAppContext();
   // takes in a callback to update authDetails to whatever is the desired state

@@ -63,7 +63,7 @@ async function queryUsersWithAccess(folderId) {
         where: { id: folderId },
         attributes: [],
         through: {
-          model: db.UserFolderAccess,
+          model: UserFolderAccess,
           attributes: ["role"],
         },
         required: false,
@@ -83,7 +83,7 @@ async function queryUsersWithoutAccess(folderId) {
         attributes: [],
         through: {
           model: db.UserFolderAccess,
-          attributes: ["role"],
+          attributes: [],
         },
         required: false,
       },
@@ -91,8 +91,70 @@ async function queryUsersWithoutAccess(folderId) {
     where: { "$accessibleFolders.id$": { [Op.is]: null } },
   });
 }
+async function queryFolders(userId) {
+  const myFolders = await Folder.findAll({
+    where: { createdBy: userId },
+    attributes: ["text", "updatedAt"],
+    include: [
+      {
+        model: User,
+        as: "foldersAccessibleTo",
+        attributes: ["name", "id"],
+        through: {
+          attributes: [],
+        },
+      },
+      {
+        model: db.Document,
+        as: "documents",
+        attributes: ["id"],
+        limit: 1,
+      },
+    ],
+  });
+  const sharedFolders = await db.Folder.findAll({
+    where: {
+      createdBy: {
+        [Op.ne]: userId,
+      },
+    },
+    attributes: ["text", "updatedAt"],
+    include: [
+      {
+        model: User,
+        as: "foldersAccessibleTo",
+        where: {
+          id: userId,
+        },
+        attributes: ["id", "name"],
+        through: {
+          model: UserFolderAccess,
+          attributes: ["role"],
+          where: {
+            role: {
+              [Op.and]: [{ [Op.ne]: "creator" }, { [Op.ne]: null }], // Not equal to 'creator'
+            },
+          },
+        },
+      },
+      {
+        model: User,
+        as: "creator",
+        attributes: ["name", "id"],
+      },
+      {
+        model: Document,
+        as: "documents",
+        attributes: ["id"],
+        limit: 1,
+      },
+    ],
+  });
+  return { sharedFolders, myFolders };
+}
 module.exports = {
   queryUserDetails,
+  queryFolders,
   queryUsersWithAccess,
   queryUsersWithoutAccess,
 };

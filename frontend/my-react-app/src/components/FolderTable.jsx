@@ -15,7 +15,7 @@ import { useAppContext } from "../context/appContext";
 import { useNavigate } from "react-router-dom";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import { createFolder } from "../services/folder";
-import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
+import useReLoginMutation from "../customHooks/useReLoginMutation";
 import { useMutation } from "@tanstack/react-query";
 import IconButton from "@mui/material/IconButton";
 import { createDocument } from "../services/document";
@@ -52,7 +52,7 @@ const FolderTable = ({ data, tableType, header }) => {
       });
       // create the document
     },
-    onSuccess: async (res) => {
+    onSuccess: (res) => {
       setIsLoadingAuth(true);
       reloginMutation();
       navigate(`/documents/${res.data.document.id}`);
@@ -152,7 +152,18 @@ const FolderTable = ({ data, tableType, header }) => {
                     navigate(`/documents/${folder.documents[0].id}`);
                   }}
                   key={idx}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  sx={{
+                    cursor: "pointer",
+                    "&:hover": {
+                      backgroundColor: "#a9a9a9",
+                      color: "#000000",
+                      transition:
+                        "background-color 0.3s ease, box-shadow 0.3s ease",
+                      boxShadow:
+                        "0px 5px 15px rgba(0, 0, 0, 0.2)" /* horizontal offset, vertical offset, blur radius, and color */,
+                    },
+                    "&:last-child td, &:last-child th": { border: 0 },
+                  }}
                 >
                   <TableCell component="th" scope="row">
                     {folder.text}

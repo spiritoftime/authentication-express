@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { persistLogin } from "../services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useAppContext } from "../context/appContext";

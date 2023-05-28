@@ -3,11 +3,8 @@ const authenticateToken = require("./middleware/authenticateToken");
 const express = require("express");
 const db = require("./db/models");
 const { Document } = require("./db/models");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const app = express();
-const { login, register } = require("./controllers/auth");
 const documentRouter = require("./routes/documentRouter");
 const userRouter = require("./routes/userRouter");
 const folderRouter = require("./routes/folderRouter");
@@ -48,7 +45,7 @@ io.on("connection", (socket) => {
     }
     const document = await findDocument(documentId, username);
     const accessType = await getAccessType(documentId, username);
-    await socket.emit(
+    socket.emit(
       "load-document",
       document.data,
       document.text,

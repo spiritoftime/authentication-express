@@ -2,6 +2,7 @@ const db = require("../db/models");
 const { User } = db;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const {generateToken} = require('../controllers/auth.js')
 async function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
 
@@ -68,16 +69,5 @@ async function refreshTokenMiddleware(req, res, next) {
   );
 }
 
-function generateToken(payload, tokenType, expiresIn) {
-  // access - 15mins, refresh - 3h
-  return jwt.sign(
-    payload,
-    tokenType === "access"
-      ? process.env.ACCESS_TOKEN_SECRET
-      : process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: expiresIn, // typically, this is 5-15mins
-    }
-  );
-}
+
 module.exports = authenticateToken;

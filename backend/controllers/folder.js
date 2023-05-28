@@ -1,67 +1,12 @@
 const db = require("../db/models");
 const { User, Folder, UserFolderAccess, UserDocumentAccess, Document } = db;
 const { Op } = require("sequelize");
+const { queryFolders } = require("../sequelize_queries/index");
 const getFolders = async (req, res) => {
   try {
     const { userId } = req.query;
-    const myFolders = await Folder.findAll({
-      where: { createdBy: userId },
-      attributes: ["text", "updatedAt"],
-      include: [
-        {
-          model: User,
-          as: "foldersAccessibleTo",
-          attributes: ["name", "id"],
-          through: {
-            attributes: [],
-          },
-        },
-        {
-          model: db.Document,
-          as: "documents",
-          attributes: ["id"],
-          limit: 1,
-        },
-      ],
-    });
-    const sharedFolders = await db.Folder.findAll({
-      where: {
-        createdBy: {
-          [Op.ne]: userId,
-        },
-      },
-      attributes: ["text", "updatedAt"],
-      include: [
-        {
-          model: User,
-          as: "foldersAccessibleTo",
-          where: {
-            id: userId,
-          },
-          attributes: ["id", "name"],
-          through: {
-            model: UserFolderAccess,
-            attributes: ["role"],
-            where: {
-              role: {
-                [Op.and]: [{ [Op.ne]: "creator" }, { [Op.ne]: null }], // Not equal to 'creator'
-              },
-            },
-          },
-        },
-        {
-          model: User,
-          as: "creator",
-          attributes: ["name", "id"],
-        },
-        {
-          model: Document,
-          as: "documents",
-          attributes: ["id"],
-          limit: 1,
-        },
-      ],
-    });
+    const { myFolders, sharedFolders } = await queryFolders(userId);
+
     res.status(200).json({ myFolders, sharedFolders });
   } catch (error) {
     console.error(error);

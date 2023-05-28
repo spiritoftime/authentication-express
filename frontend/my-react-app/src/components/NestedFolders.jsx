@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { editDocument } from "../services/document";
 import { editFolder } from "../services/folder";
 
-import useReLoginMutation from "../../reactQueryMutations/useReLoginMutation";
+import useReLoginMutation from "../customHooks/useReLoginMutation";
 const NestedFolders = ({ switchRoom, socket, type, accessType }) => {
   const treeRef = useRef(null);
   const handleOpen = (nodeId) => treeRef.current.open(nodeId);
