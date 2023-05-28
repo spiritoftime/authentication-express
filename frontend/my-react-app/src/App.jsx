@@ -3,7 +3,6 @@ import { CssBaseline } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./shared_components/Navbar";
 
-import Profile from "./routes/Profile";
 import usePersistLogin from "./customHooks/usePersistLogin";
 
 import TextEditor from "./routes/TextEditor";
