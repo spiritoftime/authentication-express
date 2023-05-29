@@ -9,7 +9,14 @@
 - Ability to share entire folders and its subfolders and subdocuments through implementation of a tree structure and dfs 
 - Restricted Access to Folders - Viewer, Collaborator and creator 
 - Custom Built Authentication system 
+
+### Future Improvements
+- Copy pasting of images via S3 Bucket
+- Public access to folders
 ### Tech Used 
+#### ERD Diagram:
+![image](https://github.com/spiritoftime/commondocs/assets/98036884/648e7043-4679-4799-a32e-cf7208d9b260)
+
 #### Frontend:
 - State Management: React-Query, useContext 
 - Component Library: Material UI 
